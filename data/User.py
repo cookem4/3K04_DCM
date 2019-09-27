@@ -1,4 +1,5 @@
 from data.Configuration import Configuration
+from data.Configuration import ConfigurationBuilder
 
 
 class User:
@@ -19,4 +20,7 @@ class User:
 
 class UserBuilder:
     def from_json(self, json_dict):
-        return User(json_dict[User.USERNAME], json_dict[User.PASSWORD], json_dict[User.CONFIG])
+        return User(
+            username=json_dict[User.USERNAME],
+            password_hash=json_dict[User.PASSWORD],
+            configurations=ConfigurationBuilder().from_json(json_dict[User.CONFIG]))

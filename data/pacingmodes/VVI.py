@@ -1,4 +1,5 @@
 from data.PacingMode import PacingMode
+import json
 
 
 class VVI(PacingMode):
@@ -12,3 +13,10 @@ class VVI(PacingMode):
             atrial_pulse_width=None,
             ventricular_amplitude=ventricular_amplitude,
             ventricular_pulse_width=ventricular_pulse_width)
+
+
+class VVIBuilder:
+    def from_string(self, string):
+        aai_dict = json.loads(string)
+        return VVI(aai_dict["lower_rate_limit"], aai_dict["upper_rate_limit"], aai_dict["ventricular_amplitude"],
+                   aai_dict["ventricular_pulse_width"])

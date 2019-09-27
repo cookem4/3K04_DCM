@@ -1,4 +1,5 @@
 from data.PacingMode import PacingMode
+import json
 
 
 class VOO(PacingMode):
@@ -12,3 +13,10 @@ class VOO(PacingMode):
             atrial_pulse_width=None,
             ventricular_amplitude=ventricular_amplitude,
             ventricular_pulse_width=ventricular_pulse_width)
+
+
+class VOOBuilder:
+    def from_string(self, string):
+        pm_dict = json.loads(string)
+        return VOO(pm_dict["lower_rate_limit"], pm_dict["upper_rate_limit"], pm_dict["ventricular_amplitude"],
+                   pm_dict["ventricular_pulse_width"])

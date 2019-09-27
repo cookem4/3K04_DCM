@@ -5,10 +5,10 @@ from data.pacingmodes.AAI import AAI
 
 if __name__ == '__main__':
     us = UserService()
-    us.create("parker", "tits")
     cs = ConfigurationService()
+
+    us.create("parker", "stupid_password")
     print(cs.get("parker", PacingModes.AAI).to_string())
-    new_aai = AAI(1, 2, 3, 4)
-    cs.update("parker", new_aai)
+    cs.update("parker", AAI(1, 2, 3, 4))
     print(cs.get("parker", PacingModes.AAI).to_string())
     us.delete("parker")

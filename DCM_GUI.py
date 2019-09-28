@@ -3,10 +3,13 @@ import tkinter as tk
 
 class DCM_GUI(tk.Tk):
     def __init__(self):
+        #initializes the main window
         tk.Tk.__init__(self)
         self._frame = None
+        #Goes to the first screen
         self.switch_frame(LoginPage)
 
+    #As the name says, a frame name is passed in and the window switches its displayed frame
     def switch_frame(self, frame_class):
         """Destroys current frame and replaces it with a new one."""
         new_frame = frame_class(self)
@@ -15,6 +18,19 @@ class DCM_GUI(tk.Tk):
         self._frame = new_frame
         self._frame.grid()
 
+
+#How formatting works:
+    #Grid system is used
+    #A grid is created in columns and rows, where each column/row has a width/heigh that allows it to wrap the item within it
+    #A single item can be in its own space at a specific row and column position and can be placed at any compas direction within that box
+    #An items specific placement within a box can be further changed by modifying the x padding and y padding
+        #The padding is helpful for fine tuning object positions
+    #Two items can be placed in the same grid space
+    #The row span or column span can be changed to have an item be able to be positioned with respect to severl rows/columns
+        #This allows for centering objects easily
+    #When in doubt, to visualize the design draw/visualize the rows and columns
+
+#Each class is its own frame
 class NewUserPage(tk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
@@ -24,7 +40,7 @@ class NewUserPage(tk.Frame):
         self.height = 720
         self.xPadding = 450
     
-        self.newUserText = tk.Label(self, bg="black", text = "Please enter your new\nusername and password")
+        self.newUserText = tk.Label(self, bg="black", text = "Please enter your new\username and password")
         self.newUserText.config(font = ("Helvetica", 30), foreground = "white")
         self.newUserText.grid(row = 0, column = 0, columnspan = 2, padx = (self.xPadding,0), pady = (200,75), sticky = tk.N)
 
@@ -321,6 +337,8 @@ class PacingConfig(tk.Frame):
         ventricalWidthState = 'normal'
         arpState = 'normal'
         vrpState = 'normal'
+        
+        #Update variables based on drop down selection
         if(self.pacingSelection.get() == "AOO"):
             ventricalAmpBack = "gray"
             ventricalWidthBack = "gray"
@@ -354,6 +372,7 @@ class PacingConfig(tk.Frame):
             atrialWidthState = 'disabled'
             arpState = 'disabled'
 
+        #Applies changes based on selected items to the entry boxes
         self.lowerRateLimitEntry.config(bg = lowerRateLimitBack, state = lowerRateLimitState)
         self.upperRateLimitEntry.config(bg = upperRateLimitBack, state = upperRateLimitState)
         self.atrialLimitEntry.config(bg = atrialAmpBack, state = atrialAmpState)
@@ -362,6 +381,7 @@ class PacingConfig(tk.Frame):
         self.ventricalPulseWidthEntry.config(bg = ventricalWidthBack, state = ventricalWidthState)
         self.arpEntry.config(bg = arpBack, state = arpState)
         self.vrpEntry.config(bg = vrpBack, state = vrpState)
+        
     def goBack(self):
         self.parent.switch_frame(MainPage)
     def saveData(self):

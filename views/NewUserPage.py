@@ -1,12 +1,15 @@
 import tkinter as tk
 from views import LoginPage
 from views.AppFrameBase import AppFrameBase
-
+from services.UserService import UserService
+from services.ConfigurationService import ConfigurationService
+from data.PacingMode import PacingModes
+from data.pacingmodes.AAI import AAI
 
 class NewUserPage(AppFrameBase):
     def __init__(self, parent):
         super().__init__(parent)
-        self.xPadding = 450
+        self.xPadding = 225
 
         self.newUserText = tk.Label(self, bg="black", text="Please enter your new username and password")
         self.newUserText.config(font=("Helvetica", 30), foreground="white")
@@ -37,4 +40,15 @@ class NewUserPage(AppFrameBase):
         self.newAccountButton.grid(row=4, column=0, columnspan=2, pady=(50, 0), padx=(self.xPadding, 0), sticky=tk.N)
 
     def registerUser(self):
-        self.parent.switch_frame(LoginPage.LoginPage)
+        us = UserService()
+        newUserName = self.usernameEntry.get()
+        password1 = self.passwordEntry.get()
+        password2 = self.confirmPassword.get()
+        if(newUserName!= "" and password1!="" and password1 == password2):
+            us.create(newUserName, password1)
+            self.parent.switch_frame(LoginPage.LoginPage)
+        else:
+            self.badLoginText = tk.Label(self, bg="black", text="INVALID ENTRY")
+            self.badLoginText.configure(font=(50), foreground="red")
+            self.badLoginText.grid(row=0, column=0, columnspan=2, padx=(self.xPadding, 0), pady=(275, 0), sticky=tk.N)
+

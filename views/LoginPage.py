@@ -2,7 +2,10 @@ import tkinter as tk
 from views import MainPage
 from views import NewUserPage
 from views.AppFrameBase import AppFrameBase
-
+from services.UserService import UserService
+from services.ConfigurationService import ConfigurationService
+from data.PacingMode import PacingModes
+from data.pacingmodes.AAI import AAI
 
 class LoginPage(AppFrameBase):
     def __init__(self, parent):
@@ -39,7 +42,10 @@ class LoginPage(AppFrameBase):
         self.newAccountButton.grid(row=4, column=0, columnspan=2, pady=(25, 0), padx=(self.xPadding, 0), sticky=tk.N)
 
     def loginBtn(self):
-        if (True):
+        us = UserService()
+        username =  self.usernameEntry.get()
+        password =  self.passwordEntry.get()
+        if (us.verify_user(username, password)):
             self.parent.switch_frame(MainPage.MainPage)
         else:
             self.badLoginText.grid(row=0, column=0, columnspan=2, padx=(self.xPadding, 0), pady=(325, 0), sticky=tk.N)

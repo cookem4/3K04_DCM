@@ -77,7 +77,7 @@ class PacingConfigPage(AppFrameBase):
                                             disabledbackground=self.disabled_bg)
         self.lowerRateLimitEntry.grid(row=2, column=3, pady=(50, 0), padx=(15, 0), sticky=tk.W)
 
-        self.lowerRateUnitLabel = tk.Label(self, bg="black", text="BPM")
+        self.lowerRateUnitLabel = tk.Label(self, bg="black", text="ppm")
         self.lowerRateUnitLabel.config(font=(25), foreground="white")
         self.lowerRateUnitLabel.grid(row=2, column=3, padx=(0, 20), pady=(50, 0), sticky=tk.E)
 
@@ -91,7 +91,7 @@ class PacingConfigPage(AppFrameBase):
                                             disabledbackground=self.disabled_bg)
         self.upperRateLimitEntry.grid(row=3, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
 
-        self.upperRateUnitLabel = tk.Label(self, bg="black", text="BPM")
+        self.upperRateUnitLabel = tk.Label(self, bg="black", text="ppm")
         self.upperRateUnitLabel.config(font=(25), foreground="white")
         self.upperRateUnitLabel.grid(row=3, column=3, padx=(0, 20), pady=(20, 0), sticky=tk.E)
 
@@ -105,7 +105,7 @@ class PacingConfigPage(AppFrameBase):
                                          disabledbackground=self.disabled_bg)
         self.atrialLimitEntry.grid(row=4, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
 
-        self.atrialLimitUnit = tk.Label(self, bg="black", text="mV")
+        self.atrialLimitUnit = tk.Label(self, bg="black", text="V")
         self.atrialLimitUnit.config(font=(25), foreground="white")
         self.atrialLimitUnit.grid(row=4, column=3, padx=(0, 35), pady=(20, 0), sticky=tk.E)
 
@@ -119,7 +119,7 @@ class PacingConfigPage(AppFrameBase):
                                             disabledbackground=self.disabled_bg)
         self.ventricalLimitEntry.grid(row=5, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
 
-        self.ventricalLimitUnit = tk.Label(self, bg="black", text="mV")
+        self.ventricalLimitUnit = tk.Label(self, bg="black", text="V")
         self.ventricalLimitUnit.config(font=(25), foreground="white")
         self.ventricalLimitUnit.grid(row=5, column=3, padx=(0, 35), pady=(20, 0), sticky=tk.E)
 
@@ -160,9 +160,9 @@ class PacingConfigPage(AppFrameBase):
         self.arpEntry = tk.Entry(self, width=10, font=(25), bg=self.enabled_bg, disabledbackground=self.disabled_bg)
         self.arpEntry.grid(row=8, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
 
-        self.arpUnit = tk.Label(self, bg="black", text="????")
+        self.arpUnit = tk.Label(self, bg="black", text="mSec")
         self.arpUnit.config(font=(25), foreground="white")
-        self.arpUnit.grid(row=8, column=3, padx=(0, 15), pady=(20, 0), sticky=tk.E)
+        self.arpUnit.grid(row=8, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
 
         #########################
 
@@ -173,9 +173,9 @@ class PacingConfigPage(AppFrameBase):
         self.vrpEntry = tk.Entry(self, width=10, font=(25), bg=self.enabled_bg, disabledbackground=self.disabled_bg)
         self.vrpEntry.grid(row=9, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
 
-        self.vrpUnit = tk.Label(self, bg="black", text="????")
+        self.vrpUnit = tk.Label(self, bg="black", text="mSec")
         self.vrpUnit.config(font=(25), foreground="white")
-        self.vrpUnit.grid(row=9, column=3, padx=(0, 15), pady=(20, 0), sticky=tk.E)
+        self.vrpUnit.grid(row=9, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
 
         #########################
 
@@ -194,9 +194,6 @@ class PacingConfigPage(AppFrameBase):
         self.errorLabel = tk.Label(self, bg="black", text="Erroneous Parameters Provided", width=33)
 
         self.dropDownChangeCallback()
-
-    def get_state(self, bool_state):
-        return "normal" if bool_state else "disabled"
 
     def dropDownChangeCallback(self, *args):
         #Upon callback clear all boxes

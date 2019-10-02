@@ -39,6 +39,13 @@ class NewUserPage(AppFrameBase):
         self.newAccountButton = tk.Button(self, text="Register", width=20, command=self.registerUser)
         self.newAccountButton.grid(row=4, column=0, columnspan=2, pady=(50, 0), padx=(self.xPadding, 0), sticky=tk.N)
 
+        self.backBtn = tk.Button(self, text="Back", width=8, height=1, command=self.goBack)
+        self.backBtn.config(font=("Helvetica", 12))
+        self.backBtn.grid(row=5, column=0, columnspan=1, pady=(140, 0), padx=(10, 0), sticky=tk.W)
+
+    def goBack(self):
+        self.parent.switch_frame(LoginPage.LoginPage)
+
     def registerUser(self):
         us = UserService()
         newUserName = self.usernameEntry.get()

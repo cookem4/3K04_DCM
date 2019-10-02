@@ -6,12 +6,15 @@ from services.UserService import UserService
 from services.ConfigurationService import ConfigurationService
 from data.PacingMode import PacingModes
 from data.pacingmodes.AAI import AAI
+from PIL import Image, ImageTk
+
+
 
 class LoginPage(AppFrameBase):
     def __init__(self, parent):
         super().__init__(parent)
         self.xPadding = 325
-
+        
         self.welcomeText = tk.Label(self, bg="black",
                                     text="Welcome to the Pacemaker DCM\n This tool allows a pacemaker to be configured in the \n AOO, VOO, AAI, and VVI pacing modes")
         self.welcomeText.config(font=("Helvetica", 20), foreground="white")

@@ -70,10 +70,10 @@ class PacingConfigPage(AppFrameBase):
         self.lowerRateLabel.config(font=(25), foreground="white")
         self.lowerRateLabel.grid(row=2, column=2, padx=(200, 0), pady=(50, 0), sticky=tk.E)
 
-        self.lowerRateLimitEntry = tk.Entry(self, width=10, bg="white", font=(25), state='disabled')
+        self.lowerRateLimitEntry = tk.Entry(self, width=10, bg="white", font=(25), state='normal')
         self.lowerRateLimitEntry.grid(row=2, column=3, pady=(50, 0), padx=(15, 0), sticky=tk.W)
 
-        self.lowerRateUnitLabel = tk.Label(self, bg="black", text="BPM")
+        self.lowerRateUnitLabel = tk.Label(self, bg="black", text="ppm")
         self.lowerRateUnitLabel.config(font=(25), foreground="white")
         self.lowerRateUnitLabel.grid(row=2, column=3, padx=(0, 20), pady=(50, 0), sticky=tk.E)
 
@@ -83,10 +83,10 @@ class PacingConfigPage(AppFrameBase):
         self.upperRateLabel.config(font=(25), foreground="white")
         self.upperRateLabel.grid(row=3, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
 
-        self.upperRateLimitEntry = tk.Entry(self, width=10, bg="white", font=(25), state='disabled')
+        self.upperRateLimitEntry = tk.Entry(self, width=10, bg="white", font=(25), state='normal')
         self.upperRateLimitEntry.grid(row=3, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
 
-        self.upperRateUnitLabel = tk.Label(self, bg="black", text="BPM")
+        self.upperRateUnitLabel = tk.Label(self, bg="black", text="ppm")
         self.upperRateUnitLabel.config(font=(25), foreground="white")
         self.upperRateUnitLabel.grid(row=3, column=3, padx=(0, 20), pady=(20, 0), sticky=tk.E)
 
@@ -96,10 +96,10 @@ class PacingConfigPage(AppFrameBase):
         self.atrialAmpLabel.config(font=(25), foreground="white")
         self.atrialAmpLabel.grid(row=4, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
 
-        self.atrialLimitEntry = tk.Entry(self, width=10, bg="white", font=(25), state='disabled')
+        self.atrialLimitEntry = tk.Entry(self, width=10, bg="white", font=(25), state='normal')
         self.atrialLimitEntry.grid(row=4, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
 
-        self.atrialLimitUnit = tk.Label(self, bg="black", text="mV")
+        self.atrialLimitUnit = tk.Label(self, bg="black", text="V")
         self.atrialLimitUnit.config(font=(25), foreground="white")
         self.atrialLimitUnit.grid(row=4, column=3, padx=(0, 35), pady=(20, 0), sticky=tk.E)
 
@@ -112,7 +112,7 @@ class PacingConfigPage(AppFrameBase):
         self.ventricalLimitEntry = tk.Entry(self, width=10, bg="white", font=(25), state='disabled')
         self.ventricalLimitEntry.grid(row=5, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
 
-        self.ventricalLimitUnit = tk.Label(self, bg="black", text="mV")
+        self.ventricalLimitUnit = tk.Label(self, bg="black", text="V")
         self.ventricalLimitUnit.config(font=(25), foreground="white")
         self.ventricalLimitUnit.grid(row=5, column=3, padx=(0, 35), pady=(20, 0), sticky=tk.E)
 
@@ -122,7 +122,7 @@ class PacingConfigPage(AppFrameBase):
         self.atrialPulseWidthLabel.config(font=(25), foreground="white")
         self.atrialPulseWidthLabel.grid(row=6, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
 
-        self.atrialPulseWidthEntry = tk.Entry(self, width=10, bg="white", font=(25), state='disabled')
+        self.atrialPulseWidthEntry = tk.Entry(self, width=10, bg="white", font=(25), state='normal')
         self.atrialPulseWidthEntry.grid(row=6, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
 
         self.atrialPulseWidthUnit = tk.Label(self, bg="black", text="mSec")
@@ -151,9 +151,9 @@ class PacingConfigPage(AppFrameBase):
         self.arpEntry = tk.Entry(self, width=10, bg="white", font=(25), state='disabled')
         self.arpEntry.grid(row=8, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
 
-        self.arpUnit = tk.Label(self, bg="black", text="????")
+        self.arpUnit = tk.Label(self, bg="black", text="mSec")
         self.arpUnit.config(font=(25), foreground="white")
-        self.arpUnit.grid(row=8, column=3, padx=(0, 15), pady=(20, 0), sticky=tk.E)
+        self.arpUnit.grid(row=8, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
 
         #########################
 
@@ -164,9 +164,9 @@ class PacingConfigPage(AppFrameBase):
         self.vrpEntry = tk.Entry(self, width=10, bg="white", font=(25), state='disabled')
         self.vrpEntry.grid(row=9, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
 
-        self.vrpUnit = tk.Label(self, bg="black", text="????")
+        self.vrpUnit = tk.Label(self, bg="black", text="mSec")
         self.vrpUnit.config(font=(25), foreground="white")
-        self.vrpUnit.grid(row=9, column=3, padx=(0, 15), pady=(20, 0), sticky=tk.E)
+        self.vrpUnit.grid(row=9, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
 
         #########################
 
@@ -182,7 +182,20 @@ class PacingConfigPage(AppFrameBase):
         self.saveDeviceLabel.config(font=(25), foreground="white")
         self.saveDeviceLabel.grid(row=10, column=1, padx=(30, 0), pady=(100, 0), sticky=tk.W)
 
+        self.errorLabel = tk.Label(self, bg="black", text="Erroneous Parameters Provided", width=33)
+
     def dropDownChangeCallback(self, *args):
+
+        #Upon callback clear all boxes
+        self.lowerRateLimitEntry.delete(0, tk.END)
+        self.upperRateLimitEntry.delete(0, tk.END)
+        self.atrialLimitEntry.delete(0, tk.END)
+        self.ventricalLimitEntry.delete(0, tk.END)
+        self.atrialPulseWidthEntry.delete(0, tk.END)
+        self.ventricalPulseWidthEntry.delete(0, tk.END)
+        self.arpEntry.delete(0, tk.END)
+        self.vrpEntry.delete(0, tk.END)
+        
         # Sets which boxes are grayed out based on drop down menu selection
         lowerRateLimitState = True
         upperRateLimitState = True
@@ -230,4 +243,47 @@ class PacingConfigPage(AppFrameBase):
         self.parent.switch_frame(MainPage.MainPage)
 
     def saveData(self):
-        self.saveDeviceLabel.config(bg="green", fg="black")
+        #Catch boundary cases from erroneous text box entries
+        displayErrorMessage = False
+        lowerRateLimit =  self.lowerRateLimitEntry.get()
+        upperRateLimit =  self.upperRateLimitEntry.get()
+        atrialAmp =  self.atrialLimitEntry.get()
+        ventricalAmp = self.ventricalLimitEntry.get()
+        atrialPulseWidth = self.atrialPulseWidthEntry.get()
+        ventricalPulseWidth = self.ventricalPulseWidthEntry.get()
+        arp = self.arpEntry.get()
+        vrp = self.vrpEntry.get()
+
+        # Update variables based on drop down selection
+        try:
+            if self.pacingSelection.get() == "AOO":
+                if((lowerRateLimit != "" and upperRateLimit != "" and atrialAmp!="" and atrialPulseWidth != "") and (int(lowerRateLimit) > 0 and int(upperRateLimit) > 0 and int(atrialAmp) > 0 and int(atrialPulseWidth) > 0)):
+                    displayErrorMessage = False
+                else:
+                    displayErrorMessage = True
+            if self.pacingSelection.get() == "VOO":
+                if((lowerRateLimit != "" and upperRateLimit != "" and ventricalAmp!="" and ventricalPulseWidth != "") and (int(lowerRateLimit) > 0 and int(upperRateLimit) > 0 and int(ventricalAmp) > 0 and int(ventricalPulseWidth) > 0)):
+                    displayErrorMessage = False
+                else:
+                    displayErrorMessage = True
+            if self.pacingSelection.get() == "AAI":
+                if((lowerRateLimit != "" and upperRateLimit != "" and atrialAmp!="" and atrialPulseWidth != "" and arp != "") and (int(lowerRateLimit) > 0 and int(upperRateLimit) > 0 and int(atrialAmp) > 0 and int(atrialPulseWidth) > 0 and int(arp) > 0)):
+                    displayErrorMessage = False
+                else:
+                    displayErrorMessage = True
+            if self.pacingSelection.get() == "VVI":
+                if((lowerRateLimit != "" and upperRateLimit != "" and ventricalAmp!="" and ventricalPulseWidth != "" and arp != "") and (int(lowerRateLimit) > 0 and int(upperRateLimit) > 0 and int(ventricalAmp) > 0 and int(ventricalPulseWidth) > 0 and int(vrp) > 0)):
+                    displayErrorMessage = False
+                else:
+                    displayErrorMessage = True
+        except:
+            displayErrorMessage = True #If non numerica entries
+            
+        
+        if(displayErrorMessage):
+            self.errorLabel.config(font=(25), foreground="red")
+            self.errorLabel.config(text="Erroneous Parameters Provided", width=33)
+            self.errorLabel.grid(row=10, column=2, columnspan = 3 ,padx=(0, 0), pady=(0, 0), sticky=tk.E)
+        else:
+            self.errorLabel.config(text="", width=1) #Shrink to remove, deleting wasn't working
+            self.saveDeviceLabel.config(bg="green", fg="black")

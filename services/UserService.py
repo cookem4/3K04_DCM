@@ -49,7 +49,10 @@ class UserService:
             return user.password_hash == self.encryptor.hash(password)
         return False
 
+    def print(self):
+        print(json.dumps(self.text_repo.get(), indent=4, sort_keys=True))
     ####################################PRIVATE METHODS##########################################
     def __save_user_json(self, users_json):
         users_str = json.dumps(users_json)
         self.text_repo.save(users_str)
+

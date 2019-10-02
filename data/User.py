@@ -1,4 +1,5 @@
-from data.PacingMode import PacingMode, PacingModeBuilder
+from data.PacingMode import PacingMode
+from data.PacingModeBuilder import PacingModeBuilder
 
 
 class User:
@@ -17,7 +18,7 @@ class User:
         return {User.USERNAME: self.username,
                 User.PASSWORD: self.password_hash,
                 User.MODE: self.pacing_mode,
-                User.SETTINGS: self.settings}
+                User.SETTINGS: self.settings.to_string()}
 
 
 class UserBuilder:

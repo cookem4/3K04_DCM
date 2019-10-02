@@ -1,4 +1,4 @@
-from data.PacingMode import PacingMode
+from ..PacingMode import PacingMode
 import json
 
 

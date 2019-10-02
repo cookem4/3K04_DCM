@@ -1,5 +1,7 @@
 import json
 
+from cryptography.fernet import InvalidToken
+
 from services.EncryptionService import EncryptionService
 
 
@@ -11,7 +13,10 @@ class TextRepository:
     def get(self):
         with open(self.file, 'r') as file:
             s = file.read()
-        return json.loads(self.encryptor.decrypt(s))
+        try:
+            return json.loads(self.encryptor.decrypt(s))
+        except InvalidToken:
+            return {}
 
     def update(self, string: str):
         self.save(string)

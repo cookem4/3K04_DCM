@@ -1,7 +1,10 @@
 import json
-from data.PacingMode import PacingModeBuilder
-from data.User import User
-from data.User import UserBuilder
+
+from cryptography.fernet import InvalidToken
+
+from data.User import User, UserBuilder
+from data.PacingModeBuilder import PacingModeBuilder
+from data.PacingMode import PacingMode
 from repositories.TextRepository import TextRepository
 from services.EncryptionService import EncryptionService
 
@@ -27,9 +30,15 @@ class UserService:
     def update(self, user: User):
         if self.user_exists(user.username):
             user_json = self.text_repo.get()
-
             user_json[user.username] = user.to_json()
             self.__save_user_json(user_json)
+
+    def update_pacing_mode(self, username, pacing_mode: PacingMode):
+        if self.user_exists(username):
+            user = self.read(username)
+            user.pacing_mode = pacing_mode.NAME
+            user.settings = pacing_mode
+            self.update(user)
 
     def delete(self, username):
         if self.user_exists(username):
@@ -40,7 +49,10 @@ class UserService:
     ####################################HELPER METHDOS#########################################
 
     def user_exists(self, username):
-        return True if username in self.text_repo.get() else False
+        try:
+            return True if username in self.text_repo.get() else False
+        except InvalidToken:
+            return False
 
     def verify_user(self, username, password):
         if self.user_exists(username):

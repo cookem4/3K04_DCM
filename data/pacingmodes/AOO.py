@@ -16,7 +16,12 @@ class AOO(PacingMode):
 
 
 class AOOBuilder:
-    def from_string(self, string):
+    @staticmethod
+    def from_string(string):
         pm_dict = json.loads(string)
         return AOO(pm_dict["lower_rate_limit"], pm_dict["upper_rate_limit"], pm_dict["atrial_amplitude"],
                    pm_dict["atrial_pulse_width"])
+
+    @staticmethod
+    def empty():
+        return AOO(0, 0, 0, 0)

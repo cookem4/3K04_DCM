@@ -1,26 +1,30 @@
-from data.Configuration import Configuration
-from data.Configuration import ConfigurationBuilder
+from data.PacingMode import PacingMode, PacingModeBuilder
 
 
 class User:
     USERNAME = "username"
-    PASSWORD = "password"
-    CONFIG = "configurations"
+    PASSWORD = "password_hash"
+    MODE = "pacing_mode_name"
+    SETTINGS = "pacing_mode_settings"
 
-    def __init__(self, username: str, password_hash: str, configurations: Configuration):
+    def __init__(self, username: str, password_hash: str, pacing_mode: PacingMode):
         self.username = username
         self.password_hash = password_hash
-        self.configurations = configurations
+        self.pacing_mode = pacing_mode.NAME
+        self.settings = pacing_mode
 
     def to_json(self):
         return {User.USERNAME: self.username,
                 User.PASSWORD: self.password_hash,
-                User.CONFIG: self.configurations.to_string()}
+                User.MODE: self.pacing_mode,
+                User.SETTINGS: self.settings}
 
 
 class UserBuilder:
-    def from_json(self, json_dict):
+    @staticmethod
+    def from_json(json_dict):
         return User(
             username=json_dict[User.USERNAME],
             password_hash=json_dict[User.PASSWORD],
-            configurations=ConfigurationBuilder().from_json(json_dict[User.CONFIG]))
+            pacing_mode=PacingModeBuilder.from_string(json_dict[User.MODE], json_dict[User.SETTINGS])
+        )

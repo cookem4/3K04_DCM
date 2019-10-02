@@ -1,6 +1,5 @@
 import json
-
-from data.Configuration import Configuration
+from data.PacingMode import PacingModeBuilder
 from data.User import User
 from data.User import UserBuilder
 from repositories.TextRepository import TextRepository
@@ -15,10 +14,10 @@ class UserService:
         self.encryptor = EncryptionService()
 
     ################################CRUD METHODS#############################################
-    def create(self, username, password, configuration=Configuration()):
+    def create(self, username, password):
         if not self.user_exists(username):
             users_json = self.text_repo.get()
-            users_json[username] = User(username, self.encryptor.hash(password), configuration).to_json()
+            users_json[username] = User(username, self.encryptor.hash(password), PacingModeBuilder.empty()).to_json()
             self.__save_user_json(users_json)
 
     def read(self, username):
@@ -28,6 +27,7 @@ class UserService:
     def update(self, user: User):
         if self.user_exists(user.username):
             user_json = self.text_repo.get()
+
             user_json[user.username] = user.to_json()
             self.__save_user_json(user_json)
 
@@ -51,8 +51,8 @@ class UserService:
 
     def print(self):
         print(json.dumps(self.text_repo.get(), indent=4, sort_keys=True))
+
     ####################################PRIVATE METHODS##########################################
     def __save_user_json(self, users_json):
         users_str = json.dumps(users_json)
         self.text_repo.save(users_str)
-

@@ -2,9 +2,7 @@ import tkinter as tk
 from views import LoginPage
 from views.AppFrameBase import AppFrameBase
 from services.UserService import UserService
-from services.ConfigurationService import ConfigurationService
-from data.PacingMode import PacingModes
-from data.pacingmodes.AAI import AAI
+
 
 class NewUserPage(AppFrameBase):
     def __init__(self, parent):

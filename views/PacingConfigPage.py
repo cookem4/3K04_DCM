@@ -196,7 +196,7 @@ class PacingConfigPage(AppFrameBase):
         self.dropDownChangeCallback()
 
     def dropDownChangeCallback(self, *args):
-        #Upon callback clear all boxes
+        # Upon callback clear all boxes
         self.lowerRateLimitEntry.delete(0, tk.END)
         self.upperRateLimitEntry.delete(0, tk.END)
         self.atrialLimitEntry.delete(0, tk.END)
@@ -248,7 +248,7 @@ class PacingConfigPage(AppFrameBase):
             if self.pacingSelection.get() == "AOO":
                 if ((lowerRateLimit != "" and upperRateLimit != "" and atrialAmp != "" and atrialPulseWidth != "") and (
                         int(lowerRateLimit) > 0 and int(upperRateLimit) > 0 and int(atrialAmp) > 0 and int(
-                        atrialPulseWidth) > 0)):
+                    atrialPulseWidth) > 0)):
                     displayErrorMessage = False
                 else:
                     displayErrorMessage = True
@@ -256,7 +256,7 @@ class PacingConfigPage(AppFrameBase):
                 if ((
                         lowerRateLimit != "" and upperRateLimit != "" and ventricalAmp != "" and ventricalPulseWidth != "") and (
                         int(lowerRateLimit) > 0 and int(upperRateLimit) > 0 and int(ventricalAmp) > 0 and int(
-                        ventricalPulseWidth) > 0)):
+                    ventricalPulseWidth) > 0)):
                     displayErrorMessage = False
                 else:
                     displayErrorMessage = True
@@ -264,7 +264,7 @@ class PacingConfigPage(AppFrameBase):
                 if ((
                         lowerRateLimit != "" and upperRateLimit != "" and atrialAmp != "" and atrialPulseWidth != "" and arp != "") and (
                         int(lowerRateLimit) > 0 and int(upperRateLimit) > 0 and int(atrialAmp) > 0 and int(
-                        atrialPulseWidth) > 0 and int(arp) > 0)):
+                    atrialPulseWidth) > 0 and int(arp) > 0)):
                     displayErrorMessage = False
                 else:
                     displayErrorMessage = True
@@ -272,7 +272,7 @@ class PacingConfigPage(AppFrameBase):
                 if ((
                         lowerRateLimit != "" and upperRateLimit != "" and ventricalAmp != "" and ventricalPulseWidth != "" and arp != "") and (
                         int(lowerRateLimit) > 0 and int(upperRateLimit) > 0 and int(ventricalAmp) > 0 and int(
-                        ventricalPulseWidth) > 0 and int(vrp) > 0)):
+                    ventricalPulseWidth) > 0 and int(vrp) > 0)):
                     displayErrorMessage = False
                 else:
                     displayErrorMessage = True

@@ -42,6 +42,7 @@ class LoginPage(AppFrameBase):
     def loginBtn(self):
         us = UserService()
         username =  self.usernameEntry.get()
+        super().setUsername(username)
         password =  self.passwordEntry.get()
         if (us.verify_user(username, password)):
             self.parent.switch_frame(MainPage.MainPage)

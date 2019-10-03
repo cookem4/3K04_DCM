@@ -17,3 +17,8 @@ class AppFrameBase(tk.Frame):
         img = tk.Label(self, image=render)
         img.image = render
         img.grid(row=0, column=0, columnspan=1000, rowspan=1000, sticky=tk.N)
+        self.username = ""
+    def setUsername(self, myUser):
+        self.username = myUser
+    def getUsername(self):
+        return self.username

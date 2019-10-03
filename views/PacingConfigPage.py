@@ -9,6 +9,8 @@ class PacingConfigPage(AppFrameBase):
 
     def __init__(self, parent):
         super().__init__(parent)
+        print(super().getUsername())
+        print("HERE")
         self.xPadding = 150
 
         self.connectionStateText = tk.Label(self, bg="gray", text="Connection Not Established")

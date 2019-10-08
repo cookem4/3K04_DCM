@@ -12,7 +12,9 @@ class VOO(PacingMode):
             atrial_amplitude=None,
             atrial_pulse_width=None,
             ventricular_amplitude=ventricular_amplitude,
-            ventricular_pulse_width=ventricular_pulse_width)
+            ventricular_pulse_width=ventricular_pulse_width,
+            arp = None,
+            vrp = None)
 
 
 class VOOBuilder:

@@ -64,6 +64,9 @@ class UserService:
     def print(self):
         print(json.dumps(self.text_repo.get(), indent=4, sort_keys=True))
 
+    def getJSON(self):
+        return json.dumps(self.text_repo.get(), indent=4, sort_keys=True)
+
     ####################################PRIVATE METHODS##########################################
     def __save_user_json(self, users_json):
         users_str = json.dumps(users_json)

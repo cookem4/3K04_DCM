@@ -12,7 +12,9 @@ class AOO(PacingMode):
             atrial_amplitude=atrial_amplitude,
             atrial_pulse_width=atrial_pulse_width,
             ventricular_amplitude=None,
-            ventricular_pulse_width=None)
+            ventricular_pulse_width=None,
+            arp = None,
+            vrp = None)
 
 
 class AOOBuilder:

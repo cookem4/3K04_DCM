@@ -20,8 +20,11 @@ class UserService:
     def create(self, username, password):
         if not self.user_exists(username):
             users_json = self.text_repo.get()
-            users_json[username] = User(username, self.encryptor.hash(password), PacingModeBuilder.empty()).to_json()
-            self.__save_user_json(users_json)
+            if len(users_json.keys()) >= 10:
+                raise Exception("Cannot hold more than 10 users, please remove a user to create a new one")
+            else:
+                users_json[username] = User(username, self.encryptor.hash(password), PacingModeBuilder.empty()).to_json()
+                self.__save_user_json(users_json)
 
     def read(self, username):
         if self.user_exists(username):

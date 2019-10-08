@@ -22,7 +22,7 @@ class VVIBuilder:
     def from_string(string):
         aai_dict = json.loads(string)
         return VVI(aai_dict["lower_rate_limit"], aai_dict["upper_rate_limit"], aai_dict["ventricular_amplitude"],
-                   aai_dict["ventricular_pulse_width"])
+                   aai_dict["ventricular_pulse_width"], aai_dict["vrp"])
 
     @staticmethod
     def empty():

@@ -28,10 +28,10 @@ class NewUserPage(AppFrameBase):
         self.usernameEntry = tk.Entry(self, width=20, bg="white", font=(25))
         self.usernameEntry.grid(row=1, column=1, pady=(0, 0), padx=(0, 0), sticky=tk.SW)
 
-        self.passwordEntry = tk.Entry(self, width=20, bg="white", font=(25))
+        self.passwordEntry = tk.Entry(self, width=20, bg="white", show="*", font=(25))
         self.passwordEntry.grid(row=2, column=1, pady=(0, 0), padx=(0, 0), sticky=tk.SW)
 
-        self.confirmPassword = tk.Entry(self, width=20, bg="white", font=(25))
+        self.confirmPassword = tk.Entry(self, width=20, bg="white", show="*", font=(25))
         self.confirmPassword.grid(row=3, column=1, pady=(0, 0), padx=(0, 0), sticky=tk.SW)
 
         self.newAccountButton = tk.Button(self, text="Register", width=20, command=self.registerUser)

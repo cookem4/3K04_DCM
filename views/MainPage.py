@@ -2,11 +2,29 @@ import tkinter as tk
 from views import PacingConfigPage
 from views import LoginPage
 from views.AppFrameBase import AppFrameBase
-
+from services.UserService import UserService
+import json
+from data.pacingmodes.VVI import VVI
+from data.pacingmodes.AAI import AAI
+from data.pacingmodes.AOO import AOO
+from data.pacingmodes.VOO import VOO
 
 class MainPage(AppFrameBase):
     def __init__(self, parent):
         super().__init__(parent)
+
+
+        f = open("currUser.txt","r")
+        self.username = f.read()
+        f.close()
+
+        self.us = UserService()
+        #Obtains current json data for users
+        userJson = self.us.getJSON()
+        loaded_json = json.loads(userJson)
+        for item in loaded_json:
+            if(item == self.username):
+                self.currUserJson = loaded_json[item]
 
         self.connectionStateText = tk.Label(self, bg="gray", text="Connection Not Established")
         self.connectionStateText.config(font=("Helvetica", 25), foreground="white")
@@ -38,7 +56,7 @@ class MainPage(AppFrameBase):
         # The following show device information###
         #########################################
 
-        self.programmedModeLabel = tk.Label(self, bg="black", text="Current Programmed Pacing Mode: VOO (test)")
+        self.programmedModeLabel = tk.Label(self, bg="black", text="Current Programmed Pacing Mode: " + self.currUserJson["pacing_mode_name"])
         self.programmedModeLabel.config(font=(15), foreground="white")
         self.programmedModeLabel.grid(row=2, column=0, columnspan=3, padx=(0, 0), pady=(30, 0), sticky=tk.N)
 

@@ -7,6 +7,8 @@ from data.pacingmodes.VVI import VVI
 from data.pacingmodes.AAI import AAI
 from data.pacingmodes.AOO import AOO
 from data.pacingmodes.VOO import VOO
+import time
+
 class PacingConfigPage(AppFrameBase):
     enabled_bg = "white"
     disabled_bg = "grey"
@@ -25,7 +27,6 @@ class PacingConfigPage(AppFrameBase):
         for item in loaded_json:
             if(item == self.username):
                 self.currUserJson = loaded_json[item]
-        print(self.currUserJson["pacing_mode_settings"])
 
         usrLowerRateLimit = tk.StringVar()
         usrUpperRateLimit = tk.StringVar()
@@ -72,9 +73,9 @@ class PacingConfigPage(AppFrameBase):
         self.programmedModeLabel.config(font=(20), foreground="white")
         self.programmedModeLabel.grid(row=7, column=0, columnspan=2, padx=(30, 0), pady=(20, 0), sticky=tk.W)
 
-        self.actualModeLabel = tk.Label(self, bg="black", text="VOO (test)")
+        self.actualModeLabel = tk.Label(self, bg="black", text=self.currUserJson["pacing_mode_name"])
         self.actualModeLabel.config(font=(20), foreground="white")
-        self.actualModeLabel.grid(row=7, column=1, columnspan=1, padx=(0, 0), pady=(20, 0), sticky=tk.E)
+        self.actualModeLabel.grid(row=7, column=1, columnspan=1, padx=(0, 75), pady=(20, 0), sticky=tk.E)
 
         self.currIDLabel = tk.Label(self, bg="black", text="Connected Device ID:")
         self.currIDLabel.config(font=(20), foreground="white")
@@ -223,16 +224,23 @@ class PacingConfigPage(AppFrameBase):
         self.dropDownChangeCallback()
 
         #Set textbox values based on user profile
-        ###print(self.currUserJson["pacing_mode_settings"][self.currUserJson["pacing_mode_settings"].index("lower_rate_limit\": ") + len("lower_rate_limit\": "):self.currUserJson["pacing_mode_settings"].index(", \"upper_rate_limit\": ")])
         #String slicing of json object
-        usrLowerRateLimit.set(self.currUserJson["pacing_mode_settings"][self.currUserJson["pacing_mode_settings"].index("lower_rate_limit\": ") + len("lower_rate_limit\": "):self.currUserJson["pacing_mode_settings"].index(", \"upper_rate_limit\": ")])
-        usrUpperRateLimit.set(self.currUserJson["pacing_mode_settings"][self.currUserJson["pacing_mode_settings"].index("upper_rate_limit\": ") + len("upper_rate_limit\": "):self.currUserJson["pacing_mode_settings"].index(", \"atrial_amplitude\": ")])
-        usrAtrialAmp.set(self.currUserJson["pacing_mode_settings"][self.currUserJson["pacing_mode_settings"].index("atrial_amplitude\": ") + len("atrial_amplitude\": "):self.currUserJson["pacing_mode_settings"].index(", \"atrial_pulse_width\": ")])
-        usrAtrialPulseWidth.set(self.currUserJson["pacing_mode_settings"][self.currUserJson["pacing_mode_settings"].index("atrial_pulse_width\": ") + len("atrial_pulse_width\": "):self.currUserJson["pacing_mode_settings"].index(", \"ventricular_amplitude\": ")])
-        usrVentricalAmp.set(self.currUserJson["pacing_mode_settings"][self.currUserJson["pacing_mode_settings"].index("ventricular_amplitude\": ") + len("ventricular_amplitude\": "):self.currUserJson["pacing_mode_settings"].index(", \"ventricular_pulse_width\": ")])
-        usrVentricalPulseWidth.set(self.currUserJson["pacing_mode_settings"][self.currUserJson["pacing_mode_settings"].index("ventricular_pulse_width\": ") + len("ventricular_pulse_width\": "):self.currUserJson["pacing_mode_settings"].index(", \"arp\": ")])
-        usrARP.set(self.currUserJson["pacing_mode_settings"][self.currUserJson["pacing_mode_settings"].index("arp\": ") + len("arp\": "):self.currUserJson["pacing_mode_settings"].index(", \"vrp\": ")])
-        usrVRP.set(self.currUserJson["pacing_mode_settings"][self.currUserJson["pacing_mode_settings"].index("vrp\": ") + len("vrp\": "):self.currUserJson["pacing_mode_settings"].index("}")])
+        lowerRateLimitSlice = self.currUserJson["pacing_mode_settings"][self.currUserJson["pacing_mode_settings"].index("lower_rate_limit\": ") + len("lower_rate_limit\": "):self.currUserJson["pacing_mode_settings"].index(", \"upper_rate_limit\": ")]
+        upperRateLimitSlice = self.currUserJson["pacing_mode_settings"][self.currUserJson["pacing_mode_settings"].index("upper_rate_limit\": ") + len("upper_rate_limit\": "):self.currUserJson["pacing_mode_settings"].index(", \"atrial_amplitude\": ")]
+        atrialAmpSlice = self.currUserJson["pacing_mode_settings"][self.currUserJson["pacing_mode_settings"].index("atrial_amplitude\": ") + len("atrial_amplitude\": "):self.currUserJson["pacing_mode_settings"].index(", \"atrial_pulse_width\": ")]
+        atrialPulseWidthSlice = self.currUserJson["pacing_mode_settings"][self.currUserJson["pacing_mode_settings"].index("atrial_pulse_width\": ") + len("atrial_pulse_width\": "):self.currUserJson["pacing_mode_settings"].index(", \"ventricular_amplitude\": ")]
+        ventricalAmpSlice = self.currUserJson["pacing_mode_settings"][self.currUserJson["pacing_mode_settings"].index("ventricular_amplitude\": ") + len("ventricular_amplitude\": "):self.currUserJson["pacing_mode_settings"].index(", \"ventricular_pulse_width\": ")]
+        ventricalPulseWidthSlice = self.currUserJson["pacing_mode_settings"][self.currUserJson["pacing_mode_settings"].index("ventricular_pulse_width\": ") + len("ventricular_pulse_width\": "):self.currUserJson["pacing_mode_settings"].index(", \"arp\": ")]
+        arpSlice = self.currUserJson["pacing_mode_settings"][self.currUserJson["pacing_mode_settings"].index("arp\": ") + len("arp\": "):self.currUserJson["pacing_mode_settings"].index(", \"vrp\": ")]
+        vrpSlice = self.currUserJson["pacing_mode_settings"][self.currUserJson["pacing_mode_settings"].index("vrp\": ") + len("vrp\": "):self.currUserJson["pacing_mode_settings"].index("}")]
+        usrLowerRateLimit.set("" if (lowerRateLimitSlice == "null") else (lowerRateLimitSlice))
+        usrUpperRateLimit.set("" if (upperRateLimitSlice == "null") else upperRateLimitSlice)
+        usrAtrialAmp.set("" if (atrialAmpSlice == "null") else atrialAmpSlice)
+        usrAtrialPulseWidth.set("" if (atrialPulseWidthSlice == "null") else atrialPulseWidthSlice)
+        usrVentricalAmp.set("" if (ventricalAmpSlice == "null") else ventricalAmpSlice)
+        usrVentricalPulseWidth.set("" if (ventricalPulseWidthSlice=="null") else ventricalPulseWidthSlice)
+        usrARP.set("" if (arpSlice == "null") else arpSlice)
+        usrVRP.set("" if (vrpSlice == "null") else vrpSlice)
 
     def dropDownChangeCallback(self, *args):
         # Upon callback clear all boxes
@@ -309,7 +317,7 @@ class PacingConfigPage(AppFrameBase):
                     displayErrorMessage = True
             if self.pacingSelection.get() == "VVI":
                 if ((
-                        lowerRateLimit != "" and upperRateLimit != "" and ventricalAmp != "" and ventricalPulseWidth != "" and arp != "") and (
+                        lowerRateLimit != "" and upperRateLimit != "" and ventricalAmp != "" and ventricalPulseWidth != "" and vrp != "") and (
                         int(lowerRateLimit) > 0 and int(upperRateLimit) > 0 and int(ventricalAmp) > 0 and int(
                     ventricalPulseWidth) > 0 and int(vrp) > 0)):
                     displayErrorMessage = False
@@ -335,5 +343,16 @@ class PacingConfigPage(AppFrameBase):
                 self.us.update_pacing_mode(self.username, VVI(int(lowerRateLimit), int(upperRateLimit),int(ventricalAmp), int(ventricalPulseWidth), int(vrp)))
                 
             self.errorLabel.config(text="", width=1)  # Shrink to remove, deleting wasn't working
-            
             self.saveDeviceLabel.config(bg="green", fg="black")
+            
+            #Update displayed programmed mode 
+            userJson = self.us.getJSON()
+            loaded_json = json.loads(userJson)
+            for item in loaded_json:
+                if(item == self.username):
+                    self.currUserJson = loaded_json[item]
+            self.actualModeLabel.config(text=self.currUserJson["pacing_mode_name"])
+            
+            #Update wont work here????
+            #time.sleep(3)
+            #self.saveDeviceLabel.config(bg="gray", fg="white")

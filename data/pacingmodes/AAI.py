@@ -22,7 +22,7 @@ class AAIBuilder:
     def from_string(string):
         aai_dict = json.loads(string)
         return AAI(aai_dict["lower_rate_limit"], aai_dict["upper_rate_limit"], aai_dict["atrial_amplitude"],
-                   aai_dict["atrial_pulse_width"])
+                   aai_dict["atrial_pulse_width"],aai_dict["arp"])
 
     @staticmethod
     def empty():

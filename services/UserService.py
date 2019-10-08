@@ -2,9 +2,9 @@ import json
 
 from cryptography.fernet import InvalidToken
 
-from data.User import User, UserBuilder
-from data.PacingModeBuilder import PacingModeBuilder
 from data.PacingMode import PacingMode
+from data.PacingModeBuilder import PacingModeBuilder
+from data.User import User, UserBuilder
 from repositories.TextRepository import TextRepository
 from services.EncryptionService import EncryptionService
 

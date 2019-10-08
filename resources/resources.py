@@ -1,13 +1,12 @@
-import os
 import base64
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-from cryptography.fernet import Fernet
 
+from cryptography.fernet import Fernet
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 keypass: bytes = b"p@c3m@k3r"
-salt:bytes = b"12345"
+salt: bytes = b"12345"
 
 kdf = PBKDF2HMAC(
     algorithm=hashes.SHA3_256(),

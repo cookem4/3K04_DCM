@@ -1,5 +1,6 @@
-from ..PacingMode import PacingMode
 import json
+
+from ..PacingMode import PacingMode
 
 
 class AOO(PacingMode):
@@ -13,8 +14,8 @@ class AOO(PacingMode):
             atrial_pulse_width=atrial_pulse_width,
             ventricular_amplitude=None,
             ventricular_pulse_width=None,
-            arp = None,
-            vrp = None)
+            arp=None,
+            vrp=None)
 
 
 class AOOBuilder:

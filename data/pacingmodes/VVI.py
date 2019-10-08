@@ -1,5 +1,6 @@
-from data.PacingMode import PacingMode
 import json
+
+from data.PacingMode import PacingMode
 
 
 class VVI(PacingMode):
@@ -13,8 +14,8 @@ class VVI(PacingMode):
             atrial_pulse_width=None,
             ventricular_amplitude=ventricular_amplitude,
             ventricular_pulse_width=ventricular_pulse_width,
-            arp = None,
-            vrp = vrp)
+            arp=None,
+            vrp=vrp)
 
 
 class VVIBuilder:

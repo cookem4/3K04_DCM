@@ -1,8 +1,9 @@
 from data.PacingModes import PacingModes
-from data.pacingmodes.AOO import AOOBuilder
-from data.pacingmodes.VVI import VVIBuilder
-from data.pacingmodes.VOO import VOOBuilder
 from data.pacingmodes.AAI import AAIBuilder
+from data.pacingmodes.AOO import AOOBuilder
+from data.pacingmodes.VOO import VOOBuilder
+from data.pacingmodes.VVI import VVIBuilder
+
 
 class PacingModeBuilder:
     @staticmethod

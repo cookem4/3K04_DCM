@@ -1,15 +1,16 @@
 import tkinter as tk
+
+from services.UserService import UserService
 from views import MainPage
 from views import NewUserPage
 from views.AppFrameBase import AppFrameBase
-from services.UserService import UserService
 
 
 class LoginPage(AppFrameBase):
     def __init__(self, parent):
         super().__init__(parent)
         self.xPadding = 325
-        
+
         self.welcomeText = tk.Label(self, bg="black",
                                     text="Welcome to the Pacemaker DCM\n This tool allows a pacemaker to be configured in the \n AOO, VOO, AAI, and VVI pacing modes")
         self.welcomeText.config(font=("Helvetica", 20), foreground="white")
@@ -41,13 +42,11 @@ class LoginPage(AppFrameBase):
 
     def loginBtn(self):
         us = UserService()
-        username =  self.usernameEntry.get()
-        #Save username to text storage for later access
-        f = open("currUser.txt", "w+")
-        f.write(username)
-        f.close()
-        password =  self.passwordEntry.get()
+        username = self.usernameEntry.get()
+        password = self.passwordEntry.get()
+
         if (us.verify_user(username, password)):
+            self.session_service.start_session(username)
             self.parent.switch_frame(MainPage.MainPage)
         else:
             self.badLoginText.grid(row=0, column=0, columnspan=2, padx=(self.xPadding, 0), pady=(325, 0), sticky=tk.N)

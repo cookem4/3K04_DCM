@@ -112,5 +112,5 @@ And you're good to go!
 [license-shield]: https://img.shields.io/github/license/cookem4/3K04_DCM.svg?style=flat-square
 [license-url]: https://github.com/cookem4/3K04_DCM/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/parkerkary
+[linkedin-url]: https://linkedin.com/in/pdkary
 [product-screenshot]: images/screenshot.png

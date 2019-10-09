@@ -27,4 +27,4 @@ class AAIBuilder:
 
     @staticmethod
     def empty():
-        return AAI(0, 0, 0, 0)
+        return AAI(60, 120, 3.5, 1, 250)

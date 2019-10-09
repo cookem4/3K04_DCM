@@ -50,10 +50,21 @@ class NewUserPage(AppFrameBase):
         newUserName = self.usernameEntry.get()
         password1 = self.passwordEntry.get()
         password2 = self.confirmPassword.get()
-        if (newUserName != "" and password1 != "" and password1 == password2):
-            us.create(newUserName, password1)
-            self.parent.switch_frame(LoginPage.LoginPage)
+        if (newUserName != "" and password1 != "" and password1 == password2 and not(us.user_exists(newUserName))):
+            try:
+                us.create(newUserName, password1)
+                self.parent.switch_frame(LoginPage.LoginPage)
+            except Exception as e:
+                print(e)
+                self.badLoginText = tk.Label(self, bg="black", text="Max Number of Users Created")
+                self.badLoginText.configure(font=(50), foreground="red")
+                self.badLoginText.grid(row=0, column=0, columnspan=2, padx=(self.xPadding, 0), pady=(275, 0), sticky=tk.N)
         else:
-            self.badLoginText = tk.Label(self, bg="black", text="INVALID ENTRY")
-            self.badLoginText.configure(font=(50), foreground="red")
-            self.badLoginText.grid(row=0, column=0, columnspan=2, padx=(self.xPadding, 0), pady=(275, 0), sticky=tk.N)
+            if(newUserName != "" and password1!="" and password1==password2 and us.user_exists(newUserName)):
+                self.badLoginText = tk.Label(self, bg="black", text="      Username Already Exists!      ")
+                self.badLoginText.configure(font=(50), foreground="red")
+                self.badLoginText.grid(row=0, column=0, columnspan=2, padx=(self.xPadding, 0), pady=(275, 0), sticky=tk.N)
+            else:
+                self.badLoginText = tk.Label(self, bg="black", text="         INVALID ENTRY         ")
+                self.badLoginText.configure(font=(50), foreground="red")
+                self.badLoginText.grid(row=0, column=0, columnspan=2, padx=(self.xPadding, 0), pady=(275, 0), sticky=tk.N)

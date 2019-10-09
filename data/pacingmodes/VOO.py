@@ -27,4 +27,4 @@ class VOOBuilder:
 
     @staticmethod
     def empty():
-        return VOO(0, 0, 0, 0)
+        return VOO(60, 120, 3.5, 1)

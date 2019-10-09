@@ -27,14 +27,14 @@ class PacingConfigPage(AppFrameBase):
             if (item == self.username):
                 self.currUserJson = loaded_json[item]
 
-        usrLowerRateLimit = tk.StringVar()
-        usrUpperRateLimit = tk.StringVar()
-        usrAtrialAmp = tk.StringVar()
-        usrVentricalAmp = tk.StringVar()
-        usrAtrialPulseWidth = tk.StringVar()
-        usrVentricalPulseWidth = tk.StringVar()
-        usrARP = tk.StringVar()
-        usrVRP = tk.StringVar()
+        self.usrLowerRateLimit = tk.StringVar()
+        self.usrUpperRateLimit = tk.StringVar()
+        self.usrAtrialAmp = tk.StringVar()
+        self.usrVentricalAmp = tk.StringVar()
+        self.usrAtrialPulseWidth = tk.StringVar()
+        self.usrVentricalPulseWidth = tk.StringVar()
+        self.usrARP = tk.StringVar()
+        self.usrVRP = tk.StringVar()
 
         self.xPadding = 150
 
@@ -100,7 +100,7 @@ class PacingConfigPage(AppFrameBase):
         self.lowerRateLabel.config(font=(25), foreground="white")
         self.lowerRateLabel.grid(row=2, column=2, padx=(200, 0), pady=(50, 0), sticky=tk.E)
 
-        self.lowerRateLimitEntry = tk.Entry(self, textvariable=usrLowerRateLimit, width=10, font=(25),
+        self.lowerRateLimitEntry = tk.Entry(self, textvariable=self.usrLowerRateLimit, width=10, font=(25),
                                             bg=self.enabled_bg,
                                             disabledbackground=self.disabled_bg)
         self.lowerRateLimitEntry.grid(row=2, column=3, pady=(50, 0), padx=(15, 0), sticky=tk.W)
@@ -115,7 +115,7 @@ class PacingConfigPage(AppFrameBase):
         self.upperRateLabel.config(font=(25), foreground="white")
         self.upperRateLabel.grid(row=3, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
 
-        self.upperRateLimitEntry = tk.Entry(self, textvariable=usrUpperRateLimit, width=10, font=(25),
+        self.upperRateLimitEntry = tk.Entry(self, textvariable=self.usrUpperRateLimit, width=10, font=(25),
                                             bg=self.enabled_bg,
                                             disabledbackground=self.disabled_bg)
         self.upperRateLimitEntry.grid(row=3, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
@@ -130,7 +130,7 @@ class PacingConfigPage(AppFrameBase):
         self.atrialAmpLabel.config(font=(25), foreground="white")
         self.atrialAmpLabel.grid(row=4, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
 
-        self.atrialLimitEntry = tk.Entry(self, textvariable=usrAtrialAmp, width=10, font=(25), bg=self.enabled_bg,
+        self.atrialLimitEntry = tk.Entry(self, textvariable=self.usrAtrialAmp, width=10, font=(25), bg=self.enabled_bg,
                                          disabledbackground=self.disabled_bg)
         self.atrialLimitEntry.grid(row=4, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
 
@@ -144,7 +144,7 @@ class PacingConfigPage(AppFrameBase):
         self.ventricalAmpLabel.config(font=(25), foreground="white")
         self.ventricalAmpLabel.grid(row=5, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
 
-        self.ventricalLimitEntry = tk.Entry(self, textvariable=usrVentricalAmp, width=10, font=(25), bg=self.enabled_bg,
+        self.ventricalLimitEntry = tk.Entry(self, textvariable=self.usrVentricalAmp, width=10, font=(25), bg=self.enabled_bg,
                                             disabledbackground=self.disabled_bg)
         self.ventricalLimitEntry.grid(row=5, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
 
@@ -158,7 +158,7 @@ class PacingConfigPage(AppFrameBase):
         self.atrialPulseWidthLabel.config(font=25, foreground="white")
         self.atrialPulseWidthLabel.grid(row=6, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
 
-        self.atrialPulseWidthEntry = tk.Entry(self, textvariable=usrAtrialPulseWidth, width=10, font=25,
+        self.atrialPulseWidthEntry = tk.Entry(self, textvariable=self.usrAtrialPulseWidth, width=10, font=25,
                                               bg=self.enabled_bg,
                                               disabledbackground=self.disabled_bg)
         self.atrialPulseWidthEntry.grid(row=6, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
@@ -173,7 +173,7 @@ class PacingConfigPage(AppFrameBase):
         self.ventricalPulseWidthLabel.config(font=25, foreground="white")
         self.ventricalPulseWidthLabel.grid(row=7, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
 
-        self.ventricalPulseWidthEntry = tk.Entry(self, textvariable=usrVentricalPulseWidth, width=10, font=(25),
+        self.ventricalPulseWidthEntry = tk.Entry(self, textvariable=self.usrVentricalPulseWidth, width=10, font=(25),
                                                  bg=self.enabled_bg,
                                                  disabledbackground=self.disabled_bg)
         self.ventricalPulseWidthEntry.grid(row=7, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
@@ -188,7 +188,7 @@ class PacingConfigPage(AppFrameBase):
         self.arpLabel.config(font=(25), foreground="white")
         self.arpLabel.grid(row=8, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
 
-        self.arpEntry = tk.Entry(self, textvariable=usrARP, width=10, font=(25), bg=self.enabled_bg,
+        self.arpEntry = tk.Entry(self, textvariable=self.usrARP, width=10, font=(25), bg=self.enabled_bg,
                                  disabledbackground=self.disabled_bg)
         self.arpEntry.grid(row=8, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
 
@@ -202,7 +202,7 @@ class PacingConfigPage(AppFrameBase):
         self.vrpLabel.config(font=(25), foreground="white")
         self.vrpLabel.grid(row=9, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
 
-        self.vrpEntry = tk.Entry(self, textvariable=usrVRP, width=10, font=(25), bg=self.enabled_bg,
+        self.vrpEntry = tk.Entry(self, textvariable=self.usrVRP, width=10, font=(25), bg=self.enabled_bg,
                                  disabledbackground=self.disabled_bg)
         self.vrpEntry.grid(row=9, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
 
@@ -260,14 +260,14 @@ class PacingConfigPage(AppFrameBase):
         vrpSlice = self.currUserJson["pacing_mode_settings"][
                    self.currUserJson["pacing_mode_settings"].index("vrp\": ") + len("vrp\": "):self.currUserJson[
                        "pacing_mode_settings"].index("}")]
-        usrLowerRateLimit.set("" if (lowerRateLimitSlice == "null") else (lowerRateLimitSlice))
-        usrUpperRateLimit.set("" if (upperRateLimitSlice == "null") else upperRateLimitSlice)
-        usrAtrialAmp.set("" if (atrialAmpSlice == "null") else atrialAmpSlice)
-        usrAtrialPulseWidth.set("" if (atrialPulseWidthSlice == "null") else atrialPulseWidthSlice)
-        usrVentricalAmp.set("" if (ventricalAmpSlice == "null") else ventricalAmpSlice)
-        usrVentricalPulseWidth.set("" if (ventricalPulseWidthSlice == "null") else ventricalPulseWidthSlice)
-        usrARP.set("" if (arpSlice == "null") else arpSlice)
-        usrVRP.set("" if (vrpSlice == "null") else vrpSlice)
+        self.usrLowerRateLimit.set("" if (lowerRateLimitSlice == "null") else (lowerRateLimitSlice))
+        self.usrUpperRateLimit.set("" if (upperRateLimitSlice == "null") else upperRateLimitSlice)
+        self.usrAtrialAmp.set("" if (atrialAmpSlice == "null") else atrialAmpSlice)
+        self.usrAtrialPulseWidth.set("" if (atrialPulseWidthSlice == "null") else atrialPulseWidthSlice)
+        self.usrVentricalAmp.set("" if (ventricalAmpSlice == "null") else ventricalAmpSlice)
+        self.usrVentricalPulseWidth.set("" if (ventricalPulseWidthSlice == "null") else ventricalPulseWidthSlice)
+        self.usrARP.set("" if (arpSlice == "null") else arpSlice)
+        self.usrVRP.set("" if (vrpSlice == "null") else vrpSlice)
 
     def dropDownChangeCallback(self, *args):
         # Upon callback clear all boxes
@@ -284,12 +284,30 @@ class PacingConfigPage(AppFrameBase):
         # Update variables based on drop down selection
         if self.pacingSelection.get() == "AOO":
             self.set_states(VLE="disabled", VPW="disabled", ARP="disabled", VRP="disabled")
+            self.usrLowerRateLimit.set("60")
+            self.usrUpperRateLimit.set("120")
+            self.usrAtrialAmp.set("3.5")
+            self.usrAtrialPulseWidth.set("1")
         if self.pacingSelection.get() == "VOO":
             self.set_states(ALE="disabled", APW="disabled", ARP="disabled", VRP="disabled")
+            self.usrLowerRateLimit.set("60")
+            self.usrUpperRateLimit.set("120")
+            self.usrVentricalAmp.set("3.5")
+            self.usrVentricalPulseWidth.set("1")
         if self.pacingSelection.get() == "AAI":
             self.set_states(VLE="disabled", VPW="disabled", VRP="disabled")
+            self.usrLowerRateLimit.set("60")
+            self.usrUpperRateLimit.set("120")
+            self.usrAtrialAmp.set("3.5")
+            self.usrAtrialPulseWidth.set("1")
+            self.usrARP.set("250")
         if self.pacingSelection.get() == "VVI":
             self.set_states(ALE="disabled", APW="disabled", ARP="disabled")
+            self.usrLowerRateLimit.set("60")
+            self.usrUpperRateLimit.set("120")
+            self.usrVentricalAmp.set("3.5")
+            self.usrVentricalPulseWidth.set("1")
+            self.usrVRP.set("320")
 
     def set_states(self, LRL="normal", URL="normal", ALE="normal", VLE="normal", APW="normal", VPW="normal",
                    ARP="normal", VRP="normal"):
@@ -321,36 +339,37 @@ class PacingConfigPage(AppFrameBase):
         try:
             if self.pacingSelection.get() == "AOO":
                 if ((lowerRateLimit != "" and upperRateLimit != "" and atrialAmp != "" and atrialPulseWidth != "") and (
-                        int(lowerRateLimit) > 0 and int(upperRateLimit) > 0 and int(atrialAmp) > 0 and int(
-                    atrialPulseWidth) > 0)):
+                        float(lowerRateLimit) > 0 and float(upperRateLimit) > 0 and float(atrialAmp) > 0 and float(
+                    atrialPulseWidth) > 0) and float(lowerRateLimit) < float(upperRateLimit)):
                     displayErrorMessage = False
                 else:
                     displayErrorMessage = True
             if self.pacingSelection.get() == "VOO":
                 if ((
                         lowerRateLimit != "" and upperRateLimit != "" and ventricalAmp != "" and ventricalPulseWidth != "") and (
-                        int(lowerRateLimit) > 0 and int(upperRateLimit) > 0 and int(ventricalAmp) > 0 and int(
-                    ventricalPulseWidth) > 0)):
+                        float(lowerRateLimit) > 0 and float(upperRateLimit) > 0 and float(ventricalAmp) > 0 and float(
+                    ventricalPulseWidth) > 0) and float(lowerRateLimit) < float(upperRateLimit)):
                     displayErrorMessage = False
                 else:
                     displayErrorMessage = True
             if self.pacingSelection.get() == "AAI":
                 if ((
                         lowerRateLimit != "" and upperRateLimit != "" and atrialAmp != "" and atrialPulseWidth != "" and arp != "") and (
-                        int(lowerRateLimit) > 0 and int(upperRateLimit) > 0 and int(atrialAmp) > 0 and int(
-                    atrialPulseWidth) > 0 and int(arp) > 0)):
+                        float(lowerRateLimit) > 0 and float(upperRateLimit) > 0 and float(atrialAmp) > 0 and float(
+                    atrialPulseWidth) > 0 and float(arp) > 0) and float(lowerRateLimit) < float(upperRateLimit)):
                     displayErrorMessage = False
                 else:
                     displayErrorMessage = True
             if self.pacingSelection.get() == "VVI":
                 if ((
                         lowerRateLimit != "" and upperRateLimit != "" and ventricalAmp != "" and ventricalPulseWidth != "" and vrp != "") and (
-                        int(lowerRateLimit) > 0 and int(upperRateLimit) > 0 and int(ventricalAmp) > 0 and int(
-                    ventricalPulseWidth) > 0 and int(vrp) > 0)):
+                        float(lowerRateLimit) > 0 and float(upperRateLimit) > 0 and float(ventricalAmp) > 0 and float(
+                    ventricalPulseWidth) > 0 and float(vrp) > 0) and float(lowerRateLimit) < float(upperRateLimit)):
                     displayErrorMessage = False
                 else:
                     displayErrorMessage = True
-        except:
+        except Exception as e:
+            print(e)
             displayErrorMessage = True  # If non numerica entries
 
         if (displayErrorMessage):
@@ -361,19 +380,19 @@ class PacingConfigPage(AppFrameBase):
             # Update saved pacing mode based on username and drop down selection
 
             if self.pacingSelection.get() == "AOO":
-                self.us.update_pacing_mode(self.username, AOO(int(lowerRateLimit), int(upperRateLimit), int(atrialAmp),
-                                                              int(atrialPulseWidth)))
+                self.us.update_pacing_mode(self.username, AOO(float(lowerRateLimit), float(upperRateLimit), float(atrialAmp),
+                                                              float(atrialPulseWidth)))
             if self.pacingSelection.get() == "VOO":
                 self.us.update_pacing_mode(self.username,
-                                           VOO(int(lowerRateLimit), int(upperRateLimit), int(ventricalAmp),
-                                               int(ventricalPulseWidth)))
+                                           VOO(float(lowerRateLimit), float(upperRateLimit), float(ventricalAmp),
+                                               float(ventricalPulseWidth)))
             if self.pacingSelection.get() == "AAI":
-                self.us.update_pacing_mode(self.username, AAI(int(lowerRateLimit), int(upperRateLimit), int(atrialAmp),
-                                                              int(atrialPulseWidth), int(arp)))
+                self.us.update_pacing_mode(self.username, AAI(float(lowerRateLimit), float(upperRateLimit), float(atrialAmp),
+                                                              float(atrialPulseWidth), float(arp)))
             if self.pacingSelection.get() == "VVI":
                 self.us.update_pacing_mode(self.username,
-                                           VVI(int(lowerRateLimit), int(upperRateLimit), int(ventricalAmp),
-                                               int(ventricalPulseWidth), int(vrp)))
+                                           VVI(float(lowerRateLimit), float(upperRateLimit), float(ventricalAmp),
+                                               float(ventricalPulseWidth), float(vrp)))
 
             self.errorLabel.config(text="", width=1)  # Shrink to remove, deleting wasn't working
             self.saveDeviceLabel.config(bg="green", fg="black")

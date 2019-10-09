@@ -27,4 +27,4 @@ class AOOBuilder:
 
     @staticmethod
     def empty():
-        return AOO(0, 0, 0, 0)
+        return AOO(60, 120, 3.5, 1)

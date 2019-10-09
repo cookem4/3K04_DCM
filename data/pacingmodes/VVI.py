@@ -27,4 +27,4 @@ class VVIBuilder:
 
     @staticmethod
     def empty():
-        return VVI(0, 0, 0, 0)
+        return VVI(60, 120, 3.5, 1, 320)

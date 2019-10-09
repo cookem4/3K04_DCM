@@ -1,4 +1,5 @@
 import tkinter as tk
+
 from views.LoginPage import LoginPage
 
 
@@ -18,8 +19,3 @@ class DCM_GUI(tk.Tk):
             self._frame.destroy()
         self._frame = new_frame
         self._frame.grid()
-
-
-if __name__ == "__main__":
-    app = DCM_GUI()
-    app.mainloop()

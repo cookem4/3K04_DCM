@@ -1,5 +1,6 @@
-from data.PacingMode import PacingMode
 import json
+
+from data.PacingMode import PacingMode
 
 
 class VOO(PacingMode):
@@ -13,8 +14,8 @@ class VOO(PacingMode):
             atrial_pulse_width=None,
             ventricular_amplitude=ventricular_amplitude,
             ventricular_pulse_width=ventricular_pulse_width,
-            arp = None,
-            vrp = None)
+            arp=None,
+            vrp=None)
 
 
 class VOOBuilder:

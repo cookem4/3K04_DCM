@@ -1,5 +1,6 @@
-from data.PacingMode import PacingMode
 import json
+
+from data.PacingMode import PacingMode
 
 
 class AAI(PacingMode):
@@ -13,8 +14,8 @@ class AAI(PacingMode):
             atrial_pulse_width=atrial_pulse_width,
             ventricular_amplitude=None,
             ventricular_pulse_width=None,
-            arp = arp,
-            vrp= None)
+            arp=arp,
+            vrp=None)
 
 
 class AAIBuilder:
@@ -22,7 +23,7 @@ class AAIBuilder:
     def from_string(string):
         aai_dict = json.loads(string)
         return AAI(aai_dict["lower_rate_limit"], aai_dict["upper_rate_limit"], aai_dict["atrial_amplitude"],
-                   aai_dict["atrial_pulse_width"],aai_dict["arp"])
+                   aai_dict["atrial_pulse_width"], aai_dict["arp"])
 
     @staticmethod
     def empty():

@@ -1,13 +1,14 @@
-import tkinter as tk
-from views import MainPage
-from views.AppFrameBase import AppFrameBase
-from services.UserService import UserService
 import json
-from data.pacingmodes.VVI import VVI
+import tkinter as tk
+
 from data.pacingmodes.AAI import AAI
 from data.pacingmodes.AOO import AOO
 from data.pacingmodes.VOO import VOO
-import time
+from data.pacingmodes.VVI import VVI
+from services.UserService import UserService
+from views import MainPage
+from views.AppFrameBase import AppFrameBase
+
 
 class PacingConfigPage(AppFrameBase):
     enabled_bg = "white"
@@ -16,16 +17,14 @@ class PacingConfigPage(AppFrameBase):
     def __init__(self, parent):
         super().__init__(parent)
 
-        f = open("currUser.txt","r")
-        self.username = f.read()
-        f.close()
+        self.username = self.session_service.get_current_user()
 
         self.us = UserService()
-        #Obtains current json data for users
+        # Obtains current json data for users
         userJson = self.us.getJSON()
         loaded_json = json.loads(userJson)
         for item in loaded_json:
-            if(item == self.username):
+            if (item == self.username):
                 self.currUserJson = loaded_json[item]
 
         usrLowerRateLimit = tk.StringVar()
@@ -36,7 +35,7 @@ class PacingConfigPage(AppFrameBase):
         usrVentricalPulseWidth = tk.StringVar()
         usrARP = tk.StringVar()
         usrVRP = tk.StringVar()
-        
+
         self.xPadding = 150
 
         self.connectionStateText = tk.Label(self, bg="gray", text="Connection Not Established")
@@ -101,7 +100,8 @@ class PacingConfigPage(AppFrameBase):
         self.lowerRateLabel.config(font=(25), foreground="white")
         self.lowerRateLabel.grid(row=2, column=2, padx=(200, 0), pady=(50, 0), sticky=tk.E)
 
-        self.lowerRateLimitEntry = tk.Entry(self, textvariable = usrLowerRateLimit, width=10, font=(25), bg=self.enabled_bg,
+        self.lowerRateLimitEntry = tk.Entry(self, textvariable=usrLowerRateLimit, width=10, font=(25),
+                                            bg=self.enabled_bg,
                                             disabledbackground=self.disabled_bg)
         self.lowerRateLimitEntry.grid(row=2, column=3, pady=(50, 0), padx=(15, 0), sticky=tk.W)
 
@@ -115,7 +115,8 @@ class PacingConfigPage(AppFrameBase):
         self.upperRateLabel.config(font=(25), foreground="white")
         self.upperRateLabel.grid(row=3, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
 
-        self.upperRateLimitEntry = tk.Entry(self,  textvariable = usrUpperRateLimit, width=10, font=(25), bg=self.enabled_bg,
+        self.upperRateLimitEntry = tk.Entry(self, textvariable=usrUpperRateLimit, width=10, font=(25),
+                                            bg=self.enabled_bg,
                                             disabledbackground=self.disabled_bg)
         self.upperRateLimitEntry.grid(row=3, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
 
@@ -129,7 +130,7 @@ class PacingConfigPage(AppFrameBase):
         self.atrialAmpLabel.config(font=(25), foreground="white")
         self.atrialAmpLabel.grid(row=4, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
 
-        self.atrialLimitEntry = tk.Entry(self,  textvariable = usrAtrialAmp, width=10, font=(25), bg=self.enabled_bg,
+        self.atrialLimitEntry = tk.Entry(self, textvariable=usrAtrialAmp, width=10, font=(25), bg=self.enabled_bg,
                                          disabledbackground=self.disabled_bg)
         self.atrialLimitEntry.grid(row=4, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
 
@@ -143,7 +144,7 @@ class PacingConfigPage(AppFrameBase):
         self.ventricalAmpLabel.config(font=(25), foreground="white")
         self.ventricalAmpLabel.grid(row=5, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
 
-        self.ventricalLimitEntry = tk.Entry(self,  textvariable = usrVentricalAmp, width=10, font=(25), bg=self.enabled_bg,
+        self.ventricalLimitEntry = tk.Entry(self, textvariable=usrVentricalAmp, width=10, font=(25), bg=self.enabled_bg,
                                             disabledbackground=self.disabled_bg)
         self.ventricalLimitEntry.grid(row=5, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
 
@@ -157,7 +158,8 @@ class PacingConfigPage(AppFrameBase):
         self.atrialPulseWidthLabel.config(font=25, foreground="white")
         self.atrialPulseWidthLabel.grid(row=6, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
 
-        self.atrialPulseWidthEntry = tk.Entry(self,  textvariable = usrAtrialPulseWidth, width=10, font=25, bg=self.enabled_bg,
+        self.atrialPulseWidthEntry = tk.Entry(self, textvariable=usrAtrialPulseWidth, width=10, font=25,
+                                              bg=self.enabled_bg,
                                               disabledbackground=self.disabled_bg)
         self.atrialPulseWidthEntry.grid(row=6, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
 
@@ -171,7 +173,8 @@ class PacingConfigPage(AppFrameBase):
         self.ventricalPulseWidthLabel.config(font=25, foreground="white")
         self.ventricalPulseWidthLabel.grid(row=7, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
 
-        self.ventricalPulseWidthEntry = tk.Entry(self, textvariable = usrVentricalPulseWidth,  width=10, font=(25), bg=self.enabled_bg,
+        self.ventricalPulseWidthEntry = tk.Entry(self, textvariable=usrVentricalPulseWidth, width=10, font=(25),
+                                                 bg=self.enabled_bg,
                                                  disabledbackground=self.disabled_bg)
         self.ventricalPulseWidthEntry.grid(row=7, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
 
@@ -185,7 +188,8 @@ class PacingConfigPage(AppFrameBase):
         self.arpLabel.config(font=(25), foreground="white")
         self.arpLabel.grid(row=8, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
 
-        self.arpEntry = tk.Entry(self,  textvariable = usrARP, width=10, font=(25), bg=self.enabled_bg, disabledbackground=self.disabled_bg)
+        self.arpEntry = tk.Entry(self, textvariable=usrARP, width=10, font=(25), bg=self.enabled_bg,
+                                 disabledbackground=self.disabled_bg)
         self.arpEntry.grid(row=8, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
 
         self.arpUnit = tk.Label(self, bg="black", text="mSec")
@@ -198,7 +202,8 @@ class PacingConfigPage(AppFrameBase):
         self.vrpLabel.config(font=(25), foreground="white")
         self.vrpLabel.grid(row=9, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
 
-        self.vrpEntry = tk.Entry(self,  textvariable = usrVRP, width=10, font=(25), bg=self.enabled_bg, disabledbackground=self.disabled_bg)
+        self.vrpEntry = tk.Entry(self, textvariable=usrVRP, width=10, font=(25), bg=self.enabled_bg,
+                                 disabledbackground=self.disabled_bg)
         self.vrpEntry.grid(row=9, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
 
         self.vrpUnit = tk.Label(self, bg="black", text="mSec")
@@ -223,22 +228,44 @@ class PacingConfigPage(AppFrameBase):
 
         self.dropDownChangeCallback()
 
-        #Set textbox values based on user profile
-        #String slicing of json object
-        lowerRateLimitSlice = self.currUserJson["pacing_mode_settings"][self.currUserJson["pacing_mode_settings"].index("lower_rate_limit\": ") + len("lower_rate_limit\": "):self.currUserJson["pacing_mode_settings"].index(", \"upper_rate_limit\": ")]
-        upperRateLimitSlice = self.currUserJson["pacing_mode_settings"][self.currUserJson["pacing_mode_settings"].index("upper_rate_limit\": ") + len("upper_rate_limit\": "):self.currUserJson["pacing_mode_settings"].index(", \"atrial_amplitude\": ")]
-        atrialAmpSlice = self.currUserJson["pacing_mode_settings"][self.currUserJson["pacing_mode_settings"].index("atrial_amplitude\": ") + len("atrial_amplitude\": "):self.currUserJson["pacing_mode_settings"].index(", \"atrial_pulse_width\": ")]
-        atrialPulseWidthSlice = self.currUserJson["pacing_mode_settings"][self.currUserJson["pacing_mode_settings"].index("atrial_pulse_width\": ") + len("atrial_pulse_width\": "):self.currUserJson["pacing_mode_settings"].index(", \"ventricular_amplitude\": ")]
-        ventricalAmpSlice = self.currUserJson["pacing_mode_settings"][self.currUserJson["pacing_mode_settings"].index("ventricular_amplitude\": ") + len("ventricular_amplitude\": "):self.currUserJson["pacing_mode_settings"].index(", \"ventricular_pulse_width\": ")]
-        ventricalPulseWidthSlice = self.currUserJson["pacing_mode_settings"][self.currUserJson["pacing_mode_settings"].index("ventricular_pulse_width\": ") + len("ventricular_pulse_width\": "):self.currUserJson["pacing_mode_settings"].index(", \"arp\": ")]
-        arpSlice = self.currUserJson["pacing_mode_settings"][self.currUserJson["pacing_mode_settings"].index("arp\": ") + len("arp\": "):self.currUserJson["pacing_mode_settings"].index(", \"vrp\": ")]
-        vrpSlice = self.currUserJson["pacing_mode_settings"][self.currUserJson["pacing_mode_settings"].index("vrp\": ") + len("vrp\": "):self.currUserJson["pacing_mode_settings"].index("}")]
+        # Set textbox values based on user profile
+        # String slicing of json object
+        lowerRateLimitSlice = self.currUserJson["pacing_mode_settings"][
+                              self.currUserJson["pacing_mode_settings"].index("lower_rate_limit\": ") + len(
+                                  "lower_rate_limit\": "):self.currUserJson["pacing_mode_settings"].index(
+                                  ", \"upper_rate_limit\": ")]
+        upperRateLimitSlice = self.currUserJson["pacing_mode_settings"][
+                              self.currUserJson["pacing_mode_settings"].index("upper_rate_limit\": ") + len(
+                                  "upper_rate_limit\": "):self.currUserJson["pacing_mode_settings"].index(
+                                  ", \"atrial_amplitude\": ")]
+        atrialAmpSlice = self.currUserJson["pacing_mode_settings"][
+                         self.currUserJson["pacing_mode_settings"].index("atrial_amplitude\": ") + len(
+                             "atrial_amplitude\": "):self.currUserJson["pacing_mode_settings"].index(
+                             ", \"atrial_pulse_width\": ")]
+        atrialPulseWidthSlice = self.currUserJson["pacing_mode_settings"][
+                                self.currUserJson["pacing_mode_settings"].index("atrial_pulse_width\": ") + len(
+                                    "atrial_pulse_width\": "):self.currUserJson["pacing_mode_settings"].index(
+                                    ", \"ventricular_amplitude\": ")]
+        ventricalAmpSlice = self.currUserJson["pacing_mode_settings"][
+                            self.currUserJson["pacing_mode_settings"].index("ventricular_amplitude\": ") + len(
+                                "ventricular_amplitude\": "):self.currUserJson["pacing_mode_settings"].index(
+                                ", \"ventricular_pulse_width\": ")]
+        ventricalPulseWidthSlice = self.currUserJson["pacing_mode_settings"][
+                                   self.currUserJson["pacing_mode_settings"].index("ventricular_pulse_width\": ") + len(
+                                       "ventricular_pulse_width\": "):self.currUserJson["pacing_mode_settings"].index(
+                                       ", \"arp\": ")]
+        arpSlice = self.currUserJson["pacing_mode_settings"][
+                   self.currUserJson["pacing_mode_settings"].index("arp\": ") + len("arp\": "):self.currUserJson[
+                       "pacing_mode_settings"].index(", \"vrp\": ")]
+        vrpSlice = self.currUserJson["pacing_mode_settings"][
+                   self.currUserJson["pacing_mode_settings"].index("vrp\": ") + len("vrp\": "):self.currUserJson[
+                       "pacing_mode_settings"].index("}")]
         usrLowerRateLimit.set("" if (lowerRateLimitSlice == "null") else (lowerRateLimitSlice))
         usrUpperRateLimit.set("" if (upperRateLimitSlice == "null") else upperRateLimitSlice)
         usrAtrialAmp.set("" if (atrialAmpSlice == "null") else atrialAmpSlice)
         usrAtrialPulseWidth.set("" if (atrialPulseWidthSlice == "null") else atrialPulseWidthSlice)
         usrVentricalAmp.set("" if (ventricalAmpSlice == "null") else ventricalAmpSlice)
-        usrVentricalPulseWidth.set("" if (ventricalPulseWidthSlice=="null") else ventricalPulseWidthSlice)
+        usrVentricalPulseWidth.set("" if (ventricalPulseWidthSlice == "null") else ventricalPulseWidthSlice)
         usrARP.set("" if (arpSlice == "null") else arpSlice)
         usrVRP.set("" if (vrpSlice == "null") else vrpSlice)
 
@@ -331,28 +358,34 @@ class PacingConfigPage(AppFrameBase):
             self.errorLabel.config(text="Erroneous Parameters Provided", width=33)
             self.errorLabel.grid(row=10, column=2, columnspan=3, padx=(0, 0), pady=(0, 0), sticky=tk.E)
         else:
-            #Update saved pacing mode based on username and drop down selection
-            
+            # Update saved pacing mode based on username and drop down selection
+
             if self.pacingSelection.get() == "AOO":
-                self.us.update_pacing_mode(self.username, AOO(int(lowerRateLimit), int(upperRateLimit), int(atrialAmp), int(atrialPulseWidth)))
+                self.us.update_pacing_mode(self.username, AOO(int(lowerRateLimit), int(upperRateLimit), int(atrialAmp),
+                                                              int(atrialPulseWidth)))
             if self.pacingSelection.get() == "VOO":
-                self.us.update_pacing_mode(self.username, VOO(int(lowerRateLimit), int(upperRateLimit),int(ventricalAmp), int(ventricalPulseWidth)))
+                self.us.update_pacing_mode(self.username,
+                                           VOO(int(lowerRateLimit), int(upperRateLimit), int(ventricalAmp),
+                                               int(ventricalPulseWidth)))
             if self.pacingSelection.get() == "AAI":
-               self.us.update_pacing_mode(self.username, AAI(int(lowerRateLimit), int(upperRateLimit), int(atrialAmp), int(atrialPulseWidth), int(arp)))
+                self.us.update_pacing_mode(self.username, AAI(int(lowerRateLimit), int(upperRateLimit), int(atrialAmp),
+                                                              int(atrialPulseWidth), int(arp)))
             if self.pacingSelection.get() == "VVI":
-                self.us.update_pacing_mode(self.username, VVI(int(lowerRateLimit), int(upperRateLimit),int(ventricalAmp), int(ventricalPulseWidth), int(vrp)))
-                
+                self.us.update_pacing_mode(self.username,
+                                           VVI(int(lowerRateLimit), int(upperRateLimit), int(ventricalAmp),
+                                               int(ventricalPulseWidth), int(vrp)))
+
             self.errorLabel.config(text="", width=1)  # Shrink to remove, deleting wasn't working
             self.saveDeviceLabel.config(bg="green", fg="black")
-            
-            #Update displayed programmed mode 
+
+            # Update displayed programmed mode
             userJson = self.us.getJSON()
             loaded_json = json.loads(userJson)
             for item in loaded_json:
-                if(item == self.username):
+                if (item == self.username):
                     self.currUserJson = loaded_json[item]
             self.actualModeLabel.config(text=self.currUserJson["pacing_mode_name"])
-            
-            #Update wont work here????
-            #time.sleep(3)
-            #self.saveDeviceLabel.config(bg="gray", fg="white")
+
+            # Update wont work here????
+            # time.sleep(3)
+            # self.saveDeviceLabel.config(bg="gray", fg="white")

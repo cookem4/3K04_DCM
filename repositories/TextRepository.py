@@ -1,11 +1,11 @@
 import json
 
 from cryptography.fernet import InvalidToken
-
+from .StringRepositoryInterface import StringRepositoryInterface
 from services.EncryptionService import EncryptionService
 
 
-class TextRepository:
+class TextRepository(StringRepositoryInterface):
     def __init__(self, filename):
         self.encryptor = EncryptionService()
         self.file = filename
@@ -17,9 +17,6 @@ class TextRepository:
             return json.loads(self.encryptor.decrypt(s))
         except InvalidToken:
             return {}
-
-    def update(self, string: str):
-        self.save(string)
 
     def save(self, string: str):
         with open(self.file, 'w') as file:

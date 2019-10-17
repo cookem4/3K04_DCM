@@ -29,3 +29,11 @@ class UserBuilder:
             password_hash=json_dict[User.PASSWORD],
             pacing_mode=PacingModeBuilder.from_string(json_dict[User.MODE], json_dict[User.SETTINGS])
         )
+
+    @staticmethod
+    def from_user_pass(username, password_hash):
+        return User(
+            username=username,
+            password_hash=password_hash,
+            pacing_mode=PacingModeBuilder().empty()
+        )

@@ -3,13 +3,13 @@ import json
 from cryptography.fernet import InvalidToken
 
 from data.PacingMode import PacingMode
-from data.PacingModeBuilder import PacingModeBuilder
 from data.User import User, UserBuilder
 from repositories.TextRepository import TextRepository
+from services.CrudServiceInterface import CrudServiceInterface
 from services.EncryptionService import EncryptionService
 
 
-class UserService:
+class UserService(CrudServiceInterface):
     user_file = "users.txt"
 
     def __init__(self):
@@ -17,13 +17,14 @@ class UserService:
         self.encryptor = EncryptionService()
 
     ################################CRUD METHODS#############################################
-    def create(self, username, password):
-        if not self.user_exists(username):
+
+    def create(self, user: User):
+        if not self.user_exists(user.username):
             users_json = self.text_repo.get()
             if len(users_json.keys()) >= 10:
                 raise Exception("Cannot hold more than 10 users, please remove a user to create a new one")
             else:
-                users_json[username] = User(username, self.encryptor.hash(password), PacingModeBuilder.empty()).to_json()
+                users_json[user.username] = user.to_json()
                 self.__save_user_json(users_json)
 
     def read(self, username):
@@ -36,13 +37,6 @@ class UserService:
             user_json[user.username] = user.to_json()
             self.__save_user_json(user_json)
 
-    def update_pacing_mode(self, username, pacing_mode: PacingMode):
-        if self.user_exists(username):
-            user = self.read(username)
-            user.pacing_mode = pacing_mode.NAME
-            user.settings = pacing_mode
-            self.update(user)
-
     def delete(self, username):
         if self.user_exists(username):
             user_json = self.text_repo.get()
@@ -50,6 +44,16 @@ class UserService:
             self.__save_user_json(user_json)
 
     ####################################HELPER METHDOS#########################################
+
+    def create_by_username_and_password(self, username, password):
+        self.create(UserBuilder.from_user_pass(username, self.encryptor.hash(password)))
+
+    def update_pacing_mode(self, username, pacing_mode: PacingMode):
+        if self.user_exists(username):
+            user = self.read(username)
+            user.pacing_mode = pacing_mode.NAME
+            user.settings = pacing_mode
+            self.update(user)
 
     def user_exists(self, username):
         try:
@@ -63,12 +67,6 @@ class UserService:
             user = UserBuilder().from_json(user_json[username])
             return user.password_hash == self.encryptor.hash(password)
         return False
-
-    def print(self):
-        print(json.dumps(self.text_repo.get(), indent=4, sort_keys=True))
-
-    def getJSON(self):
-        return json.dumps(self.text_repo.get(), indent=4, sort_keys=True)
 
     ####################################PRIVATE METHODS##########################################
     def __save_user_json(self, users_json):

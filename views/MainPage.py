@@ -14,12 +14,7 @@ class MainPage(AppFrameBase):
         self.username = self.session_service.get_current_user()
 
         self.us = UserService()
-        # Obtains current json data for users
-        userJson = self.us.getJSON()
-        loaded_json = json.loads(userJson)
-        for item in loaded_json:
-            if (item == self.username):
-                self.currUserJson = loaded_json[item]
+        self.currUserJson = self.us.read(self.session_service.get_current_user()).to_json()
 
         self.connectionStateText = tk.Label(self, bg="gray", text="Connection Not Established")
         self.connectionStateText.config(font=("Helvetica", 25), foreground="white")

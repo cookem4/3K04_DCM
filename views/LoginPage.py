@@ -45,7 +45,7 @@ class LoginPage(AppFrameBase):
         username = self.usernameEntry.get()
         password = self.passwordEntry.get()
 
-        if (us.verify_user(username, password)):
+        if (us.verify(username, password)):
             self.session_service.start_session(username)
             self.parent.switch_frame(MainPage.MainPage)
         else:

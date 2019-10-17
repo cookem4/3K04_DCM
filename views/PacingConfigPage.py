@@ -17,7 +17,7 @@ class PacingConfigPage(AppFrameBase):
     def __init__(self, parent):
         super().__init__(parent)
 
-        self.username = self.session_service.get_current_user()
+        self.username = self.session_service.get().username
 
         self.us = UserService()
         # Obtains current json data for users

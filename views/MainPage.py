@@ -1,4 +1,3 @@
-import json
 import tkinter as tk
 
 from services.UserService import UserService
@@ -11,10 +10,10 @@ class MainPage(AppFrameBase):
     def __init__(self, parent):
         super().__init__(parent)
 
-        self.username = self.session_service.get_current_user()
+        self.username = self.session_service.get().username
 
         self.us = UserService()
-        self.currUserJson = self.us.read(self.session_service.get_current_user()).to_json()
+        self.currUserJson = self.us.read(self.username).to_json()
 
         self.connectionStateText = tk.Label(self, bg="gray", text="Connection Not Established")
         self.connectionStateText.config(font=("Helvetica", 25), foreground="white")
@@ -70,5 +69,5 @@ class MainPage(AppFrameBase):
         print("Past Data")
 
     def logout(self):
-        self.session_service.invalidate_session()
+        self.session_service.invalidate()
         self.parent.switch_frame(LoginPage.LoginPage)

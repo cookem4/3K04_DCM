@@ -1,10 +1,9 @@
 import abc
 
 from data.PacingMode import PacingMode
-from .CrudServiceInterface import CrudServiceInterface
 
 
-class UserServiceInterface(CrudServiceInterface):
+class UserServiceInterface:
 
     @abc.abstractmethod
     def create_by_username_and_password(self, username: str, password: str) -> None:

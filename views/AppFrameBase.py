@@ -3,7 +3,7 @@ import tkinter as tk
 from PIL import Image, ImageTk
 
 from services.SessionService import SessionService
-
+from services.UserService import UserService
 
 class AppFrameBase(tk.Frame):
 
@@ -23,3 +23,4 @@ class AppFrameBase(tk.Frame):
         img.grid(row=0, column=0, columnspan=1000, rowspan=1000, sticky=tk.N)
 
         self.session_service = SessionService.get_instance()
+        self.user_service = UserService()

@@ -8,6 +8,7 @@ from repositories.TextRepository import TextRepository
 from services.EncryptionService import EncryptionService
 from services.Interfaces.CrudServiceInterface import CrudServiceInterface
 from services.Interfaces.UserServiceInterface import UserServiceInterface
+from exceptions.MaxUsersExceededException import MaxUsersExceededException
 
 
 class UserService(UserServiceInterface, CrudServiceInterface):
@@ -20,7 +21,8 @@ class UserService(UserServiceInterface, CrudServiceInterface):
         if not self.exists(user.username):
             users_json = self.__text_repo.get()
             if len(users_json.keys()) >= 10:
-                raise Exception("Cannot hold more than 10 users, please remove a user to create a new one")
+                raise MaxUsersExceededException("Cannot hold more than 10 users, please remove a user to create a new "
+                                                "one")
             else:
                 users_json[user.username] = user.to_json()
                 self.__save_user_json(users_json)
@@ -54,6 +56,7 @@ class UserService(UserServiceInterface, CrudServiceInterface):
             self.update(user)
 
     def exists(self, username):
+        self.__print()
         try:
             return True if username in self.__text_repo.get() else False
         except InvalidToken:
@@ -70,3 +73,6 @@ class UserService(UserServiceInterface, CrudServiceInterface):
     def __save_user_json(self, users_json):
         users_str = json.dumps(users_json)
         self.__text_repo.save(users_str)
+
+    def __print(self):
+        print(self.__text_repo.get())

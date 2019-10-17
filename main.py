@@ -12,7 +12,6 @@ if __name__ == '__main__':
     us.print()
     us.delete("parker")
     '''
-
     # Create GUI instance
     app = DCM_GUI()
     app.mainloop()

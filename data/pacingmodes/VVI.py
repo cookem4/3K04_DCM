@@ -17,6 +17,12 @@ class VVI(PacingMode):
             arp=None,
             vrp=vrp)
 
+    def validate(self) -> bool:
+        return super().validate() and \
+               self.ventricular_amplitude > 0 and \
+               self.ventricular_pulse_width > 0 and \
+               self.vrp > 0
+
 
 class VVIBuilder:
     @staticmethod

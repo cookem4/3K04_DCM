@@ -18,3 +18,14 @@ class PacingMode:
 
     def to_string(self):
         return json.dumps(self.__dict__)
+
+    def validate(self) -> bool:
+        return (self.lower_rate_limit > 0) and \
+               (self.upper_rate_limit > 0) and \
+               (self.upper_rate_limit > self.lower_rate_limit) and \
+               (self.atrial_amplitude is None or self.atrial_amplitude > 0) and \
+               (self.atrial_pulse_width is None or self.atrial_pulse_width > 0) and \
+               (self.ventricular_amplitude is None or self.ventricular_amplitude > 0) and \
+               (self.ventricular_pulse_width is None or self.ventricular_pulse_width > 0) and \
+               (self.vrp is None or self.vrp > 0) and \
+               (self.arp is None or self.arp > 0)

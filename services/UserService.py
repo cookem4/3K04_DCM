@@ -56,7 +56,7 @@ class UserService(UserServiceInterface, CrudServiceInterface):
             self.update(user)
 
     def exists(self, username):
-        self.__print()
+        #self.__print()
         try:
             return True if username in self.__text_repo.get() else False
         except InvalidToken:

@@ -338,7 +338,7 @@ class PacingConfigPage(AppFrameBase):
 
         if (display_error_message):
             self.errorLabel.config(font=(25), foreground="red")
-            self.errorLabel.config(text="Erroneous Parameters Provided", width=33)
+            self.errorLabel.config(text="Invalid Entry Provided", width=33)
             self.errorLabel.grid(row=10, column=2, columnspan=3, padx=(0, 0), pady=(0, 0), sticky=tk.E)
         else:
             # Update saved pacing mode based on username and drop down selection

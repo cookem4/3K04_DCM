@@ -1,22 +1,9 @@
 # This class is a Singleton, it will only ever have 1 active instantce
-import datetime as dt
+from data.Session import Session
+from .Interfaces.SessionInterface import SessionInterface
 
 
-class Session:
-    __timeout = dt.timedelta(minutes=30)
-
-    def __init__(self, username):
-        self.username = username
-        self.datetime = dt.datetime.now();
-
-    def is_valid(self):
-        if dt.datetime.now() - self.datetime < self.__timeout:
-            return True
-        else:
-            return False
-
-
-class SessionService:
+class SessionService(SessionInterface):
     __instance = None
     __current_session: Session
 
@@ -36,17 +23,17 @@ class SessionService:
         else:
             SessionService.__instance = self
 
-    def get_current_user(self):
+    def get(self):
         if self.__current_session != None:
-            return self.__current_session.username
+            return self.__current_session
         else:
-            return ""
+            return None
 
     def start_session(self, username):
         self.__current_session = Session(username);
 
-    def is_valid(self, username):
+    def validate(self, username):
         return username == self.__current_session.username and self.__current_session.is_valid()
 
-    def invalidate_session(self):
+    def invalidate(self):
         self.__current_session = None

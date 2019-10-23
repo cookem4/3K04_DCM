@@ -17,6 +17,10 @@ class AOO(PacingMode):
             arp=None,
             vrp=None)
 
+    def validate(self) -> bool:
+        return super().validate() and \
+               self.atrial_amplitude > 0 and \
+               self.atrial_pulse_width > 0
 
 class AOOBuilder:
     @staticmethod

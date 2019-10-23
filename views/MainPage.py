@@ -1,4 +1,3 @@
-import json
 import tkinter as tk
 
 from services.UserService import UserService
@@ -11,15 +10,8 @@ class MainPage(AppFrameBase):
     def __init__(self, parent):
         super().__init__(parent)
 
-        self.username = self.session_service.get_current_user()
-
-        self.us = UserService()
-        # Obtains current json data for users
-        userJson = self.us.getJSON()
-        loaded_json = json.loads(userJson)
-        for item in loaded_json:
-            if (item == self.username):
-                self.currUserJson = loaded_json[item]
+        self.username = self.session_service.get().username
+        self.currUserJson = self.user_service.read(self.username).to_json()
 
         self.connectionStateText = tk.Label(self, bg="gray", text="Connection Not Established")
         self.connectionStateText.config(font=("Helvetica", 25), foreground="white")
@@ -30,20 +22,20 @@ class MainPage(AppFrameBase):
         self.screenInfo.grid(row=1, column=0, columnspan=3, padx=(0, 0), pady=(20, 0), sticky=tk.N)
 
         self.editPacingButton = tk.Button(self, text="Edit Pacing Mode\nand Parameters", width=20, height=6,
-                                          command=self.editPacingModes)
+                                          command=self.edit_pacing_modes_callback)
         self.editPacingButton.config(font=("Helvetica", 20))
         self.editPacingButton.grid(row=5, column=0, columnspan=3, pady=(50, 0), padx=(45, 0), sticky=tk.NW)
 
         self.viewCurrEGM = tk.Button(self, text="View Current EGM\nData", width=20, height=6,
-                                     command=self.viewCurrEGMDat)
+                                     command=self.view_current_EGM_data_callback)
         self.viewCurrEGM.config(font=("Helvetica", 20))
         self.viewCurrEGM.grid(row=5, column=0, columnspan=3, pady=(50, 0), padx=(0, 0), sticky=tk.N)
 
-        self.viewPastEGM = tk.Button(self, text="View Past EGM\nData", width=20, height=6, command=self.viewPastEGMDat)
+        self.viewPastEGM = tk.Button(self, text="View Past EGM\nData", width=20, height=6, command=self.view_past_EGM_data_callback)
         self.viewPastEGM.config(font=("Helvetica", 20))
         self.viewPastEGM.grid(row=5, column=0, columnspan=3, pady=(50, 0), padx=(0, 60), sticky=tk.NE)
 
-        self.logoutBtn = tk.Button(self, text="Logout", width=12, height=2, command=self.logout)
+        self.logoutBtn = tk.Button(self, text="Logout", width=12, height=2, command=self.logout_callback)
         self.logoutBtn.config(font=("Helvetica", 12))
         self.logoutBtn.grid(row=6, column=0, columnspan=1, pady=(125, 0), padx=(10, 0), sticky=tk.W)
 
@@ -65,15 +57,15 @@ class MainPage(AppFrameBase):
         self.prevIDLabel.config(font=(15), foreground="white")
         self.prevIDLabel.grid(row=4, column=0, columnspan=3, padx=(0, 0), pady=(0, 0), sticky=tk.N)
 
-    def editPacingModes(self):
+    def edit_pacing_modes_callback(self):
         self.parent.switch_frame(PacingConfigPage.PacingConfigPage)
 
-    def viewCurrEGMDat(self):
+    def view_current_EGM_data_callback(self):
         print("Present Data")
 
-    def viewPastEGMDat(self):
+    def view_past_EGM_data_callback(self):
         print("Past Data")
 
-    def logout(self):
-        self.session_service.invalidate_session()
+    def logout_callback(self):
+        self.session_service.invalidate()
         self.parent.switch_frame(LoginPage.LoginPage)

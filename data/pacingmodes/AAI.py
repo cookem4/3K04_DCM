@@ -17,6 +17,12 @@ class AAI(PacingMode):
             arp=arp,
             vrp=None)
 
+    def validate(self) -> bool:
+        return super().validate() and \
+               self.atrial_amplitude > 0 and \
+               self.atrial_pulse_width > 0 and \
+               self.arp > 0
+
 
 class AAIBuilder:
     @staticmethod

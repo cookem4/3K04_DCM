@@ -1,20 +1,19 @@
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
-
+from services.Interfaces.EncryptionInterface import EncryptionInterface
 import resources.resources as rs
 
 
-class EncryptionService:
-    def __init__(self):
-        self.f = rs.fernet
-
+class EncryptionService(EncryptionInterface):
+    __f = rs.fernet
+    
     def encrypt(self, message):
         message = str.encode(message, 'ascii')
-        return str(self.f.encrypt(message), 'utf-8')
+        return str(self.__f.encrypt(message), 'utf-8')
 
     def decrypt(self, message):
         message = str.encode(message, 'ascii')
-        return str(self.f.decrypt(message), "utf-8")
+        return str(self.__f.decrypt(message), "utf-8")
 
     def hash(self, message):
         message = str.encode(message, 'ascii')

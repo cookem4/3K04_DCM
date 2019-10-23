@@ -17,6 +17,11 @@ class VOO(PacingMode):
             arp=None,
             vrp=None)
 
+    def validate(self) -> bool:
+        return super().validate() and \
+               self.ventricular_amplitude > 0 and \
+               self.ventricular_pulse_width > 0
+
 
 class VOOBuilder:
     @staticmethod

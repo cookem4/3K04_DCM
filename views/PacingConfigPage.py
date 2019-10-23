@@ -1,6 +1,6 @@
-import json
 import tkinter as tk
 
+from data.PacingMode import PacingMode
 from data.pacingmodes.AAI import AAI
 from data.pacingmodes.AOO import AOO
 from data.pacingmodes.VOO import VOO
@@ -10,6 +10,11 @@ from views import MainPage
 from views.AppFrameBase import AppFrameBase
 
 
+def entry_to_value(entry):
+    entry_string = entry.get()
+    return float(entry_string) if entry_string != "" else None
+
+
 class PacingConfigPage(AppFrameBase):
     enabled_bg = "white"
     disabled_bg = "grey"
@@ -17,15 +22,10 @@ class PacingConfigPage(AppFrameBase):
     def __init__(self, parent):
         super().__init__(parent)
 
-        self.username = self.session_service.get_current_user()
+        self.username = self.session_service.get().username
 
         self.us = UserService()
-        # Obtains current json data for users
-        userJson = self.us.getJSON()
-        loaded_json = json.loads(userJson)
-        for item in loaded_json:
-            if (item == self.username):
-                self.currUserJson = loaded_json[item]
+        self.currUserJson = self.load_current_user_json()
 
         self.usrLowerRateLimit = tk.StringVar()
         self.usrUpperRateLimit = tk.StringVar()
@@ -62,7 +62,7 @@ class PacingConfigPage(AppFrameBase):
         dropDownMenu.grid(row=2, column=1, padx=(20, 0), pady=(20, 0), sticky=tk.W)
 
         # Sets callback listener for drop down menu
-        self.pacingSelection.trace("w", self.dropDownChangeCallback)
+        self.pacingSelection.trace("w", self.drop_down_callback)
 
         #########################################
         # The following show device information###
@@ -144,7 +144,8 @@ class PacingConfigPage(AppFrameBase):
         self.ventricalAmpLabel.config(font=(25), foreground="white")
         self.ventricalAmpLabel.grid(row=5, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
 
-        self.ventricalLimitEntry = tk.Entry(self, textvariable=self.usrVentricalAmp, width=10, font=(25), bg=self.enabled_bg,
+        self.ventricalLimitEntry = tk.Entry(self, textvariable=self.usrVentricalAmp, width=10, font=(25),
+                                            bg=self.enabled_bg,
                                             disabledbackground=self.disabled_bg)
         self.ventricalLimitEntry.grid(row=5, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
 
@@ -212,11 +213,11 @@ class PacingConfigPage(AppFrameBase):
 
         #########################
 
-        self.backBtn = tk.Button(self, text="Back", width=10, height=1, command=self.goBack)
+        self.backBtn = tk.Button(self, text="Back", width=10, height=1, command=self.go_back)
         self.backBtn.config(font=("Helvetica", 10))
         self.backBtn.grid(row=10, column=0, columnspan=1, pady=(100, 0), padx=(15, 0), sticky=tk.W)
 
-        self.backBtn = tk.Button(self, text="Save", width=10, height=1, command=self.saveData)
+        self.backBtn = tk.Button(self, text="Save", width=10, height=1, command=self.save_data)
         self.backBtn.config(font=("Helvetica", 10))
         self.backBtn.grid(row=10, column=0, columnspan=1, pady=(100, 0), padx=(50, 0), sticky=tk.E)
 
@@ -226,7 +227,7 @@ class PacingConfigPage(AppFrameBase):
 
         self.errorLabel = tk.Label(self, bg="black", text="Erroneous Parameters Provided", width=33)
 
-        self.dropDownChangeCallback()
+        self.drop_down_callback()
 
         # Set textbox values based on user profile
         # String slicing of json object
@@ -269,7 +270,10 @@ class PacingConfigPage(AppFrameBase):
         self.usrARP.set("" if (arpSlice == "null") else arpSlice)
         self.usrVRP.set("" if (vrpSlice == "null") else vrpSlice)
 
-    def dropDownChangeCallback(self, *args):
+    def load_current_user_json(self):
+        return self.us.read(self.username).to_json()
+
+    def drop_down_callback(self, *args):
         # Upon callback clear all boxes
         self.lowerRateLimitEntry.delete(0, tk.END)
         self.upperRateLimitEntry.delete(0, tk.END)
@@ -284,30 +288,12 @@ class PacingConfigPage(AppFrameBase):
         # Update variables based on drop down selection
         if self.pacingSelection.get() == "AOO":
             self.set_states(VLE="disabled", VPW="disabled", ARP="disabled", VRP="disabled")
-            self.usrLowerRateLimit.set("60")
-            self.usrUpperRateLimit.set("120")
-            self.usrAtrialAmp.set("3.5")
-            self.usrAtrialPulseWidth.set("1")
         if self.pacingSelection.get() == "VOO":
             self.set_states(ALE="disabled", APW="disabled", ARP="disabled", VRP="disabled")
-            self.usrLowerRateLimit.set("60")
-            self.usrUpperRateLimit.set("120")
-            self.usrVentricalAmp.set("3.5")
-            self.usrVentricalPulseWidth.set("1")
         if self.pacingSelection.get() == "AAI":
             self.set_states(VLE="disabled", VPW="disabled", VRP="disabled")
-            self.usrLowerRateLimit.set("60")
-            self.usrUpperRateLimit.set("120")
-            self.usrAtrialAmp.set("3.5")
-            self.usrAtrialPulseWidth.set("1")
-            self.usrARP.set("250")
         if self.pacingSelection.get() == "VVI":
             self.set_states(ALE="disabled", APW="disabled", ARP="disabled")
-            self.usrLowerRateLimit.set("60")
-            self.usrUpperRateLimit.set("120")
-            self.usrVentricalAmp.set("3.5")
-            self.usrVentricalPulseWidth.set("1")
-            self.usrVRP.set("320")
 
     def set_states(self, LRL="normal", URL="normal", ALE="normal", VLE="normal", APW="normal", VPW="normal",
                    ARP="normal", VRP="normal"):
@@ -320,91 +306,47 @@ class PacingConfigPage(AppFrameBase):
         self.arpEntry.config(state=ARP)
         self.vrpEntry.config(state=VRP)
 
-    def goBack(self):
+    def go_back(self):
         self.parent.switch_frame(MainPage.MainPage)
 
-    def saveData(self):
+    def save_data(self):
         # Catch boundary cases from erroneous text box entries
-        displayErrorMessage = False
-        lowerRateLimit = self.lowerRateLimitEntry.get()
-        upperRateLimit = self.upperRateLimitEntry.get()
-        atrialAmp = self.atrialLimitEntry.get()
-        ventricalAmp = self.ventricalLimitEntry.get()
-        atrialPulseWidth = self.atrialPulseWidthEntry.get()
-        ventricalPulseWidth = self.ventricalPulseWidthEntry.get()
-        arp = self.arpEntry.get()
-        vrp = self.vrpEntry.get()
+        pacing_mode: PacingMode = PacingMode(lower_rate_limit=entry_to_value(self.lowerRateLimitEntry),
+                                             upper_rate_limit=entry_to_value(self.upperRateLimitEntry),
+                                             atrial_amplitude=entry_to_value(self.atrialLimitEntry),
+                                             atrial_pulse_width=entry_to_value(self.atrialPulseWidthEntry),
+                                             ventricular_amplitude=entry_to_value(self.ventricalLimitEntry),
+                                             ventricular_pulse_width=entry_to_value(self.ventricalPulseWidthEntry),
+                                             arp=entry_to_value(self.arpEntry),
+                                             vrp=entry_to_value(self.vrpEntry))
 
         # Update variables based on drop down selection
         try:
             if self.pacingSelection.get() == "AOO":
-                if ((lowerRateLimit != "" and upperRateLimit != "" and atrialAmp != "" and atrialPulseWidth != "") and (
-                        float(lowerRateLimit) > 0 and float(upperRateLimit) > 0 and float(atrialAmp) > 0 and float(
-                    atrialPulseWidth) > 0) and float(lowerRateLimit) < float(upperRateLimit)):
-                    displayErrorMessage = False
-                else:
-                    displayErrorMessage = True
+                pacing_mode.__class__ = AOO
             if self.pacingSelection.get() == "VOO":
-                if ((
-                        lowerRateLimit != "" and upperRateLimit != "" and ventricalAmp != "" and ventricalPulseWidth != "") and (
-                        float(lowerRateLimit) > 0 and float(upperRateLimit) > 0 and float(ventricalAmp) > 0 and float(
-                    ventricalPulseWidth) > 0) and float(lowerRateLimit) < float(upperRateLimit)):
-                    displayErrorMessage = False
-                else:
-                    displayErrorMessage = True
+                pacing_mode.__class__ = VOO
             if self.pacingSelection.get() == "AAI":
-                if ((
-                        lowerRateLimit != "" and upperRateLimit != "" and atrialAmp != "" and atrialPulseWidth != "" and arp != "") and (
-                        float(lowerRateLimit) > 0 and float(upperRateLimit) > 0 and float(atrialAmp) > 0 and float(
-                    atrialPulseWidth) > 0 and float(arp) > 0) and float(lowerRateLimit) < float(upperRateLimit)):
-                    displayErrorMessage = False
-                else:
-                    displayErrorMessage = True
+                pacing_mode.__class__ = AAI
             if self.pacingSelection.get() == "VVI":
-                if ((
-                        lowerRateLimit != "" and upperRateLimit != "" and ventricalAmp != "" and ventricalPulseWidth != "" and vrp != "") and (
-                        float(lowerRateLimit) > 0 and float(upperRateLimit) > 0 and float(ventricalAmp) > 0 and float(
-                    ventricalPulseWidth) > 0 and float(vrp) > 0) and float(lowerRateLimit) < float(upperRateLimit)):
-                    displayErrorMessage = False
-                else:
-                    displayErrorMessage = True
+                pacing_mode.__class__ = VVI
+
+            display_error_message = not pacing_mode.validate()
         except Exception as e:
             print(e)
-            displayErrorMessage = True  # If non numerica entries
+            display_error_message = True  # If non numerica entries
 
-        if (displayErrorMessage):
+        if (display_error_message):
             self.errorLabel.config(font=(25), foreground="red")
             self.errorLabel.config(text="Erroneous Parameters Provided", width=33)
             self.errorLabel.grid(row=10, column=2, columnspan=3, padx=(0, 0), pady=(0, 0), sticky=tk.E)
         else:
             # Update saved pacing mode based on username and drop down selection
-
-            if self.pacingSelection.get() == "AOO":
-                self.us.update_pacing_mode(self.username, AOO(float(lowerRateLimit), float(upperRateLimit), float(atrialAmp),
-                                                              float(atrialPulseWidth)))
-            if self.pacingSelection.get() == "VOO":
-                self.us.update_pacing_mode(self.username,
-                                           VOO(float(lowerRateLimit), float(upperRateLimit), float(ventricalAmp),
-                                               float(ventricalPulseWidth)))
-            if self.pacingSelection.get() == "AAI":
-                self.us.update_pacing_mode(self.username, AAI(float(lowerRateLimit), float(upperRateLimit), float(atrialAmp),
-                                                              float(atrialPulseWidth), float(arp)))
-            if self.pacingSelection.get() == "VVI":
-                self.us.update_pacing_mode(self.username,
-                                           VVI(float(lowerRateLimit), float(upperRateLimit), float(ventricalAmp),
-                                               float(ventricalPulseWidth), float(vrp)))
+            self.us.update_pacing_mode(self.username, pacing_mode)
 
             self.errorLabel.config(text="", width=1)  # Shrink to remove, deleting wasn't working
             self.saveDeviceLabel.config(bg="green", fg="black")
 
             # Update displayed programmed mode
-            userJson = self.us.getJSON()
-            loaded_json = json.loads(userJson)
-            for item in loaded_json:
-                if (item == self.username):
-                    self.currUserJson = loaded_json[item]
+            self.currUserJson = self.load_current_user_json()
             self.actualModeLabel.config(text=self.currUserJson["pacing_mode_name"])
-
-            # Update wont work here????
-            # time.sleep(3)
-            # self.saveDeviceLabel.config(bg="gray", fg="white")

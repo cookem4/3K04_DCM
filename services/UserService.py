@@ -4,17 +4,22 @@ from cryptography.fernet import InvalidToken
 
 from data.PacingMode import PacingMode
 from data.User import User, UserBuilder
-from repositories.TextRepository import TextRepository
+from exceptions.MaxUsersExceededException import MaxUsersExceededException
+from repositories.JSONRepository import JSONRepository
 from services.EncryptionService import EncryptionService
 from services.Interfaces.CrudServiceInterface import CrudServiceInterface
 from services.Interfaces.UserServiceInterface import UserServiceInterface
-from exceptions.MaxUsersExceededException import MaxUsersExceededException
 
 
 class UserService(UserServiceInterface, CrudServiceInterface):
-    __user_file = "users.txt"
-    __text_repo = TextRepository(__user_file)
-    __encryptor = EncryptionService()
+
+    def __init__(self, testing_file=None):
+        if testing_file is not None:
+            self.user_file = testing_file
+        else:
+            self.user_file = "users.txt"
+        self.__text_repo = JSONRepository(self.user_file)
+        self.__encryptor = EncryptionService()
 
     ################################CRUD METHODS#############################################
     def create(self, user: User):
@@ -56,7 +61,6 @@ class UserService(UserServiceInterface, CrudServiceInterface):
             self.update(user)
 
     def exists(self, username):
-        self.__print()
         try:
             return True if username in self.__text_repo.get() else False
         except InvalidToken:

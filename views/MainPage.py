@@ -10,7 +10,7 @@ class MainPage(AppFrameBase):
     def __init__(self, parent):
         super().__init__(parent)
 
-        self.username = self.session_service.get().username
+        self.username = self.session_service.get.username
         self.currUserJson = self.user_service.read(self.username).to_json()
 
         self.connectionStateText = tk.Label(self, bg="gray", text="Connection Not Established")

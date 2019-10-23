@@ -1,5 +1,6 @@
 # This class is a Singleton, it will only ever have 1 active instantce
 from data.Session import Session
+from exceptions.SingletonInstantiationException import SingletonInstantiationException
 from .Interfaces.SessionInterface import SessionInterface
 
 
@@ -19,12 +20,12 @@ class SessionService(SessionInterface):
     def __init__(self):
         """ Virtually Private Constructor"""
         if SessionService.__instance != None:
-            raise Exception("This class is a Singleton!")
+            raise SingletonInstantiationException("This class is a Singleton!")
         else:
             SessionService.__instance = self
 
     def get(self):
-        if self.__current_session != None:
+        if self.__current_session is not None:
             return self.__current_session
         else:
             return None

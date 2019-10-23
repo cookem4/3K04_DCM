@@ -57,11 +57,11 @@ class MainPage(AppFrameBase):
         self.programmedModeLabel.config(font=(15), foreground="white")
         self.programmedModeLabel.grid(row=2, column=0, columnspan=3, padx=(0, 0), pady=(30, 0), sticky=tk.N)
 
-        self.currIDLabel = tk.Label(self, bg="black", text="Connected Device ID: 6969420")
+        self.currIDLabel = tk.Label(self, bg="black", text="Connected Device ID: 123456")
         self.currIDLabel.config(font=(15), foreground="white")
         self.currIDLabel.grid(row=3, column=0, columnspan=3, padx=(0, 0), pady=(0, 0), sticky=tk.N)
 
-        self.prevIDLabel = tk.Label(self, bg="black", text="Previous Device ID: 4206969")
+        self.prevIDLabel = tk.Label(self, bg="black", text="Previous Device ID: 654321")
         self.prevIDLabel.config(font=(15), foreground="white")
         self.prevIDLabel.grid(row=4, column=0, columnspan=3, padx=(0, 0), pady=(0, 0), sticky=tk.N)
 

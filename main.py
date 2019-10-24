@@ -1,4 +1,4 @@
-from views.GUIApplication import DCM_GUI
+from main.views.GUIApplication import DCM_GUI
 
 if __name__ == '__main__':
 

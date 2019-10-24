@@ -52,13 +52,14 @@
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
 * [Usage](#usage)
+* [Testing](#testing)
 
 
 ### Built With
 
 * [Python3](https://www.python.org)
 * [Tkinter](https://tkdocs.com)
-
+* [unittest](https://docs.python.org/3/library/unittest.html)
 
 
 <!-- GETTING STARTED -->
@@ -96,6 +97,23 @@ To run the app, all you need is one simple command
 python main.py
 ```
 And you're good to go!
+
+## Testing
+This application uses [unittest](https://docs.python.org/3/library/unittest.html) across all services and repositories
+To run these tests
+- on Windows
+    ```shell 
+    > runtests.bat
+    ```
+ - on Mac
+    ```shell script
+    $ runtests.sh
+    ```
+Both of these scripts simply run the command
+```shell script
+> python -m unittest discover -s test -p "*Test.py"
+```
+To find and run all tests in the "test" directory, with the naming convention "*Test.py"
 
 
 

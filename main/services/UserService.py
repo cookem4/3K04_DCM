@@ -12,6 +12,9 @@ from main.services.Interfaces.UserServiceInterface import UserServiceInterface
 
 
 class UserService(UserServiceInterface, CrudServiceInterface):
+    __user_file = "users.txt"
+    __text_repo = JSONRepository(__user_file)
+    __encryptor = EncryptionService()
 
     def __init__(self, testing_file=None):
         if testing_file is not None:
@@ -61,6 +64,7 @@ class UserService(UserServiceInterface, CrudServiceInterface):
             self.update(user)
 
     def exists(self, username):
+        # self.__print()
         try:
             return True if username in self.__text_repo.get() else False
         except InvalidToken:

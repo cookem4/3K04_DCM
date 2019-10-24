@@ -15,6 +15,14 @@ class UserService(UserServiceInterface, CrudServiceInterface):
     __user_file = "users.txt"
     __text_repo = TextRepository(__user_file)
     __encryptor = EncryptionService()
+	
+    def __init__(self, testing_file=None):
+        if testing_file is not None:
+            self.user_file = testing_file
+        else:
+            self.user_file = "users.txt"
+        self.__text_repo = JSONRepository(self.user_file)
+        self.__encryptor = EncryptionService()
 
     ################################CRUD METHODS#############################################
     def create(self, user: User):

@@ -6,6 +6,8 @@ from services.SessionService import SessionService
 from services.UserService import UserService
 
 class AppFrameBase(tk.Frame):
+    session_service = SessionService.get_instance()
+    user_service = UserService()
 
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
@@ -22,5 +24,4 @@ class AppFrameBase(tk.Frame):
         img.image = render
         img.grid(row=0, column=0, columnspan=1000, rowspan=1000, sticky=tk.N)
 
-        self.session_service = SessionService.get_instance()
-        self.user_service = UserService()
+

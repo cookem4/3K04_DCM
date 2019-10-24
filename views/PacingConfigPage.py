@@ -11,7 +11,7 @@ from views.AppFrameBase import AppFrameBase
 
 
 def entry_to_value(entry):
-    entry_string = entry.get()
+    entry_string = entry.get
     return float(entry_string) if entry_string != "" else None
 
 
@@ -22,9 +22,8 @@ class PacingConfigPage(AppFrameBase):
     def __init__(self, parent):
         super().__init__(parent)
 
-        self.username = self.session_service.get().username
+        self.username = self.session_service.get.username
 
-        self.us = UserService()
         self.currUserJson = self.load_current_user_json()
 
         self.usrLowerRateLimit = tk.StringVar()
@@ -271,7 +270,7 @@ class PacingConfigPage(AppFrameBase):
         self.usrVRP.set("" if (vrpSlice == "null") else vrpSlice)
 
     def load_current_user_json(self):
-        return self.us.read(self.username).to_json()
+        return self.user_service.read(self.username).to_json()
 
     def drop_down_callback(self, *args):
         # Upon callback clear all boxes
@@ -342,7 +341,7 @@ class PacingConfigPage(AppFrameBase):
             self.errorLabel.grid(row=10, column=2, columnspan=3, padx=(0, 0), pady=(0, 0), sticky=tk.E)
         else:
             # Update saved pacing mode based on username and drop down selection
-            self.us.update_pacing_mode(self.username, pacing_mode)
+            self.user_service.update_pacing_mode(self.username, pacing_mode)
 
             self.errorLabel.config(text="", width=1)  # Shrink to remove, deleting wasn't working
             self.saveDeviceLabel.config(bg="green", fg="black")

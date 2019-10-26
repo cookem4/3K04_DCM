@@ -39,6 +39,7 @@ class UserServiceTest(unittest.TestCase):
         self.assertEqual(user.pacing_mode, PacingModes.VVI.name)
 
     def test_delete_deletes_user(self) -> None:
+        self.assertTrue(self.sut.exists(self.test_username))
         self.sut.delete(self.test_username)
         self.assertFalse(self.sut.exists(self.test_username))
 

@@ -78,7 +78,7 @@ class PacingConfigPage(AppFrameBase):
         self.currIDLabel.config(font=(20), foreground="white")
         self.currIDLabel.grid(row=8, column=0, columnspan=2, padx=(30, 0), pady=(10, 0), sticky=tk.W)
 
-        self.currID = tk.Label(self, bg="black", text="6969420")
+        self.currID = tk.Label(self, bg="black", text="123456")
         self.currID.config(font=(20), foreground="white")
         self.currID.grid(row=8, column=0, columnspan=2, padx=(0, 130), pady=(10, 0), sticky=tk.E)
 
@@ -86,7 +86,7 @@ class PacingConfigPage(AppFrameBase):
         self.prevIDLabel.config(font=(20), foreground="white")
         self.prevIDLabel.grid(row=9, column=0, columnspan=2, padx=(30, 0), pady=(10, 0), sticky=tk.W)
 
-        self.prevID = tk.Label(self, bg="black", text="4206969")
+        self.prevID = tk.Label(self, bg="black", text="654321")
         self.prevID.config(font=(20), foreground="white")
         self.prevID.grid(row=9, column=0, columnspan=2, padx=(0, 140), pady=(10, 0), sticky=tk.E)
 
@@ -138,7 +138,7 @@ class PacingConfigPage(AppFrameBase):
 
         #############################
 
-        self.ventricalAmpLabel = tk.Label(self, bg="black", text="Ventrical Amplitude:")
+        self.ventricalAmpLabel = tk.Label(self, bg="black", text="Ventricular Amplitude:")
         self.ventricalAmpLabel.config(font=(25), foreground="white")
         self.ventricalAmpLabel.grid(row=5, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
 
@@ -168,7 +168,7 @@ class PacingConfigPage(AppFrameBase):
 
         #########################
 
-        self.ventricalPulseWidthLabel = tk.Label(self, bg="black", text="Ventrical Pulse Width:")
+        self.ventricalPulseWidthLabel = tk.Label(self, bg="black", text="Ventricular Pulse Width:")
         self.ventricalPulseWidthLabel.config(font=25, foreground="white")
         self.ventricalPulseWidthLabel.grid(row=7, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
 

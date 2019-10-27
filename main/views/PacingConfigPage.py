@@ -308,18 +308,18 @@ class PacingConfigPage(AppFrameBase):
         self.parent.switch_frame(MainPage.MainPage)
 
     def save_data(self):
-        # Catch boundary cases from erroneous text box entries
-        pacing_mode: PacingMode = PacingMode(lower_rate_limit=entry_to_value(self.lowerRateLimitEntry),
-                                             upper_rate_limit=entry_to_value(self.upperRateLimitEntry),
-                                             atrial_amplitude=entry_to_value(self.atrialLimitEntry),
-                                             atrial_pulse_width=entry_to_value(self.atrialPulseWidthEntry),
-                                             ventricular_amplitude=entry_to_value(self.ventricalLimitEntry),
-                                             ventricular_pulse_width=entry_to_value(self.ventricalPulseWidthEntry),
-                                             arp=entry_to_value(self.arpEntry),
-                                             vrp=entry_to_value(self.vrpEntry))
-
         # Update variables based on drop down selection
         try:
+            # Catch boundary cases from erroneous text box entries
+            pacing_mode: PacingMode = PacingMode(lower_rate_limit=entry_to_value(self.lowerRateLimitEntry),
+                                                 upper_rate_limit=entry_to_value(self.upperRateLimitEntry),
+                                                 atrial_amplitude=entry_to_value(self.atrialLimitEntry),
+                                                 atrial_pulse_width=entry_to_value(self.atrialPulseWidthEntry),
+                                                 ventricular_amplitude=entry_to_value(self.ventricalLimitEntry),
+                                                 ventricular_pulse_width=entry_to_value(self.ventricalPulseWidthEntry),
+                                                 arp=entry_to_value(self.arpEntry),
+                                                 vrp=entry_to_value(self.vrpEntry))
+        
             if self.pacingSelection.get() == "AOO":
                 pacing_mode.__class__ = AOO
             if self.pacingSelection.get() == "VOO":

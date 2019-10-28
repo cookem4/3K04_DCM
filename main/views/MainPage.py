@@ -1,6 +1,6 @@
 import tkinter as tk
 
-from main.views import PacingConfigPage, LoginPage
+from main.views import PacingConfigPage, LoginPage, EGMDataPage
 from main.views.AppFrameBase import AppFrameBase
 
 
@@ -58,7 +58,7 @@ class MainPage(AppFrameBase):
         self.parent.switch_frame(PacingConfigPage.PacingConfigPage)
 
     def view_current_EGM_data_callback(self):
-        print("Present Data")
+        self.parent.switch_frame(EGMDataPage.EGMDataPage)
 
     def view_past_EGM_data_callback(self):
         print("Past Data")

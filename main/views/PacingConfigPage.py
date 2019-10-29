@@ -72,27 +72,50 @@ class PacingConfigPage(AppFrameBase):
 
         self.programmedModeLabel = tk.Label(self, bg="black", text="Current Programmed Pacing Mode:")
         self.programmedModeLabel.config(font=(20), foreground="white")
-        self.programmedModeLabel.grid(row=7, column=0, columnspan=2, padx=(30, 0), pady=(20, 0), sticky=tk.W)
-
+        #self.programmedModeLabel.grid(row=3, column=0, columnspan=2, padx=(30, 0), pady=(20, 0), sticky=tk.W)
+        self.programmedModeLabel.place(relx=0.05, rely=0.75, anchor = 'sw')
+        
         self.actualModeLabel = tk.Label(self, bg="black", text=self.currUserJson["pacing_mode_name"])
         self.actualModeLabel.config(font=(20), foreground="white")
-        self.actualModeLabel.grid(row=7, column=1, columnspan=1, padx=(0, 75), pady=(20, 0), sticky=tk.E)
-
+        #self.actualModeLabel.grid(row=3, column=1, columnspan=1, padx=(0, 75), pady=(20, 0), sticky=tk.E)
+        self.actualModeLabel.place(relx=0.29, rely=0.75, anchor = 'sw')
+        
         self.currIDLabel = tk.Label(self, bg="black", text="Connected Device ID:")
         self.currIDLabel.config(font=(20), foreground="white")
-        self.currIDLabel.grid(row=8, column=0, columnspan=2, padx=(30, 0), pady=(10, 0), sticky=tk.W)
+        #self.currIDLabel.grid(row=4, column=0, columnspan=2, padx=(30, 0), pady=(10, 0), sticky=tk.W)
+        self.currIDLabel.place(relx=0.05, rely=0.8, anchor = 'sw')
 
         self.currID = tk.Label(self, bg="black", text="123456")
         self.currID.config(font=(20), foreground="white")
-        self.currID.grid(row=8, column=0, columnspan=2, padx=(0, 130), pady=(10, 0), sticky=tk.E)
+        #self.currID.grid(row=4, column=0, columnspan=2, padx=(0, 130), pady=(10, 0), sticky=tk.E)
+        self.currID.place(relx=0.2, rely=0.8, anchor = 'sw')
 
         self.prevIDLabel = tk.Label(self, bg="black", text="Previous Device ID:")
         self.prevIDLabel.config(font=(20), foreground="white")
-        self.prevIDLabel.grid(row=9, column=0, columnspan=2, padx=(30, 0), pady=(10, 0), sticky=tk.W)
+        #self.prevIDLabel.grid(row=5, column=0, columnspan=2, padx=(30, 0), pady=(10, 0), sticky=tk.W)
+        self.prevIDLabel.place(relx=0.05, rely=0.85, anchor = 'sw')
 
         self.prevID = tk.Label(self, bg="black", text="654321")
         self.prevID.config(font=(20), foreground="white")
-        self.prevID.grid(row=9, column=0, columnspan=2, padx=(0, 140), pady=(10, 0), sticky=tk.E)
+        #self.prevID.grid(row=5, column=0, columnspan=2, padx=(0, 140), pady=(10, 0), sticky=tk.E)
+        self.prevID.place(relx=0.2, rely=0.85, anchor = 'sw')
+
+        self.backBtn = tk.Button(self, text="Back", width=10, height=1, command=self.go_back)
+        self.backBtn.config(font=("Helvetica", 10))
+        #self.backBtn.grid(row=6, column=0, pady=(0, 0), padx=(15, 0), sticky=tk.W)
+        self.backBtn.place(relx=0.05, rely=0.92, anchor = 'sw')
+
+        self.saveBtn = tk.Button(self, text="Save", width=10, height=1, command=self.save_data)
+        self.saveBtn.config(font=("Helvetica", 10))
+        #self.saveBtn.grid(row=6, column=0, pady=(0, 0), padx=(50, 0), sticky=tk.E)
+        self.saveBtn.place(relx=0.12, rely=0.92, anchor = 'sw')
+
+        self.saveDeviceLabel = tk.Label(self, bg="gray", text="Saving to Device...")
+        self.saveDeviceLabel.config(font=(25), foreground="white")
+        #self.saveDeviceLabel.grid(row=6, column=1, padx=(30, 0), pady=(0, 0), sticky=tk.W)
+        self.saveDeviceLabel.place(relx=0.20, rely=0.92, anchor = 'sw')
+
+        self.errorLabel = tk.Label(self, bg="black", text="Erroneous Parameters Provided", width=33)
 
         ###################################################################
         # The following configure the text entries for parameters
@@ -351,7 +374,7 @@ class PacingConfigPage(AppFrameBase):
 
         #########################
 
-        self.ventricularSensitivityLabel = tk.Label(self, bg="black", text="Atrial Sensitivity:")
+        self.ventricularSensitivityLabel = tk.Label(self, bg="black", text="Ventricular Sensitivity:")
         self.ventricularSensitivityLabel.config(font=(25), foreground="white")
         
 
@@ -367,23 +390,11 @@ class PacingConfigPage(AppFrameBase):
             self.ventricularSensitivityEntry.grid(row=16, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
             self.ventricularSensitivityUnit.grid(row=16, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E) 
 
-        #########################
-
-        self.backBtn = tk.Button(self, text="Back", width=10, height=1, command=self.go_back)
-        self.backBtn.config(font=("Helvetica", 10))
-        self.backBtn.grid(row=13, column=0, columnspan=1, pady=(0, 0), padx=(15, 0), sticky=tk.W)
-
-        self.backBtn = tk.Button(self, text="Save", width=10, height=1, command=self.save_data)
-        self.backBtn.config(font=("Helvetica", 10))
-        self.backBtn.grid(row=13, column=0, columnspan=1, pady=(0, 0), padx=(50, 0), sticky=tk.E)
-
-        self.saveDeviceLabel = tk.Label(self, bg="gray", text="Saving to Device...")
-        self.saveDeviceLabel.config(font=(25), foreground="white")
-        self.saveDeviceLabel.grid(row=13, column=1, padx=(30, 0), pady=(0, 0), sticky=tk.W)
-
-        self.errorLabel = tk.Label(self, bg="black", text="Erroneous Parameters Provided", width=33)
+        #################################
 
         self.drop_down_callback()
+
+        #################################
 
         # Set textbox values based on user profile
         # String slicing of json object
@@ -455,133 +466,150 @@ class PacingConfigPage(AppFrameBase):
             self.boxesToDisplay = [True, True, False, True, False, True, False, True, False, False, False, False, False, False, False]
             #self.set_states(ALE="disabled", APW="disabled", ARP="disabled")
         if self.pacingSelection.get() == "DOO":
-            self.boxesToDisplay = [True, True, True, True, True, True, False, True, False, True, False, False, False, False, False]
+            self.boxesToDisplay = [True, True, True, True, True, True, False, False, False, True, False, False, False, False, False]
         if self.pacingSelection.get() == "AOOR":
-            self.boxesToDisplay = [True, True, True, False, True, False, False, True, True, False, False, False, False, False, False]
+            self.boxesToDisplay = [True, True, True, False, True, False, False, False, True, False, False, False, False, False, False]
         if self.pacingSelection.get() == "VOOR":
-            self.boxesToDisplay = [True, True, False, True, False, True, False, True, True, False, False, False, False, False, False]
+            self.boxesToDisplay = [True, True, False, True, False, True, False, False, True, False, False, False, False, False, False]
         if self.pacingSelection.get() == "AAIR":
-            self.boxesToDisplay = [True, True, True, False, True, False, True, False, True, False, True, True, True, True, False]
+            self.boxesToDisplay = [True, True, True, False, True, False, True, False, True, False, False, False, False, True, False]
         if self.pacingSelection.get() == "VVIR":
-            self.boxesToDisplay = [True, True, False, True, False, True, False, True, False, False, False, True, True, False, True]
+            self.boxesToDisplay = [True, True, False, True, False, True, False, True, True, False, False, False, False, False, True]
         if self.pacingSelection.get() == "DOOR":
             self.boxesToDisplay = [True, True, True, True, True, True, False, False, True, True, False, False, False, False, False]
+        #Show only if the corresponding vector element is true
+        rowCounter = 2 #keeps track of what row the entry box is to be displayed in
         if(self.boxesToDisplay[0]):
-            self.lowerRateLabel.grid(row=2, column=2, padx=(200, 0), pady=(50, 0), sticky=tk.E)
-            self.lowerRateLimitEntry.grid(row=2, column=3, pady=(50, 0), padx=(15, 0), sticky=tk.W)
-            self.lowerRateUnitLabel.grid(row=2, column=3, padx=(0, 20), pady=(50, 0), sticky=tk.E)
+            self.lowerRateLabel.grid(row=rowCounter, column=2, padx=(200, 0), pady=(50, 0), sticky=tk.E)
+            self.lowerRateLimitEntry.grid(row=rowCounter, column=3, pady=(50, 0), padx=(15, 0), sticky=tk.W)
+            self.lowerRateUnitLabel.grid(row=rowCounter, column=3, padx=(0, 20), pady=(50, 0), sticky=tk.E)
+            rowCounter = rowCounter + 1
         else:
             self.lowerRateLabel.grid_forget()
             self.lowerRateLimitEntry.grid_forget()
             self.lowerRateUnitLabel.grid_forget()
         if(self.boxesToDisplay[1]):
-            self.upperRateLabel.grid(row=3, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
-            self.upperRateLimitEntry.grid(row=3, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
-            self.upperRateUnitLabel.grid(row=3, column=3, padx=(0, 20), pady=(20, 0), sticky=tk.E)
+            self.upperRateLabel.grid(row=rowCounter, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
+            self.upperRateLimitEntry.grid(row=rowCounter, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
+            self.upperRateUnitLabel.grid(row=rowCounter, column=3, padx=(0, 20), pady=(20, 0), sticky=tk.E)
+            rowCounter = rowCounter + 1
         else:
             self.upperRateLabel.grid_forget()
             self.upperRateLimitEntry.grid_forget()
             self.upperRateUnitLabel.grid_forget()
         if(self.boxesToDisplay[2]):
-            self.atrialAmpLabel.grid(row=4, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
-            self.atrialLimitEntry.grid(row=4, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
-            self.atrialLimitUnit.grid(row=4, column=3, padx=(0, 35), pady=(20, 0), sticky=tk.E)
+            self.atrialAmpLabel.grid(row=rowCounter, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
+            self.atrialLimitEntry.grid(row=rowCounter, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
+            self.atrialLimitUnit.grid(row=rowCounter, column=3, padx=(0, 35), pady=(20, 0), sticky=tk.E)
+            rowCounter = rowCounter + 1
         else:
             self.atrialAmpLabel.grid_forget()
             self.atrialLimitEntry.grid_forget()
             self.atrialLimitUnit.grid_forget()
         if(self.boxesToDisplay[3]):
-            self.ventricalAmpLabel.grid(row=5, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
-            self.ventricalLimitEntry.grid(row=5, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
-            self.ventricalLimitUnit.grid(row=5, column=3, padx=(0, 35), pady=(20, 0), sticky=tk.E)
+            self.ventricalAmpLabel.grid(row=rowCounter, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
+            self.ventricalLimitEntry.grid(row=rowCounter, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
+            self.ventricalLimitUnit.grid(row=rowCounter, column=3, padx=(0, 35), pady=(20, 0), sticky=tk.E)
+            rowCounter = rowCounter + 1
         else:
             self.ventricalAmpLabel.grid_forget()
             self.ventricalLimitEntry.grid_forget()
             self.ventricalLimitUnit.grid_forget()
         if(self.boxesToDisplay[4]):
-            self.atrialPulseWidthLabel.grid(row=6, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
-            self.atrialPulseWidthEntry.grid(row=6, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
-            self.atrialPulseWidthUnit.grid(row=6, column=3, padx=(0, 15), pady=(20, 0), sticky=tk.E)
+            self.atrialPulseWidthLabel.grid(row=rowCounter, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
+            self.atrialPulseWidthEntry.grid(row=rowCounter, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
+            self.atrialPulseWidthUnit.grid(row=rowCounter, column=3, padx=(0, 15), pady=(20, 0), sticky=tk.E)
+            rowCounter = rowCounter + 1
         else:
             self.atrialPulseWidthLabel.grid_forget()
             self.atrialPulseWidthEntry.grid_forget()
             self.atrialPulseWidthUnit.grid_forget()
         if(self.boxesToDisplay[5]):
-            self.ventricalPulseWidthLabel.grid(row=7, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
-            self.ventricalPulseWidthEntry.grid(row=7, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
-            self.ventricalPulseWidthUnit.grid(row=7, column=3, padx=(0, 15), pady=(20, 0), sticky=tk.E)
+            self.ventricalPulseWidthLabel.grid(row=rowCounter, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
+            self.ventricalPulseWidthEntry.grid(row=rowCounter, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
+            self.ventricalPulseWidthUnit.grid(row=rowCounter, column=3, padx=(0, 15), pady=(20, 0), sticky=tk.E)
+            rowCounter = rowCounter + 1
         else:
             self.ventricalPulseWidthLabel.grid_forget()
             self.ventricalPulseWidthEntry.grid_forget()
             self.ventricalPulseWidthUnit.grid_forget()
         if(self.boxesToDisplay[6]):
-            self.arpLabel.grid(row=8, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
-            self.arpEntry.grid(row=8, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
-            self.arpUnit.grid(row=8, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
+            self.arpLabel.grid(row=rowCounter, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
+            self.arpEntry.grid(row=rowCounter, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
+            self.arpUnit.grid(row=rowCounter, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
+            rowCounter = rowCounter + 1
         else:
             self.arpLabel.grid_forget()
             self.arpEntry.grid_forget()
             self.arpUnit.grid_forget()
         if(self.boxesToDisplay[7]):
-            self.vrpLabel.grid(row=9, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
-            self.vrpEntry.grid(row=9, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
-            self.vrpUnit.grid(row=9, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
+            self.vrpLabel.grid(row=rowCounter, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
+            self.vrpEntry.grid(row=rowCounter, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
+            self.vrpUnit.grid(row=rowCounter, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
+            rowCounter = rowCounter + 1
         else:
             self.vrpLabel.grid_forget()
             self.vrpEntry.grid_forget()
             self.vrpUnit.grid_forget()
         if(self.boxesToDisplay[8]):
-            self.sensorRateLabel.grid(row=10, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
-            self.sensorRateEntry.grid(row=10, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
-            self.sensorRateUnit.grid(row=10, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
+            self.sensorRateLabel.grid(row=rowCounter, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
+            self.sensorRateEntry.grid(row=rowCounter, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
+            self.sensorRateUnit.grid(row=rowCounter, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
+            rowCounter = rowCounter + 1
         else:
             self.sensorRateLabel.grid_forget()
             self.sensorRateEntry.grid_forget()
             self.sensorRateUnit.grid_forget()
         if(self.boxesToDisplay[9]):
-            self.avDelayLabel.grid(row=11, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
-            self.avDelayEntry.grid(row=11, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
-            self.avDelayUnit.grid(row=11, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
+            self.avDelayLabel.grid(row=rowCounter, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
+            self.avDelayEntry.grid(row=rowCounter, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
+            self.avDelayUnit.grid(row=rowCounter, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
+            rowCounter = rowCounter + 1
         else:
             self.avDelayLabel.grid_forget()
             self.avDelayEntry.grid_forget()
             self.avDelayUnit.grid_forget()
         if(self.boxesToDisplay[10]):
-            self.pvarpUnit.grid(row=12, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
-            self.pvarpEntry.grid(row=12, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
-            self.pvarpLabel.grid(row=12, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
+            self.pvarpUnit.grid(row=rowCounter, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
+            self.pvarpEntry.grid(row=rowCounter, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
+            self.pvarpLabel.grid(row=rowCounter, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
+            rowCounter = rowCounter + 1
         else:
             self.pvarpUnit.grid_forget()
             self.pvarpEntry.grid_forget()
             self.pvarpLabel.grid_forget()
         if(self.boxesToDisplay[11]):
-            self.hystersisLabel.grid(row=13, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
-            self.hystersisEntry.grid(row=13, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
-            self.hystersisUnit.grid(row=13, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
+            self.hystersisLabel.grid(row=rowCounter, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
+            self.hystersisEntry.grid(row=rowCounter, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
+            self.hystersisUnit.grid(row=rowCounter, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
+            rowCounter = rowCounter + 1
         else:
             self.hystersisLabel.grid_forget()
             self.hystersisEntry.grid_forget()
             self.hystersisUnit.grid_forget()
         if(self.boxesToDisplay[12]):
-            self.smoothingLabel.grid(row=14, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
-            self.smoothingEntry.grid(row=14, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
-            self.smoothingUnit.grid(row=14, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
+            self.smoothingLabel.grid(row=rowCounter, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
+            self.smoothingEntry.grid(row=rowCounter, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
+            self.smoothingUnit.grid(row=rowCounter, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
+            rowCounter = rowCounter + 1
         else:
             self.smoothingLabel.grid_forget()
             self.smoothingEntry.grid_forget()
             self.smoothingUnit.grid_forget()
         if(self.boxesToDisplay[13]):
-            self.atrialSensitivityLabel.grid(row=15, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
-            self.atrialSensitivityEntry.grid(row=15, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
-            self.atrialSensitivityUnit.grid(row=15, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
+            self.atrialSensitivityLabel.grid(row=rowCounter, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
+            self.atrialSensitivityEntry.grid(row=rowCounter, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
+            self.atrialSensitivityUnit.grid(row=rowCounter, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
+            rowCounter = rowCounter + 1
         else:
             self.atrialSensitivityLabel.grid_forget()
             self.atrialSensitivityEntry.grid_forget()
             self.atrialSensitivityUnit.grid_forget()
         if(self.boxesToDisplay[14]):
-            self.ventricularSensitivityLabel.grid(row=16, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
-            self.ventricularSensitivityEntry.grid(row=16, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
-            self.ventricularSensitivityUnit.grid(row=16, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
+            self.ventricularSensitivityLabel.grid(row=rowCounter, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
+            self.ventricularSensitivityEntry.grid(row=rowCounter, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
+            self.ventricularSensitivityUnit.grid(row=rowCounter, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
+            rowCounter = rowCounter + 1
         else:
             self.ventricularSensitivityLabel.grid_forget()
             self.ventricularSensitivityEntry.grid_forget()
@@ -631,7 +659,8 @@ class PacingConfigPage(AppFrameBase):
         if (display_error_message):
             self.errorLabel.config(font=(25), foreground="red")
             self.errorLabel.config(text="Invalid Entry Provided", width=33)
-            self.errorLabel.grid(row=10, column=2, columnspan=3, padx=(0, 0), pady=(0, 0), sticky=tk.E)
+            #self.errorLabel.grid(row=10, column=2, columnspan=3, padx=(0, 0), pady=(0, 0), sticky=tk.E)
+            self.errorLabel.place(relx=0.55, rely=0.92, anchor = 'sw')
         else:
             # Update saved pacing mode based on username and drop down selection
             self.user_service.update_pacing_mode(self.username, pacing_mode)

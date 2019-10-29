@@ -38,7 +38,7 @@ class PacingConfigPage(AppFrameBase):
 
         #Vector that tells us what text entry boxes should be shown
         #This one is to display only the boxes for the AOO mode
-        self.boxesToDisplay = [True, True, True, False, True, False, False, False, False, False, False, False, False, False, False]
+        self.boxesToDisplay = [True, True, True, False, True, False, False, False, False, False, False, False]
 
         self.connectionStateText = tk.Label(self, bg="gray", text="Connection Not Established")
         self.connectionStateText.config(font=("Helvetica", 25), foreground="white")
@@ -134,17 +134,7 @@ class PacingConfigPage(AppFrameBase):
 
         self.lowerRateUnitLabel = tk.Label(self, bg="black", text="ppm")
         self.lowerRateUnitLabel.config(font=(25), foreground="white")
-        '''
-        if(self.boxesToDisplay[0]):
-            
-            self.lowerRateLabel.grid(row=2, column=2, padx=(200, 0), pady=(50, 0), sticky=tk.E)
-            self.lowerRateLimitEntry.grid(row=2, column=3, pady=(50, 0), padx=(15, 0), sticky=tk.W)
-            self.lowerRateUnitLabel.grid(row=2, column=3, padx=(0, 20), pady=(50, 0), sticky=tk.E)
-            
-            self.lowerRateLabel.place(relx=0.55, rely=0.25, anchor = 'sw')
-            self.lowerRateLimitEntry.place(relx=0.7, rely=0.25, anchor = 'sw')
-            self.lowerRateUnitLabel.place(relx=0.78, rely=0.25, anchor = 'sw')
-        '''
+
         ############################
 
         self.upperRateLabel = tk.Label(self, bg="black", text="Upper Rate Limit:")
@@ -157,12 +147,7 @@ class PacingConfigPage(AppFrameBase):
 
         self.upperRateUnitLabel = tk.Label(self, bg="black", text="ppm")
         self.upperRateUnitLabel.config(font=(25), foreground="white")
-        '''
-        if(self.boxesToDisplay[1]):
-            self.upperRateLabel.grid(row=3, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
-            self.upperRateLimitEntry.grid(row=3, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
-            self.upperRateUnitLabel.grid(row=3, column=3, padx=(0, 20), pady=(20, 0), sticky=tk.E)
-        '''
+
         ############################
 
         self.atrialAmpLabel = tk.Label(self, bg="black", text="Atrial Amplitude:")
@@ -175,12 +160,7 @@ class PacingConfigPage(AppFrameBase):
 
         self.atrialLimitUnit = tk.Label(self, bg="black", text="V")
         self.atrialLimitUnit.config(font=(25), foreground="white")
-        '''
-        if(self.boxesToDisplay[2]):
-            self.atrialAmpLabel.grid(row=4, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
-            self.atrialLimitEntry.grid(row=4, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
-            self.atrialLimitUnit.grid(row=4, column=3, padx=(0, 35), pady=(20, 0), sticky=tk.E)
-        '''
+
         #############################
 
         self.ventricalAmpLabel = tk.Label(self, bg="black", text="Ventricular Amplitude:")
@@ -194,12 +174,7 @@ class PacingConfigPage(AppFrameBase):
 
         self.ventricalLimitUnit = tk.Label(self, bg="black", text="V")
         self.ventricalLimitUnit.config(font=(25), foreground="white")
-        '''
-        if(self.boxesToDisplay[3]):
-            self.ventricalAmpLabel.grid(row=5, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
-            self.ventricalLimitEntry.grid(row=5, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
-            self.ventricalLimitUnit.grid(row=5, column=3, padx=(0, 35), pady=(20, 0), sticky=tk.E)
-        '''
+
         ############################
 
         self.atrialPulseWidthLabel = tk.Label(self, bg="black", text="Atrial Pulse Width:")
@@ -213,12 +188,7 @@ class PacingConfigPage(AppFrameBase):
 
         self.atrialPulseWidthUnit = tk.Label(self, bg="black", text="mSec")
         self.atrialPulseWidthUnit.config(font=(25), foreground="white")
-        '''
-        if(self.boxesToDisplay[4]):
-            self.atrialPulseWidthLabel.grid(row=6, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
-            self.atrialPulseWidthEntry.grid(row=6, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
-            self.atrialPulseWidthUnit.grid(row=6, column=3, padx=(0, 15), pady=(20, 0), sticky=tk.E)
-        '''
+
         #########################
 
         self.ventricalPulseWidthLabel = tk.Label(self, bg="black", text="Ventricular Pulse Width:")
@@ -232,12 +202,7 @@ class PacingConfigPage(AppFrameBase):
 
         self.ventricalPulseWidthUnit = tk.Label(self, bg="black", text="mSec")
         self.ventricalPulseWidthUnit.config(font=(25), foreground="white")
-        '''
-        if(self.boxesToDisplay[5]):
-            self.ventricalPulseWidthLabel.grid(row=7, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
-            self.ventricalPulseWidthEntry.grid(row=7, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
-            self.ventricalPulseWidthUnit.grid(row=7, column=3, padx=(0, 15), pady=(20, 0), sticky=tk.E)
-        '''
+
         #########################
 
         self.arpLabel = tk.Label(self, bg="black", text="ARP:")
@@ -250,12 +215,7 @@ class PacingConfigPage(AppFrameBase):
 
         self.arpUnit = tk.Label(self, bg="black", text="mSec")
         self.arpUnit.config(font=(25), foreground="white")
-        '''
-        if(self.boxesToDisplay[6]):
-            self.arpLabel.grid(row=8, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
-            self.arpEntry.grid(row=8, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
-            self.arpUnit.grid(row=8, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
-        '''
+
         #########################
 
         self.vrpLabel = tk.Label(self, bg="black", text="VRP:")
@@ -267,12 +227,7 @@ class PacingConfigPage(AppFrameBase):
 
         self.vrpUnit = tk.Label(self, bg="black", text="mSec")
         self.vrpUnit.config(font=(25), foreground="white")
-        '''
-        if(self.boxesToDisplay[7]):
-            self.vrpLabel.grid(row=9, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
-            self.vrpEntry.grid(row=9, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
-            self.vrpUnit.grid(row=9, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
-        '''
+
         #########################
 
         self.sensorRateLabel = tk.Label(self, bg="black", text="Max Sensor Rate:")
@@ -285,12 +240,7 @@ class PacingConfigPage(AppFrameBase):
 
         self.sensorRateUnit = tk.Label(self, bg="black", text="mSec")
         self.sensorRateUnit.config(font=(25), foreground="white")
-        '''
-        if(self.boxesToDisplay[8]):
-            self.sensorRateLabel.grid(row=10, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
-            self.sensorRateEntry.grid(row=10, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
-            self.sensorRateUnit.grid(row=10, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
-        '''
+
         #########################
 
         self.avDelayLabel = tk.Label(self, bg="black", text="Fixed AV Delay:")
@@ -302,66 +252,7 @@ class PacingConfigPage(AppFrameBase):
 
         self.avDelayUnit = tk.Label(self, bg="black", text="mSec")
         self.avDelayUnit.config(font=(25), foreground="white")
-        '''
-        if(self.boxesToDisplay[9]):
-            self.avDelayLabel.grid(row=11, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
-            self.avDelayEntry.grid(row=11, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
-            self.avDelayUnit.grid(row=11, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
-        '''
-        #########################
 
-        self.pvarpLabel = tk.Label(self, bg="black", text="PVARP:")
-        self.pvarpLabel.config(font=(25), foreground="white")
-        
-
-        self.pvarpEntry = tk.Entry(self, textvariable=self.usrVRP, width=10, font=(25), bg=self.enabled_bg,
-                                 disabledbackground=self.disabled_bg)
-        
-
-        self.pvarpUnit = tk.Label(self, bg="black", text="mSec")
-        self.pvarpUnit.config(font=(25), foreground="white")
-        '''
-        if(self.boxesToDisplay[10]):
-            self.pvarpUnit.grid(row=12, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
-            self.pvarpEntry.grid(row=12, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
-            self.pvarpLabel.grid(row=12, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
-        '''
-        #########################
-
-        self.hystersisLabel = tk.Label(self, bg="black", text="Hyseresis:")
-        self.hystersisLabel.config(font=(25), foreground="white")
-        
-
-        self.hystersisEntry = tk.Entry(self, textvariable=self.usrVRP, width=10, font=(25), bg=self.enabled_bg,
-                                 disabledbackground=self.disabled_bg)
-        
-        
-        self.hystersisUnit = tk.Label(self, bg="black", text="V")
-        self.hystersisUnit.config(font=(25), foreground="white")
-        '''
-        if(self.boxesToDisplay[11]):
-            self.hystersisLabel.grid(row=13, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
-            self.hystersisEntry.grid(row=13, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
-            self.hystersisUnit.grid(row=13, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
-        '''
-        #########################
-
-        self.smoothingLabel = tk.Label(self, bg="black", text="Rate Smoothing:")
-        self.smoothingLabel.config(font=(25), foreground="white")
-        
-
-        self.smoothingEntry = tk.Entry(self, textvariable=self.usrVRP, width=10, font=(25), bg=self.enabled_bg,
-                                 disabledbackground=self.disabled_bg)
-        
-
-        self.smoothingUnit = tk.Label(self, bg="black", text="???")
-        self.smoothingUnit.config(font=(25), foreground="white")
-        '''
-        if(self.boxesToDisplay[12]):
-            self.smoothingLabel.grid(row=14, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
-            self.smoothingEntry.grid(row=14, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
-            self.smoothingUnit.grid(row=14, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
-        '''
         #########################
 
         self.atrialSensitivityLabel = tk.Label(self, bg="black", text="Atrial Sensitivity:")
@@ -374,12 +265,7 @@ class PacingConfigPage(AppFrameBase):
 
         self.atrialSensitivityUnit = tk.Label(self, bg="black", text="???")
         self.atrialSensitivityUnit.config(font=(25), foreground="white")
-        '''
-        if(self.boxesToDisplay[13]):
-            self.atrialSensitivityLabel.grid(row=15, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
-            self.atrialSensitivityEntry.grid(row=15, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
-            self.atrialSensitivityUnit.grid(row=15, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
-        '''
+
         #########################
 
         self.ventricularSensitivityLabel = tk.Label(self, bg="black", text="Ventricular Sensitivity:")
@@ -392,12 +278,7 @@ class PacingConfigPage(AppFrameBase):
 
         self.ventricularSensitivityUnit = tk.Label(self, bg="black", text="???")
         self.ventricularSensitivityUnit.config(font=(25), foreground="white")
-        '''
-        if(self.boxesToDisplay[14]):
-            self.ventricularSensitivityLabel.grid(row=16, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
-            self.ventricularSensitivityEntry.grid(row=16, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
-            self.ventricularSensitivityUnit.grid(row=16, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E) 
-        '''
+
         #################################
 
         self.drop_down_callback()
@@ -462,29 +343,29 @@ class PacingConfigPage(AppFrameBase):
         # Sets which boxes are grayed out based on drop down menu selection
         # Update variables based on drop down selection
         if self.pacingSelection.get() == "AOO":
-            self.boxesToDisplay = [True, True, True, False, True, False, False, False, False, False, False, False, False, False, False]
+            self.boxesToDisplay = [True, True, True, False, True, False, False, False, False, False, False, False]
             #self.set_states(VLE="disabled", VPW="disabled", ARP="disabled", VRP="disabled")
         if self.pacingSelection.get() == "VOO":
-            self.boxesToDisplay = [True, True, False, True, False, True, False, False, False, False, False, False, False, False, False]
+            self.boxesToDisplay = [True, True, False, True, False, True, False, False, False, False, False, False]
             #self.set_states(ALE="disabled", APW="disabled", ARP="disabled", VRP="disabled")
         if self.pacingSelection.get() == "AAI":
-            self.boxesToDisplay = [True, True, True, False, True, False, True, False, False, False, False, False, False, False, False]
+            self.boxesToDisplay = [True, True, True, False, True, False, True, False, False, False, False, False]
             #self.set_states(VLE="disabled", VPW="disabled", VRP="disabled")
         if self.pacingSelection.get() == "VVI":
-            self.boxesToDisplay = [True, True, False, True, False, True, False, True, False, False, False, False, False, False, False]
+            self.boxesToDisplay = [True, True, False, True, False, True, False, True, False, False, False, False]
             #self.set_states(ALE="disabled", APW="disabled", ARP="disabled")
         if self.pacingSelection.get() == "DOO":
-            self.boxesToDisplay = [True, True, True, True, True, True, False, False, False, True, False, False, False, False, False]
+            self.boxesToDisplay = [True, True, True, True, True, True, False, False, False, True, False, False]
         if self.pacingSelection.get() == "AOOR":
-            self.boxesToDisplay = [True, True, True, False, True, False, False, False, True, False, False, False, False, False, False]
+            self.boxesToDisplay = [True, True, True, False, True, False, False, False, True, False, False, False]
         if self.pacingSelection.get() == "VOOR":
-            self.boxesToDisplay = [True, True, False, True, False, True, False, False, True, False, False, False, False, False, False]
+            self.boxesToDisplay = [True, True, False, True, False, True, False, False, True, False, False, False]
         if self.pacingSelection.get() == "AAIR":
-            self.boxesToDisplay = [True, True, True, False, True, False, True, False, True, False, False, False, False, True, False]
+            self.boxesToDisplay = [True, True, True, False, True, False, True, False, True, False, True, False]
         if self.pacingSelection.get() == "VVIR":
-            self.boxesToDisplay = [True, True, False, True, False, True, False, True, True, False, False, False, False, False, True]
+            self.boxesToDisplay = [True, True, False, True, False, True, False, True, True, False, False, True]
         if self.pacingSelection.get() == "DOOR":
-            self.boxesToDisplay = [True, True, True, True, True, True, False, False, True, True, False, False, False, False, False]
+            self.boxesToDisplay = [True, True, True, True, True, True, False, False, True, True, False, False]
         #Show only if the corresponding vector element is true
         rowCounter = 0.25 #keeps track of what row the entry box is to be displayed in
         if(self.boxesToDisplay[0]):
@@ -638,51 +519,6 @@ class PacingConfigPage(AppFrameBase):
             self.avDelayUnit.place_forget()
         if(self.boxesToDisplay[10]):
             '''
-            self.pvarpUnit.grid(row=rowCounter, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
-            self.pvarpEntry.grid(row=rowCounter, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
-            self.pvarpLabel.grid(row=rowCounter, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
-            rowCounter = rowCounter + 1
-            '''
-            self.pvarpUnit.place(relx=0.54, rely=rowCounter, anchor = 'sw')
-            self.pvarpEntry.place(relx=0.7, rely=rowCounter, anchor = 'sw')
-            self.pvarpLabel.place(relx=0.78, rely=rowCounter, anchor = 'sw')
-            rowCounter = rowCounter + 0.08
-        else:
-            self.pvarpUnit.place_forget()
-            self.pvarpEntry.place_forget()
-            self.pvarpLabel.place_forget()
-        if(self.boxesToDisplay[11]):
-            '''
-            self.hystersisLabel.grid(row=rowCounter, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
-            self.hystersisEntry.grid(row=rowCounter, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
-            self.hystersisUnit.grid(row=rowCounter, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
-            rowCounter = rowCounter + 1
-            '''
-            self.hystersisLabel.place(relx=0.54, rely=rowCounter, anchor = 'sw')
-            self.hystersisEntry.place(relx=0.7, rely=rowCounter, anchor = 'sw')
-            self.hystersisUnit.place(relx=0.78, rely=rowCounter, anchor = 'sw')
-            rowCounter = rowCounter + 0.08
-        else:
-            self.hystersisLabel.place_forget()
-            self.hystersisEntry.place_forget()
-            self.hystersisUnit.place_forget()
-        if(self.boxesToDisplay[12]):
-            '''
-            self.smoothingLabel.grid(row=rowCounter, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
-            self.smoothingEntry.grid(row=rowCounter, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
-            self.smoothingUnit.grid(row=rowCounter, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
-            rowCounter = rowCounter + 1
-            '''
-            self.smoothingLabel.place(relx=0.54, rely=rowCounter, anchor = 'sw')
-            self.smoothingEntry.place(relx=0.7, rely=rowCounter, anchor = 'sw')
-            self.smoothingUnit.place(relx=0.78, rely=rowCounter, anchor = 'sw')
-            rowCounter = rowCounter + 0.08
-        else:
-            self.smoothingLabel.place_forget()
-            self.smoothingEntry.place_forget()
-            self.smoothingUnit.place_forget()
-        if(self.boxesToDisplay[13]):
-            '''
             self.atrialSensitivityLabel.grid(row=rowCounter, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
             self.atrialSensitivityEntry.grid(row=rowCounter, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
             self.atrialSensitivityUnit.grid(row=rowCounter, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
@@ -696,7 +532,7 @@ class PacingConfigPage(AppFrameBase):
             self.atrialSensitivityLabel.place_forget()
             self.atrialSensitivityEntry.place_forget()
             self.atrialSensitivityUnit.place_forget()
-        if(self.boxesToDisplay[14]):
+        if(self.boxesToDisplay[11]):
             '''
             self.ventricularSensitivityLabel.grid(row=rowCounter, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
             self.ventricularSensitivityEntry.grid(row=rowCounter, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)

@@ -24,7 +24,7 @@ class UserServiceTest(unittest.TestCase):
         self.sut.create(self.test_user)
 
     def tearDown(self) -> None:
-        self.sut.delete(self.test_user)
+        self.sut.delete(self.test_username)
 
     def test_create_creates_user(self) -> None:
         user: User = self.sut.read(self.test_username)

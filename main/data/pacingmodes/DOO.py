@@ -16,9 +16,9 @@ class DOO(PacingMode):
             ventricular_pulse_width=ventricular_pulse_width,
             arp=None,
             vrp=None,
-            sensor_rate = None
-            av_delay = av_delay
-            atrial_sensitivity = None
+            sensor_rate = None,
+            av_delay = av_delay,
+            atrial_sensitivity = None,
             ventricular_sensitivity  = None)
 
     def validate(self) -> bool:

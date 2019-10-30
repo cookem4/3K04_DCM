@@ -25,7 +25,7 @@ class UserService(UserServiceInterface, CrudServiceInterface):
         self.__encryptor = EncryptionService()
 
     ################################CRUD METHODS#############################################
-    def create(self, user: User):
+    def create(self, user: User) -> None:
         if not self.exists(user.username):
             users_json = self.__text_repo.get()
             if len(users_json.keys()) >= 10:
@@ -35,17 +35,17 @@ class UserService(UserServiceInterface, CrudServiceInterface):
                 users_json[user.username] = user.to_json()
                 self.__save_user_json(users_json)
 
-    def read(self, username: str):
+    def read(self, username: str) -> User:
         if self.exists(username):
             return UserBuilder().from_json(self.__text_repo.get()[username])
 
-    def update(self, user: User):
+    def update(self, user: User) -> None:
         if self.exists(user.username):
             user_json = self.__text_repo.get()
             user_json[user.username] = user.to_json()
             self.__save_user_json(user_json)
 
-    def delete(self, username: str):
+    def delete(self, username: str) -> None:
         if self.exists(username):
             user_json = self.__text_repo.get()
             del user_json[username]
@@ -63,14 +63,14 @@ class UserService(UserServiceInterface, CrudServiceInterface):
             user.settings = pacing_mode
             self.update(user)
 
-    def exists(self, username):
+    def exists(self, username) -> bool:
         # self.__print()
         try:
             return True if username in self.__text_repo.get() else False
         except InvalidToken:
             return False
 
-    def verify(self, username, password):
+    def verify(self, username, password) -> bool:
         if self.exists(username):
             user_json = self.__text_repo.get()
             user = UserBuilder().from_json(user_json[username])

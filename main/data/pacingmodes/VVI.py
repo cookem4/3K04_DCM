@@ -15,7 +15,11 @@ class VVI(PacingMode):
             ventricular_amplitude=ventricular_amplitude,
             ventricular_pulse_width=ventricular_pulse_width,
             arp=None,
-            vrp=vrp)
+            vrp=vrp,
+            sensor_rate=None,
+            av_delay=None,
+            atrial_sensitivity=None,
+            ventricular_sensitivity=None)
 
     def validate(self) -> bool:
         return super().validate() and \

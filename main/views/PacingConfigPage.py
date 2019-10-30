@@ -5,6 +5,12 @@ from main.data.pacingmodes.AAI import AAI
 from main.data.pacingmodes.AOO import AOO
 from main.data.pacingmodes.VOO import VOO
 from main.data.pacingmodes.VVI import VVI
+from main.data.pacingmodes.DOOR import DOOR
+from main.data.pacingmodes.AOOR import AOOR
+from main.data.pacingmodes.VOOR import VOOR
+from main.data.pacingmodes.VVIR import VVIR
+from main.data.pacingmodes.AAIR import AAIR
+from main.data.pacingmodes.DOO import DOO
 from main.views import MainPage
 from main.views.AppFrameBase import AppFrameBase
 
@@ -33,6 +39,10 @@ class PacingConfigPage(AppFrameBase):
         self.usrVentricalPulseWidth = tk.StringVar()
         self.usrARP = tk.StringVar()
         self.usrVRP = tk.StringVar()
+        self.usrSensorRate = tk.StringVar()
+        self.usrAtrialSensitivity = tk.StringVar()
+        self.usrVentricularSensitivity = tk.StringVar()
+        self.usrAVDelay = tk.StringVar()
 
         self.xPadding = 150
 
@@ -234,7 +244,7 @@ class PacingConfigPage(AppFrameBase):
         self.sensorRateLabel.config(font=(25), foreground="white")
         
 
-        self.sensorRateEntry = tk.Entry(self, textvariable=self.usrVRP, width=10, font=(25), bg=self.enabled_bg,
+        self.sensorRateEntry = tk.Entry(self, textvariable=self.usrSensorRate, width=10, font=(25), bg=self.enabled_bg,
                                  disabledbackground=self.disabled_bg)
         
 
@@ -246,7 +256,7 @@ class PacingConfigPage(AppFrameBase):
         self.avDelayLabel = tk.Label(self, bg="black", text="Fixed AV Delay:")
         self.avDelayLabel.config(font=(25), foreground="white")
 
-        self.avDelayEntry = tk.Entry(self, textvariable=self.usrVRP, width=10, font=(25), bg=self.enabled_bg,
+        self.avDelayEntry = tk.Entry(self, textvariable=self.usrAVDelay, width=10, font=(25), bg=self.enabled_bg,
                                  disabledbackground=self.disabled_bg)
         
 
@@ -259,11 +269,11 @@ class PacingConfigPage(AppFrameBase):
         self.atrialSensitivityLabel.config(font=(25), foreground="white")
         
 
-        self.atrialSensitivityEntry = tk.Entry(self, textvariable=self.usrVRP, width=10, font=(25), bg=self.enabled_bg,
+        self.atrialSensitivityEntry = tk.Entry(self, textvariable=self.usrAtrialSensitivity, width=10, font=(25), bg=self.enabled_bg,
                                  disabledbackground=self.disabled_bg)
         
 
-        self.atrialSensitivityUnit = tk.Label(self, bg="black", text="???")
+        self.atrialSensitivityUnit = tk.Label(self, bg="black", text="mV")
         self.atrialSensitivityUnit.config(font=(25), foreground="white")
 
         #########################
@@ -272,11 +282,11 @@ class PacingConfigPage(AppFrameBase):
         self.ventricularSensitivityLabel.config(font=(25), foreground="white")
         
 
-        self.ventricularSensitivityEntry = tk.Entry(self, textvariable=self.usrVRP, width=10, font=(25), bg=self.enabled_bg,
+        self.ventricularSensitivityEntry = tk.Entry(self, textvariable=self.usrVentricularSensitivity, width=10, font=(25), bg=self.enabled_bg,
                                  disabledbackground=self.disabled_bg)
         
 
-        self.ventricularSensitivityUnit = tk.Label(self, bg="black", text="???")
+        self.ventricularSensitivityUnit = tk.Label(self, bg="black", text="mV")
         self.ventricularSensitivityUnit.config(font=(25), foreground="white")
 
         #################################
@@ -316,7 +326,20 @@ class PacingConfigPage(AppFrameBase):
                        "pacing_mode_settings"].index(", \"vrp\": ")]
         vrpSlice = self.currUserJson["pacing_mode_settings"][
                    self.currUserJson["pacing_mode_settings"].index("vrp\": ") + len("vrp\": "):self.currUserJson[
+                       "pacing_mode_settings"].index(", \"sensor_rate\": ")]
+        sensorRateSlice = self.currUserJson["pacing_mode_settings"][
+                   self.currUserJson["pacing_mode_settings"].index("sensor_rate\": ") + len("sensor_rate\": "):self.currUserJson[
+                       "pacing_mode_settings"].index(", \"av_delay\": ")]
+        avDelaySlice = self.currUserJson["pacing_mode_settings"][
+                   self.currUserJson["pacing_mode_settings"].index("av_delay\": ") + len("av_delay\": "):self.currUserJson[
+                       "pacing_mode_settings"].index(", \"atrial_sensitivity\": ")]
+        atrialSensitivitySlice = self.currUserJson["pacing_mode_settings"][
+                   self.currUserJson["pacing_mode_settings"].index("atrial_sensitivity\": ") + len("atrial_sensitivity\": "):self.currUserJson[
+                       "pacing_mode_settings"].index(", \"ventricular_sensitivity\": ")]
+        ventricularSensitivitySlice = self.currUserJson["pacing_mode_settings"][
+                   self.currUserJson["pacing_mode_settings"].index("ventricular_sensitivity\": ") + len("ventricular_sensitivity\": "):self.currUserJson[
                        "pacing_mode_settings"].index("}")]
+
         self.usrLowerRateLimit.set("" if (lowerRateLimitSlice == "null") else (lowerRateLimitSlice))
         self.usrUpperRateLimit.set("" if (upperRateLimitSlice == "null") else upperRateLimitSlice)
         self.usrAtrialAmp.set("" if (atrialAmpSlice == "null") else atrialAmpSlice)
@@ -325,6 +348,11 @@ class PacingConfigPage(AppFrameBase):
         self.usrVentricalPulseWidth.set("" if (ventricalPulseWidthSlice == "null") else ventricalPulseWidthSlice)
         self.usrARP.set("" if (arpSlice == "null") else arpSlice)
         self.usrVRP.set("" if (vrpSlice == "null") else vrpSlice)
+        self.usrSensorRate.set("" if (sensorRateSlice == "null") else sensorRateSlice)
+        self.usrAVDelay.set("" if (avDelaySlice == "null") else avDelaySlice)
+        self.usrAtrialSensitivity.set("" if (atrialSensitivitySlice == "null") else atrialSensitivitySlice)
+        self.usrVentricularSensitivity.set("" if (ventricularSensitivitySlice == "null") else ventricularSensitivitySlice)
+
 
     def load_current_user_json(self):
         return self.user_service.read(self.username).to_json()
@@ -339,7 +367,11 @@ class PacingConfigPage(AppFrameBase):
         self.ventricalPulseWidthEntry.delete(0, tk.END)
         self.arpEntry.delete(0, tk.END)
         self.vrpEntry.delete(0, tk.END)
-
+        self.sensorRateEntry.delete(0, tk.END)
+        self.avDelayEntry.delete(0, tk.END)
+        self.atrialSensitivityEntry.delete(0, tk.END)
+        self.ventricularSensitivityEntry.delete(0, tk.END)
+        
         # Sets which boxes are grayed out based on drop down menu selection
         # Update variables based on drop down selection
         if self.pacingSelection.get() == "AOO":
@@ -374,7 +406,7 @@ class PacingConfigPage(AppFrameBase):
             self.lowerRateLimitEntry.grid(row=rowCounter, column=3, pady=(50, 0), padx=(15, 0), sticky=tk.W)
             self.lowerRateUnitLabel.grid(row=rowCounter, column=3, padx=(0, 20), pady=(50, 0), sticky=tk.E)
             '''
-            self.lowerRateLabel.place(relx=0.54, rely=rowCounter, anchor = 'sw')
+            self.lowerRateLabel.place(relx=0.53, rely=rowCounter, anchor = 'sw')
             self.lowerRateLimitEntry.place(relx=0.7, rely=rowCounter, anchor = 'sw')
             self.lowerRateUnitLabel.place(relx=0.78, rely=rowCounter, anchor = 'sw')
             rowCounter = rowCounter + 0.08
@@ -389,7 +421,7 @@ class PacingConfigPage(AppFrameBase):
             self.upperRateUnitLabel.grid(row=rowCounter, column=3, padx=(0, 20), pady=(20, 0), sticky=tk.E)
             rowCounter = rowCounter + 1
             '''
-            self.upperRateLabel.place(relx=0.54, rely=rowCounter, anchor = 'sw')
+            self.upperRateLabel.place(relx=0.53, rely=rowCounter, anchor = 'sw')
             self.upperRateLimitEntry.place(relx=0.7, rely=rowCounter, anchor = 'sw')
             self.upperRateUnitLabel.place(relx=0.78, rely=rowCounter, anchor = 'sw')
             rowCounter = rowCounter + 0.08
@@ -404,7 +436,7 @@ class PacingConfigPage(AppFrameBase):
             self.atrialLimitUnit.grid(row=rowCounter, column=3, padx=(0, 35), pady=(20, 0), sticky=tk.E)
             rowCounter = rowCounter + 1
             '''
-            self.atrialAmpLabel.place(relx=0.54, rely=rowCounter, anchor = 'sw')
+            self.atrialAmpLabel.place(relx=0.53, rely=rowCounter, anchor = 'sw')
             self.atrialLimitEntry.place(relx=0.7, rely=rowCounter, anchor = 'sw')
             self.atrialLimitUnit.place(relx=0.78, rely=rowCounter, anchor = 'sw')
             rowCounter = rowCounter + 0.08
@@ -419,7 +451,7 @@ class PacingConfigPage(AppFrameBase):
             self.ventricalLimitUnit.grid(row=rowCounter, column=3, padx=(0, 35), pady=(20, 0), sticky=tk.E)
             rowCounter = rowCounter + 1
             '''
-            self.ventricalAmpLabel.place(relx=0.54, rely=rowCounter, anchor = 'sw')
+            self.ventricalAmpLabel.place(relx=0.53, rely=rowCounter, anchor = 'sw')
             self.ventricalLimitEntry.place(relx=0.7, rely=rowCounter, anchor = 'sw')
             self.ventricalLimitUnit.place(relx=0.78, rely=rowCounter, anchor = 'sw')
             rowCounter = rowCounter + 0.08
@@ -434,7 +466,7 @@ class PacingConfigPage(AppFrameBase):
             self.atrialPulseWidthUnit.grid(row=rowCounter, column=3, padx=(0, 15), pady=(20, 0), sticky=tk.E)
             rowCounter = rowCounter + 1
             '''
-            self.atrialPulseWidthLabel.place(relx=0.54, rely=rowCounter, anchor = 'sw')
+            self.atrialPulseWidthLabel.place(relx=0.53, rely=rowCounter, anchor = 'sw')
             self.atrialPulseWidthEntry.place(relx=0.7, rely=rowCounter, anchor = 'sw')
             self.atrialPulseWidthUnit.place(relx=0.78, rely=rowCounter, anchor = 'sw')
             rowCounter = rowCounter + 0.08
@@ -449,7 +481,7 @@ class PacingConfigPage(AppFrameBase):
             self.ventricalPulseWidthUnit.grid(row=rowCounter, column=3, padx=(0, 15), pady=(20, 0), sticky=tk.E)
             rowCounter = rowCounter + 1
             '''
-            self.ventricalPulseWidthLabel.place(relx=0.54, rely=rowCounter, anchor = 'sw')
+            self.ventricalPulseWidthLabel.place(relx=0.53, rely=rowCounter, anchor = 'sw')
             self.ventricalPulseWidthEntry.place(relx=0.7, rely=rowCounter, anchor = 'sw')
             self.ventricalPulseWidthUnit.place(relx=0.78, rely=rowCounter, anchor = 'sw')
             rowCounter = rowCounter + 0.08
@@ -464,7 +496,7 @@ class PacingConfigPage(AppFrameBase):
             self.arpUnit.grid(row=rowCounter, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
             rowCounter = rowCounter + 1
             '''
-            self.arpLabel.place(relx=0.54, rely=rowCounter, anchor = 'sw')
+            self.arpLabel.place(relx=0.53, rely=rowCounter, anchor = 'sw')
             self.arpEntry.place(relx=0.7, rely=rowCounter, anchor = 'sw')
             self.arpUnit.place(relx=0.78, rely=rowCounter, anchor = 'sw')
             rowCounter = rowCounter + 0.08
@@ -479,7 +511,7 @@ class PacingConfigPage(AppFrameBase):
             self.vrpUnit.grid(row=rowCounter, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
             rowCounter = rowCounter + 1
             '''
-            self.vrpLabel.place(relx=0.54, rely=rowCounter, anchor = 'sw')
+            self.vrpLabel.place(relx=0.53, rely=rowCounter, anchor = 'sw')
             self.vrpEntry.place(relx=0.7, rely=rowCounter, anchor = 'sw')
             self.vrpUnit.place(relx=0.78, rely=rowCounter, anchor = 'sw')
             rowCounter = rowCounter + 0.08
@@ -494,7 +526,7 @@ class PacingConfigPage(AppFrameBase):
             self.sensorRateUnit.grid(row=rowCounter, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
             rowCounter = rowCounter + 1
             '''
-            self.sensorRateLabel.place(relx=0.54, rely=rowCounter, anchor = 'sw')
+            self.sensorRateLabel.place(relx=0.53, rely=rowCounter, anchor = 'sw')
             self.sensorRateEntry.place(relx=0.7, rely=rowCounter, anchor = 'sw')
             self.sensorRateUnit.place(relx=0.78, rely=rowCounter, anchor = 'sw')
             rowCounter = rowCounter + 0.08
@@ -509,7 +541,7 @@ class PacingConfigPage(AppFrameBase):
             self.avDelayUnit.grid(row=rowCounter, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
             rowCounter = rowCounter + 1
             '''
-            self.avDelayLabel.place(relx=0.54, rely=rowCounter, anchor = 'sw')
+            self.avDelayLabel.place(relx=0.53, rely=rowCounter, anchor = 'sw')
             self.avDelayEntry.place(relx=0.7, rely=rowCounter, anchor = 'sw')
             self.avDelayUnit.place(relx=0.78, rely=rowCounter, anchor = 'sw')
             rowCounter = rowCounter + 0.08
@@ -524,7 +556,7 @@ class PacingConfigPage(AppFrameBase):
             self.atrialSensitivityUnit.grid(row=rowCounter, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
             rowCounter = rowCounter + 1
             '''
-            self.atrialSensitivityLabel.place(relx=0.54, rely=rowCounter, anchor = 'sw')
+            self.atrialSensitivityLabel.place(relx=0.53, rely=rowCounter, anchor = 'sw')
             self.atrialSensitivityEntry.place(relx=0.7, rely=rowCounter, anchor = 'sw')
             self.atrialSensitivityUnit.place(relx=0.78, rely=rowCounter, anchor = 'sw')
             rowCounter = rowCounter + 0.08
@@ -539,7 +571,7 @@ class PacingConfigPage(AppFrameBase):
             self.ventricularSensitivityUnit.grid(row=rowCounter, column=3, padx=(0, 10), pady=(20, 0), sticky=tk.E)
             rowCounter = rowCounter + 1
             '''
-            self.ventricularSensitivityLabel.place(relx=0.54, rely=rowCounter, anchor = 'sw')
+            self.ventricularSensitivityLabel.place(relx=0.53, rely=rowCounter, anchor = 'sw')
             self.ventricularSensitivityEntry.place(relx=0.7, rely=rowCounter, anchor = 'sw')
             self.ventricularSensitivityUnit.place(relx=0.78, rely=rowCounter, anchor = 'sw')
             rowCounter = rowCounter + 0.08
@@ -578,7 +610,7 @@ class PacingConfigPage(AppFrameBase):
                                                  av_delay=entry_to_value(self.avDelayEntry),
                                                  atrial_sensitivity=entry_to_value(self.atrialSensitivityEntry),
                                                  ventricular_sensitivity=entry_to_value(self.ventricularSensitivityEntry))
-        
+            
             if self.pacingSelection.get() == "AOO":
                 pacing_mode.__class__ = AOO
             if self.pacingSelection.get() == "VOO":
@@ -587,7 +619,19 @@ class PacingConfigPage(AppFrameBase):
                 pacing_mode.__class__ = AAI
             if self.pacingSelection.get() == "VVI":
                 pacing_mode.__class__ = VVI
-
+            if self.pacingSelection.get() == "DOO":
+                pacing_mode.__class__ = DOO
+            if self.pacingSelection.get() == "AOOR":
+                pacing_mode.__class__ = AOOR
+            if self.pacingSelection.get() == "DOOR":
+                pacing_mode.__class__ = DOOR
+            if self.pacingSelection.get() == "VVIR":
+                pacing_mode.__class__ = VVIR
+            if self.pacingSelection.get() == "AAIR":
+                pacing_mode.__class__ = AAIR
+            if self.pacingSelection.get() == "VOOR":
+                pacing_mode.__class__ = VOOR 
+            
             display_error_message = not pacing_mode.validate()
         except Exception as e:
             print(e)

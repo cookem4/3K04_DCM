@@ -10,8 +10,8 @@ class DOOR(PacingMode):
         super().__init__(
             lower_rate_limit=lower_rate_limit,
             upper_rate_limit=upper_rate_limit,
-            atrial_amplitude=None,
-            atrial_pulse_width=None,
+            atrial_amplitude=atrial_amplitude,
+            atrial_pulse_width=atrial_pulse_width,
             ventricular_amplitude=ventricular_amplitude,
             ventricular_pulse_width=ventricular_pulse_width,
             arp=None,

@@ -573,7 +573,11 @@ class PacingConfigPage(AppFrameBase):
                                                  ventricular_amplitude=entry_to_value(self.ventricalLimitEntry),
                                                  ventricular_pulse_width=entry_to_value(self.ventricalPulseWidthEntry),
                                                  arp=entry_to_value(self.arpEntry),
-                                                 vrp=entry_to_value(self.vrpEntry))
+                                                 vrp=entry_to_value(self.vrpEntry),
+                                                 sensor_rate=entry_to_value(self.sensorRateEntry),
+                                                 av_delay=entry_to_value(self.avDelayEntry),
+                                                 atrial_sensitivity=entry_to_value(self.atrialSensitivityEntry),
+                                                 ventricular_sensitivity=entry_to_value(self.ventricularSensitivityEntry))
         
             if self.pacingSelection.get() == "AOO":
                 pacing_mode.__class__ = AOO

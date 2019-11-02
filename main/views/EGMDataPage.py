@@ -1,20 +1,13 @@
 import tkinter as tk
 
-from main.data.PacingMode import PacingMode
-from main.data.pacingmodes.AAI import AAI
-from main.data.pacingmodes.AOO import AOO
-from main.data.pacingmodes.VOO import VOO
-from main.data.pacingmodes.VVI import VVI
+import matplotlib
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.figure import Figure
+
 from main.views import MainPage
 from main.views.AppFrameBase import AppFrameBase
-import numpy as np
-from matplotlib import pyplot as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
-from matplotlib.figure import Figure
-import matplotlib
+
 matplotlib.use("TkAgg")
-
-
 
 
 class EGMDataPage(AppFrameBase):
@@ -26,12 +19,12 @@ class EGMDataPage(AppFrameBase):
 
         self.currUserJson = self.load_current_user_json()
 
-        #The following are temporary values that are graphed when the drop down menu changes
-        #Based on what drop down menu selection is chosen, this list will be indexed differently
-        #This list will constantly be udpated from the serial module
-        #First index is atrial pacing second is ventricle pacing
-        self.setToGraph = [[5,6,1,3,8,9,3,5, 5,6,1,3,8,9,3,5],[1,2,3,4,5,6,7,8, 9, 10, 11, 12, 15, 14, 15, 16]]
-
+        # The following are temporary values that are graphed when the drop down menu changes
+        # Based on what drop down menu selection is chosen, this list will be indexed differently
+        # This list will constantly be udpated from the serial module
+        # First index is atrial pacing second is ventricle pacing
+        self.setToGraph = [[5, 6, 1, 3, 8, 9, 3, 5, 5, 6, 1, 3, 8, 9, 3, 5],
+                           [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 14, 15, 16]]
 
         self.connectionStateText = tk.Label(self, bg="gray", text="Connection Not Established")
         self.connectionStateText.config(font=("Helvetica", 25), foreground="white")
@@ -64,62 +57,64 @@ class EGMDataPage(AppFrameBase):
         # Sets callback listener for drop down menu
         self.displaySelection.trace("w", self.drop_down_callback)
 
-
         ##############################################
         #### The following creates a graph ###########
         ##############################################
 
-        f = Figure(figsize=(10,4), dpi=100)
+        f = Figure(figsize=(10, 4), dpi=100)
         self.a = f.add_subplot(111)
-        self.a.plot([0],[0])
-        #a.title("EGM Data for Device 123345")
-        #a.xlabel("Time (s)")
-        #a.ylabel("Voltage")
-        
+        self.a.plot([0], [0])
+        # a.title("EGM Data for Device 123345")
+        # a.xlabel("Time (s)")
+        # a.ylabel("Voltage")
+
         canvas = FigureCanvasTkAgg(f, self)
         canvas.draw()
         canvas.get_tk_widget().grid(row=3, column=0, columnspan=3, padx=(135, 0), pady=(30, 0), sticky=tk.W)
 
     def drop_down_callback(self, *args):
         print(self.displaySelection.get())
-        if(self.graphingEnabled):
-            f = Figure(figsize=(10,4), dpi=100)
+        if (self.graphingEnabled):
+            f = Figure(figsize=(10, 4), dpi=100)
             self.a = f.add_subplot(111)
-            if(self.displaySelection.get() == 'Atrium'):
+            if (self.displaySelection.get() == 'Atrium'):
                 self.a.plot(range(len(self.setToGraph[0])), self.setToGraph[0])
-            elif(self.displaySelection.get() == 'Ventrical'):
+            elif (self.displaySelection.get() == 'Ventrical'):
                 self.a.plot(range(len(self.setToGraph[1])), self.setToGraph[1])
-            elif(self.displaySelection.get() == 'Both'):
+            elif (self.displaySelection.get() == 'Both'):
                 self.a.plot(range(len(self.setToGraph[0])), self.setToGraph[0], self.setToGraph[1])
             canvas = FigureCanvasTkAgg(f, self)
             canvas.draw()
             canvas.get_tk_widget().grid(row=3, column=0, columnspan=3, padx=(135, 0), pady=(30, 0), sticky=tk.W)
+
     def load_current_user_json(self):
         return self.user_service.read(self.username).to_json()
-    def toggleGraphing(self):        
-        self.graphingEnabled = not(self.graphingEnabled)
-        if(self.graphingEnabled):
-            self.startBtn.config(text = "Stop")
+
+    def toggleGraphing(self):
+        self.graphingEnabled = not (self.graphingEnabled)
+        if (self.graphingEnabled):
+            self.startBtn.config(text="Stop")
         else:
-            self.startBtn.config(text = "Start")
-        if(self.graphingEnabled):
-            f = Figure(figsize=(10,4), dpi=100)
+            self.startBtn.config(text="Start")
+        if (self.graphingEnabled):
+            f = Figure(figsize=(10, 4), dpi=100)
             self.a = f.add_subplot(111)
-            if(self.displaySelection.get() == 'Atrium'):
+            if (self.displaySelection.get() == 'Atrium'):
                 self.a.plot(range(len(self.setToGraph[0])), self.setToGraph[0])
-            elif(self.displaySelection.get() == 'Ventrical'):
+            elif (self.displaySelection.get() == 'Ventrical'):
                 self.a.plot(range(len(self.setToGraph[1])), self.setToGraph[1])
-            elif(self.displaySelection.get() == 'Both'):
+            elif (self.displaySelection.get() == 'Both'):
                 self.a.plot(range(len(self.setToGraph[0])), self.setToGraph[0], self.setToGraph[1])
             canvas = FigureCanvasTkAgg(f, self)
             canvas.draw()
             canvas.get_tk_widget().grid(row=3, column=0, columnspan=3, padx=(135, 0), pady=(30, 0), sticky=tk.W)
         else:
-            f = Figure(figsize=(10,4), dpi=100)
+            f = Figure(figsize=(10, 4), dpi=100)
             self.a = f.add_subplot(111)
             self.a.plot([0], [0])
             canvas = FigureCanvasTkAgg(f, self)
             canvas.draw()
             canvas.get_tk_widget().grid(row=3, column=0, columnspan=3, padx=(135, 0), pady=(30, 0), sticky=tk.W)
+
     def go_back(self):
         self.parent.switch_frame(MainPage.MainPage)

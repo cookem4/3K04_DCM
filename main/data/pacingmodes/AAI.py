@@ -15,17 +15,7 @@ class AAI(PacingMode):
             ventricular_amplitude=None,
             ventricular_pulse_width=None,
             arp=arp,
-            vrp=None,
-            sensor_rate=None,
-            av_delay=None,
-            atrial_sensitivity=None,
-            ventricular_sensitivity=None)
-
-    def validate(self) -> bool:
-        return super().validate() and \
-               self.atrial_amplitude > 0 and \
-               self.atrial_pulse_width > 0 and \
-               self.arp > 0
+            vrp=None)
 
 
 class AAIBuilder:

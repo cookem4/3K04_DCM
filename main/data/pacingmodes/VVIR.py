@@ -1,13 +1,15 @@
 import json
 
 from main.data.PacingMode import PacingMode
+from main.data.RateAdjusted import RateAdjustedVentrical
 
 
-class VVIR(PacingMode):
+class VVIR(PacingMode, RateAdjustedVentrical):
     NAME = "VVIR"
 
-    def __init__(self, lower_rate_limit, upper_rate_limit, ventricular_amplitude, ventricular_pulse_width, vrp, sensor_rate, ventricular_sensitivity):
-        super().__init__(
+    def __init__(self, lower_rate_limit, upper_rate_limit, ventricular_amplitude, ventricular_pulse_width, vrp,
+                 sensor_rate, ventricular_sensitivity):
+        super(PacingMode).__init__(
             lower_rate_limit=lower_rate_limit,
             upper_rate_limit=upper_rate_limit,
             atrial_amplitude=None,
@@ -15,19 +17,14 @@ class VVIR(PacingMode):
             ventricular_amplitude=ventricular_amplitude,
             ventricular_pulse_width=ventricular_pulse_width,
             arp=None,
-            vrp=vrp,
+            vrp=vrp)
+        super(RateAdjustedVentrical).__init__(
             sensor_rate=sensor_rate,
             av_delay=None,
-            atrial_sensitivity=None,
             ventricular_sensitivity=ventricular_sensitivity)
 
     def validate(self) -> bool:
-        return super().validate() and \
-               self.ventricular_amplitude > 0 and \
-               self.ventricular_pulse_width > 0 and \
-               self.vrp > 0 and \
-               self.ventricular_sensitivity >0 and \
-               self.sensor_rate > 0
+        return super(PacingMode).validate() and super(RateAdjustedVentrical).validate()
 
 
 class VVIRBuilder:
@@ -35,7 +32,8 @@ class VVIRBuilder:
     def from_string(string):
         aai_dict = json.loads(string)
         return VVIR(aai_dict["lower_rate_limit"], aai_dict["upper_rate_limit"], aai_dict["ventricular_amplitude"],
-                   aai_dict["ventricular_pulse_width"], aai_dict["vrp"], aai_dict["sensor_rate"], aai_dict["ventricular_sensitivity"])
+                    aai_dict["ventricular_pulse_width"], aai_dict["vrp"], aai_dict["sensor_rate"],
+                    aai_dict["ventricular_sensitivity"])
 
     @staticmethod
     def empty():

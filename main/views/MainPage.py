@@ -28,7 +28,8 @@ class MainPage(AppFrameBase):
         self.viewCurrEGM.config(font=("Helvetica", 20))
         self.viewCurrEGM.grid(row=5, column=0, columnspan=3, pady=(50, 0), padx=(0, 0), sticky=tk.N)
 
-        self.viewPastEGM = tk.Button(self, text="View Past EGM\nData", width=20, height=6, command=self.view_past_EGM_data_callback)
+        self.viewPastEGM = tk.Button(self, text="View Past EGM\nData", width=20, height=6,
+                                     command=self.view_past_EGM_data_callback)
         self.viewPastEGM.config(font=("Helvetica", 20))
         self.viewPastEGM.grid(row=5, column=0, columnspan=3, pady=(50, 0), padx=(0, 60), sticky=tk.NE)
 

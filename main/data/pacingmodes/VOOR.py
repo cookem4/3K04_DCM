@@ -1,13 +1,14 @@
 import json
 
 from main.data.PacingMode import PacingMode
+from main.data.RateAdjusted import RateAdjustedVentrical
 
 
-class VOOR(PacingMode):
+class VOOR(PacingMode, RateAdjustedVentrical):
     NAME = "VOOR"
 
     def __init__(self, lower_rate_limit, upper_rate_limit, ventricular_amplitude, ventricular_pulse_width, sensor_rate):
-        super().__init__(
+        super(PacingMode).__init__(
             lower_rate_limit=lower_rate_limit,
             upper_rate_limit=upper_rate_limit,
             atrial_amplitude=None,
@@ -15,17 +16,14 @@ class VOOR(PacingMode):
             ventricular_amplitude=ventricular_amplitude,
             ventricular_pulse_width=ventricular_pulse_width,
             arp=None,
-            vrp=None,
-            sensor_rate = sensor_rate,
-            av_delay = None,
-            atrial_sensitivity = None,
-            ventricular_sensitivity  = None)
+            vrp=None)
+        super(RateAdjustedVentrical).__init__(
+            sensor_rate=sensor_rate,
+            av_delay=None,
+            ventricular_sensitivity=None)
 
     def validate(self) -> bool:
-        return super().validate() and \
-               self.ventricular_amplitude > 0 and \
-               self.ventricular_pulse_width > 0 and \
-               self.sensor_rate > 0
+        return super(PacingMode).validate() and super(RateAdjustedVentrical).validate()
 
 
 class VOORBuilder:
@@ -33,7 +31,7 @@ class VOORBuilder:
     def from_string(string):
         pm_dict = json.loads(string)
         return VOOR(pm_dict["lower_rate_limit"], pm_dict["upper_rate_limit"], pm_dict["ventricular_amplitude"],
-                   pm_dict["ventricular_pulse_width"], pm_dict["sensor_rate"])
+                    pm_dict["ventricular_pulse_width"], pm_dict["sensor_rate"])
 
     @staticmethod
     def empty():

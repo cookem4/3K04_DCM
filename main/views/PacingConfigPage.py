@@ -280,6 +280,8 @@ class PacingConfigPage(AppFrameBase):
 
         # Set textbox values based on user profile
         # String slicing of json object
+        '''
+        print(self.currUserJson["pacing_mode_settings"])
         lowerRateLimitSlice = self.currUserJson["pacing_mode_settings"][
                               self.currUserJson["pacing_mode_settings"].index("lower_rate_limit\": ") + len(
                                   "lower_rate_limit\": "):self.currUserJson["pacing_mode_settings"].index(
@@ -341,7 +343,7 @@ class PacingConfigPage(AppFrameBase):
         self.usrAtrialSensitivity.set("" if (atrialSensitivitySlice == "null") else atrialSensitivitySlice)
         self.usrVentricularSensitivity.set(
             "" if (ventricularSensitivitySlice == "null") else ventricularSensitivitySlice)
-
+        '''
     def load_current_user_json(self):
         return self.user_service.read(self.username).to_json()
 
@@ -585,20 +587,18 @@ class PacingConfigPage(AppFrameBase):
     def save_data(self):
         # Update variables based on drop down selection
         try:
-            # Catch boundary cases from erroneous text box entries
             pacing_mode: PacingMode = PacingMode(lower_rate_limit=entry_to_value(self.lowerRateLimitEntry),
-                                                 upper_rate_limit=entry_to_value(self.upperRateLimitEntry),
-                                                 atrial_amplitude=entry_to_value(self.atrialLimitEntry),
-                                                 atrial_pulse_width=entry_to_value(self.atrialPulseWidthEntry),
-                                                 ventricular_amplitude=entry_to_value(self.ventricalLimitEntry),
-                                                 ventricular_pulse_width=entry_to_value(self.ventricalPulseWidthEntry),
-                                                 arp=entry_to_value(self.arpEntry),
-                                                 vrp=entry_to_value(self.vrpEntry),
-                                                 sensor_rate=entry_to_value(self.sensorRateEntry),
-                                                 av_delay=entry_to_value(self.avDelayEntry),
-                                                 atrial_sensitivity=entry_to_value(self.atrialSensitivityEntry),
-                                                 ventricular_sensitivity=entry_to_value(
-                                                     self.ventricularSensitivityEntry))
+										 upper_rate_limit=entry_to_value(self.upperRateLimitEntry),
+										 atrial_amplitude=entry_to_value(self.atrialLimitEntry),
+										 atrial_pulse_width=entry_to_value(self.atrialPulseWidthEntry),
+										 ventricular_amplitude=entry_to_value(self.ventricalLimitEntry),
+										 ventricular_pulse_width=entry_to_value(self.ventricalPulseWidthEntry),
+										 arp=entry_to_value(self.arpEntry),
+										 vrp=entry_to_value(self.vrpEntry),
+										 sensor_rate=entry_to_value(self.sensorRateEntry),
+										 av_delay=entry_to_value(self.avDelayEntry),
+										 atrial_sensitivity=entry_to_value(self.atrialSensitivityEntry),
+										 ventricular_sensitivity=entry_to_value(self.ventricularSensitivityEntry))
 
             if self.pacingSelection.get() == "AOO":
                 pacing_mode.__class__ = AOO

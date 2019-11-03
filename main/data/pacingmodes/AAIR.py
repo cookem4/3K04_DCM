@@ -22,7 +22,7 @@ class AAIR(PacingMode, RateAdjustedAtrial):
                                            atrial_sensitivity=atrial_sensitivity)
 
     def validate(self) -> bool:
-        return super(PacingMode).validate() and super(RateAdjustedAtrial).validate()
+        return super(PacingMode, self).validate() and super(RateAdjustedAtrial, self).validate()
 
 
 class AAIRBuilder:

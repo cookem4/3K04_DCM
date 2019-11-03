@@ -9,7 +9,7 @@ class DOOR(PacingMode, RateAdjusted):
 
     def __init__(self, lower_rate_limit, upper_rate_limit, atrial_amplitude, atrial_pulse_width, ventricular_amplitude,
                  ventricular_pulse_width, sensor_rate, av_delay):
-        super(PacingMode).__init__(
+        super(DOOR, self).__init__(
             lower_rate_limit=lower_rate_limit,
             upper_rate_limit=upper_rate_limit,
             atrial_amplitude=atrial_amplitude,
@@ -25,7 +25,7 @@ class DOOR(PacingMode, RateAdjusted):
             ventricular_sensitivity=None)
 
     def validate(self) -> bool:
-        return super(PacingMode).validate() and super(RateAdjusted).validate()
+        return super(PacingMode, self).validate() and super(RateAdjusted, self).validate()
 
 
 class DOORBuilder:

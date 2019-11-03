@@ -1,12 +1,14 @@
 import json
 
+from main.data.RateAdjusted import RateAdjusted
+
 
 class PacingMode:
     NAME: str
 
-    def __init__(self, lower_rate_limit: float, upper_rate_limit: float, atrial_amplitude: float,
-                 atrial_pulse_width: float, ventricular_amplitude: float,
-                 ventricular_pulse_width: float, arp: float, vrp: float):
+    def __init__(self, lower_rate_limit, upper_rate_limit, atrial_amplitude,
+                 atrial_pulse_width, ventricular_amplitude,
+                 ventricular_pulse_width, arp, vrp):
         self.lower_rate_limit = lower_rate_limit
         self.upper_rate_limit = upper_rate_limit
         self.atrial_amplitude = atrial_amplitude
@@ -16,11 +18,13 @@ class PacingMode:
         self.arp = arp
         self.vrp = vrp
 
+    def add_rate_adjustment(self, rate_adjustment: RateAdjusted):
+        self.__dict__.update(rate_adjustment.__dict__);
+
     def to_string(self):
         return json.dumps(self.__dict__)
 
     def validate(self) -> bool:
-    
         return (self.lower_rate_limit >= 40) and \
                (self.upper_rate_limit <= 220) and \
                (self.upper_rate_limit > self.lower_rate_limit) and \

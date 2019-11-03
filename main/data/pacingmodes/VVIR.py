@@ -9,7 +9,7 @@ class VVIR(PacingMode, RateAdjustedVentrical):
 
     def __init__(self, lower_rate_limit, upper_rate_limit, ventricular_amplitude, ventricular_pulse_width, vrp,
                  sensor_rate, ventricular_sensitivity):
-        super(PacingMode).__init__(
+        super(VVIR, self).__init__(
             lower_rate_limit=lower_rate_limit,
             upper_rate_limit=upper_rate_limit,
             atrial_amplitude=None,
@@ -18,13 +18,14 @@ class VVIR(PacingMode, RateAdjustedVentrical):
             ventricular_pulse_width=ventricular_pulse_width,
             arp=None,
             vrp=vrp)
-        super(RateAdjustedVentrical).__init__(
+        super(RateAdjustedVentrical, self).__init__(
             sensor_rate=sensor_rate,
             av_delay=None,
+            atrial_sensitivity=None,
             ventricular_sensitivity=ventricular_sensitivity)
 
     def validate(self) -> bool:
-        return super(PacingMode).validate() and super(RateAdjustedVentrical).validate()
+        return super(PacingMode, self).validate() and super(RateAdjustedVentrical, self).validate()
 
 
 class VVIRBuilder:

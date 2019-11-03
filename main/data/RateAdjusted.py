@@ -1,5 +1,5 @@
 class RateAdjusted:
-    def __init__(self, sensor_rate: float, av_delay: float, atrial_sensitivity: float, ventricular_sensitivity: float):
+    def __init__(self, sensor_rate, av_delay, atrial_sensitivity, ventricular_sensitivity):
         self.sensor_rate = sensor_rate
         self.av_delay = av_delay
         self.atrial_sensitivity = atrial_sensitivity
@@ -14,7 +14,7 @@ class RateAdjusted:
 
 
 class RateAdjustedVentrical(RateAdjusted):
-    def __init__(self, sensor_rate: float, av_delay: float, ventricular_sensitivity: float):
+    def __init__(self, sensor_rate, av_delay, ventricular_sensitivity):
         super(RateAdjusted, self).__init__(
             sensor_rate=sensor_rate,
             av_delay=av_delay,
@@ -24,7 +24,7 @@ class RateAdjustedVentrical(RateAdjusted):
 
 
 class RateAdjustedAtrial(RateAdjusted):
-    def __init__(self, sensor_rate: float, av_delay: float, atrial_sensitivity: float):
+    def __init__(self, sensor_rate, av_delay, atrial_sensitivity):
         super(RateAdjusted, self).__init__(
             sensor_rate=sensor_rate,
             av_delay=av_delay,

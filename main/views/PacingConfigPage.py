@@ -1,7 +1,6 @@
 import tkinter as tk
 
 from main.data.PacingMode import PacingMode
-from main.data.RateAdjusted import RateAdjusted
 from main.data.pacingmodes.AAI import AAI
 from main.data.pacingmodes.AAIR import AAIR
 from main.data.pacingmodes.AOO import AOO
@@ -597,13 +596,11 @@ class PacingConfigPage(AppFrameBase):
                 ventricular_amplitude=entry_to_value(self.ventricalLimitEntry),
                 ventricular_pulse_width=entry_to_value(self.ventricalPulseWidthEntry),
                 arp=entry_to_value(self.arpEntry),
-                vrp=entry_to_value(self.vrpEntry))
-
-            rate_adjusted: RateAdjusted = RateAdjusted(
+                vrp=entry_to_value(self.vrpEntry),
                 sensor_rate=entry_to_value(self.sensorRateEntry),
                 av_delay=entry_to_value(self.avDelayEntry),
                 atrial_sensitivity=entry_to_value(self.atrialSensitivityEntry),
-                ventricular_sensitivity=entry_to_value(self.ventricularSensitivityEntry));
+                ventricular_sensitivity=entry_to_value(self.ventricularSensitivityEntry))
 
             if self.pacingSelection.get() == "AOO":
                 pacing_mode.__class__ = AOO
@@ -615,18 +612,16 @@ class PacingConfigPage(AppFrameBase):
                 pacing_mode.__class__ = VVI
             if self.pacingSelection.get() == "DOO":
                 pacing_mode.__class__ = DOO
-            if "R" in self.pacingSelection.get():
-                pacing_mode.add_rate_adjustment(rate_adjusted)
-                if self.pacingSelection.get() == "AOOR":
-                    pacing_mode.__class__ = AOOR
-                if self.pacingSelection.get() == "DOOR":
-                    pacing_mode.__class__ = DOOR
-                if self.pacingSelection.get() == "VVIR":
-                    pacing_mode.__class__ = VVIR
-                if self.pacingSelection.get() == "AAIR":
-                    pacing_mode.__class__ = AAIR
-                if self.pacingSelection.get() == "VOOR":
-                    pacing_mode.__class__ = VOOR
+            if self.pacingSelection.get() == "AOOR":
+                pacing_mode.__class__ = AOOR
+            if self.pacingSelection.get() == "DOOR":
+                pacing_mode.__class__ = DOOR
+            if self.pacingSelection.get() == "VVIR":
+                pacing_mode.__class__ = VVIR
+            if self.pacingSelection.get() == "AAIR":
+                pacing_mode.__class__ = AAIR
+            if self.pacingSelection.get() == "VOOR":
+                pacing_mode.__class__ = VOOR
 
             display_error_message = not pacing_mode.validate()
         except Exception as e:

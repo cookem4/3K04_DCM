@@ -1,14 +1,13 @@
 import json
 
 from main.data.PacingMode import PacingMode
-from main.data.RateAdjusted import RateAdjustedAtrial
 
 
-class AOOR(PacingMode, RateAdjustedAtrial):
+class AOOR(PacingMode):
     NAME = "AOOR"
 
     def __init__(self, lower_rate_limit, upper_rate_limit, atrial_amplitude, atrial_pulse_width, sensor_rate):
-        super(AOOR, self).__init__(
+        super().__init__(
             lower_rate_limit=lower_rate_limit,
             upper_rate_limit=upper_rate_limit,
             atrial_amplitude=atrial_amplitude,
@@ -17,16 +16,11 @@ class AOOR(PacingMode, RateAdjustedAtrial):
             ventricular_pulse_width=None,
             arp=None,
             vrp=None,
-        )
-        super(RateAdjustedAtrial, self).__init__(
             sensor_rate=sensor_rate,
             av_delay=None,
             atrial_sensitivity=None,
             ventricular_sensitivity=None
         )
-
-    def validate(self) -> bool:
-        return super(PacingMode, self).validate() and super(RateAdjustedAtrial, self).validate()
 
 
 class AOORBuilder:

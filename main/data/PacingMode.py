@@ -1,14 +1,12 @@
 import json
 
-from main.data.RateAdjusted import RateAdjusted
-
-
 class PacingMode:
     NAME: str
 
     def __init__(self, lower_rate_limit, upper_rate_limit, atrial_amplitude,
                  atrial_pulse_width, ventricular_amplitude,
-                 ventricular_pulse_width, arp, vrp):
+                 ventricular_pulse_width, arp, vrp, sensor_rate, av_delay, atrial_sensitivity,
+                 ventricular_sensitivity):
         self.lower_rate_limit = lower_rate_limit
         self.upper_rate_limit = upper_rate_limit
         self.atrial_amplitude = atrial_amplitude
@@ -17,9 +15,10 @@ class PacingMode:
         self.ventricular_pulse_width = ventricular_pulse_width
         self.arp = arp
         self.vrp = vrp
-
-    def add_rate_adjustment(self, rate_adjustment: RateAdjusted):
-        self.__dict__.update(rate_adjustment.__dict__);
+        self.sensor_rate = sensor_rate
+        self.av_delay = av_delay
+        self.atrial_sensitivity = atrial_sensitivity
+        self.ventricular_sensitivity = ventricular_sensitivity
 
     def to_string(self):
         return json.dumps(self.__dict__)
@@ -33,4 +32,8 @@ class PacingMode:
                (self.ventricular_amplitude is None or 0 < self.ventricular_amplitude <= 5) and \
                (self.ventricular_pulse_width is None or 0 < self.ventricular_pulse_width <= 5) and \
                (self.vrp is None or 150 <= self.vrp <= 500) and \
-               (self.arp is None or 150 <= self.arp <= 500)
+               (self.arp is None or 150 <= self.arp <= 500) and \
+                (self.sensor_rate is None or 50 <= self.sensor_rate <= 175) and \
+               (self.av_delay is None or 70 <= self.av_delay <= 300) and \
+               (self.atrial_sensitivity is None or 1 <= self.atrial_sensitivity <= 10) and \
+               (self.ventricular_sensitivity is None or 1 <= self.ventricular_sensitivity <= 10)

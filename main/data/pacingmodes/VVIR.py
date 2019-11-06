@@ -1,15 +1,14 @@
 import json
 
 from main.data.PacingMode import PacingMode
-from main.data.RateAdjusted import RateAdjustedVentrical
 
 
-class VVIR(PacingMode, RateAdjustedVentrical):
+class VVIR(PacingMode):
     NAME = "VVIR"
 
     def __init__(self, lower_rate_limit, upper_rate_limit, ventricular_amplitude, ventricular_pulse_width, vrp,
                  sensor_rate, ventricular_sensitivity):
-        super(VVIR, self).__init__(
+        super().__init__(
             lower_rate_limit=lower_rate_limit,
             upper_rate_limit=upper_rate_limit,
             atrial_amplitude=None,
@@ -17,15 +16,11 @@ class VVIR(PacingMode, RateAdjustedVentrical):
             ventricular_amplitude=ventricular_amplitude,
             ventricular_pulse_width=ventricular_pulse_width,
             arp=None,
-            vrp=vrp)
-        super(RateAdjustedVentrical, self).__init__(
+            vrp=vrp,
             sensor_rate=sensor_rate,
             av_delay=None,
             atrial_sensitivity=None,
             ventricular_sensitivity=ventricular_sensitivity)
-
-    def validate(self) -> bool:
-        return super(PacingMode, self).validate() and super(RateAdjustedVentrical, self).validate()
 
 
 class VVIRBuilder:

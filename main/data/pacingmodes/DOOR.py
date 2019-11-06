@@ -1,15 +1,14 @@
 import json
 
 from main.data.PacingMode import PacingMode
-from main.data.RateAdjusted import RateAdjusted
 
 
-class DOOR(PacingMode, RateAdjusted):
+class DOOR(PacingMode):
     NAME = "DOOR"
 
     def __init__(self, lower_rate_limit, upper_rate_limit, atrial_amplitude, atrial_pulse_width, ventricular_amplitude,
                  ventricular_pulse_width, sensor_rate, av_delay):
-        super(DOOR, self).__init__(
+        super().__init__(
             lower_rate_limit=lower_rate_limit,
             upper_rate_limit=upper_rate_limit,
             atrial_amplitude=atrial_amplitude,
@@ -17,15 +16,11 @@ class DOOR(PacingMode, RateAdjusted):
             ventricular_amplitude=ventricular_amplitude,
             ventricular_pulse_width=ventricular_pulse_width,
             arp=None,
-            vrp=None)
-        super(RateAdjusted).__init__(
+            vrp=None,
             sensor_rate=sensor_rate,
             av_delay=av_delay,
             atrial_sensitivity=None,
             ventricular_sensitivity=None)
-
-    def validate(self) -> bool:
-        return super(PacingMode, self).validate() and super(RateAdjusted, self).validate()
 
 
 class DOORBuilder:

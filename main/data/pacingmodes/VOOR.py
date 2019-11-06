@@ -1,14 +1,13 @@
 import json
 
 from main.data.PacingMode import PacingMode
-from main.data.RateAdjusted import RateAdjustedVentrical
 
 
-class VOOR(PacingMode, RateAdjustedVentrical):
+class VOOR(PacingMode):
     NAME = "VOOR"
 
     def __init__(self, lower_rate_limit, upper_rate_limit, ventricular_amplitude, ventricular_pulse_width, sensor_rate):
-        super(VOOR,self).__init__(
+        super().__init__(
             lower_rate_limit=lower_rate_limit,
             upper_rate_limit=upper_rate_limit,
             atrial_amplitude=None,
@@ -16,15 +15,11 @@ class VOOR(PacingMode, RateAdjustedVentrical):
             ventricular_amplitude=ventricular_amplitude,
             ventricular_pulse_width=ventricular_pulse_width,
             arp=None,
-            vrp=None)
-        super(RateAdjustedVentrical,self).__init__(
+            vrp=None,
             sensor_rate=sensor_rate,
             av_delay=None,
             atrial_sensitivity=None,
             ventricular_sensitivity=None)
-
-    def validate(self) -> bool:
-        return super(PacingMode, self).validate() and super(RateAdjustedVentrical, self).validate()
 
 
 class VOORBuilder:

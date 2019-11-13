@@ -1,16 +1,16 @@
 import tkinter as tk
 
-from main.data.PacingMode import PacingMode
-from main.data.pacingmodes.AAI import AAI
-from main.data.pacingmodes.AAIR import AAIR
-from main.data.pacingmodes.AOO import AOO
-from main.data.pacingmodes.AOOR import AOOR
-from main.data.pacingmodes.DOO import DOO
-from main.data.pacingmodes.DOOR import DOOR
-from main.data.pacingmodes.VOO import VOO
-from main.data.pacingmodes.VOOR import VOOR
-from main.data.pacingmodes.VVI import VVI
-from main.data.pacingmodes.VVIR import VVIR
+from main.data.pacingmode.PacingMode import PacingMode
+from main.data.pacingmode.AAI import AAI
+from main.data.pacingmode.AAIR import AAIR
+from main.data.pacingmode.AOO import AOO
+from main.data.pacingmode.AOOR import AOOR
+from main.data.pacingmode.DOO import DOO
+from main.data.pacingmode.DOOR import DOOR
+from main.data.pacingmode.VOO import VOO
+from main.data.pacingmode.VOOR import VOOR
+from main.data.pacingmode.VVI import VVI
+from main.data.pacingmode.VVIR import VVIR
 from main.views import MainPage
 from main.views.AppFrameBase import AppFrameBase
 

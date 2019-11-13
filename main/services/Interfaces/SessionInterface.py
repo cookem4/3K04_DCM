@@ -1,6 +1,6 @@
 import abc
 
-from main.data.Session import Session
+from main.data.user.Session import Session
 
 
 class SessionInterface(abc.ABC):

@@ -1,6 +1,6 @@
 import abc
 
-from main.data.PacingMode import PacingMode
+from main.data.pacingmode.PacingMode import PacingMode
 
 
 class UserServiceInterface:

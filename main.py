@@ -1,4 +1,5 @@
 from main.views.GUIApplication import DCM_GUI
+from main.communication.SerialCommunicator import test
 
 if __name__ == '__main__':
 
@@ -16,5 +17,6 @@ if __name__ == '__main__':
     '''
     
     # Create GUI instance
-    app = DCM_GUI()
-    app.mainloop()
+    # app = DCM_GUI()
+    # app.mainloop()
+    test()

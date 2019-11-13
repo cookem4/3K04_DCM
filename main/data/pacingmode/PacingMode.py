@@ -1,12 +1,16 @@
 import json
 
+from main.data.serial.SerialPacingFormat import SerialPacingFormat
+
+
 class PacingMode:
     NAME: str
 
-    def __init__(self, lower_rate_limit, upper_rate_limit, atrial_amplitude,
-                 atrial_pulse_width, ventricular_amplitude,
-                 ventricular_pulse_width, arp, vrp, sensor_rate, av_delay, atrial_sensitivity,
-                 ventricular_sensitivity):
+    def __init__(self, lower_rate_limit, upper_rate_limit, atrial_amplitude=None,
+                 atrial_pulse_width=None, ventricular_amplitude=None,
+                 ventricular_pulse_width=None, arp=None, vrp=None, sensor_rate=None, av_delay=None,
+                 atrial_sensitivity=None,
+                 ventricular_sensitivity=None):
         self.lower_rate_limit = lower_rate_limit
         self.upper_rate_limit = upper_rate_limit
         self.atrial_amplitude = atrial_amplitude
@@ -23,6 +27,9 @@ class PacingMode:
     def to_string(self):
         return json.dumps(self.__dict__)
 
+    def serialize(self) -> bytearray:
+        return SerialPacingFormat(self).getBytes()
+
     def validate(self) -> bool:
         return (self.lower_rate_limit >= 40) and \
                (self.upper_rate_limit <= 220) and \
@@ -33,7 +40,7 @@ class PacingMode:
                (self.ventricular_pulse_width is None or 0 < self.ventricular_pulse_width <= 5) and \
                (self.vrp is None or 150 <= self.vrp <= 500) and \
                (self.arp is None or 150 <= self.arp <= 500) and \
-                (self.sensor_rate is None or 50 <= self.sensor_rate <= 175) and \
+               (self.sensor_rate is None or 50 <= self.sensor_rate <= 175) and \
                (self.av_delay is None or 70 <= self.av_delay <= 300) and \
                (self.atrial_sensitivity is None or 1 <= self.atrial_sensitivity <= 10) and \
                (self.ventricular_sensitivity is None or 1 <= self.ventricular_sensitivity <= 10)

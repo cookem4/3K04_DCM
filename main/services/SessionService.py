@@ -1,5 +1,5 @@
 # This class is a Singleton, it will only ever have 1 active instantce
-from main.data.Session import Session
+from main.data.user.Session import Session
 from main.exceptions.SingletonInstantiationException import SingletonInstantiationException
 from .Interfaces.SessionInterface import SessionInterface
 

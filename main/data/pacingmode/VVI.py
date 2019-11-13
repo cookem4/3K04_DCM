@@ -1,6 +1,6 @@
 import json
 
-from main.data.PacingMode import PacingMode
+from main.data.pacingmode.PacingMode import PacingMode
 
 
 class VVI(PacingMode):
@@ -10,11 +10,8 @@ class VVI(PacingMode):
         super().__init__(
             lower_rate_limit=lower_rate_limit,
             upper_rate_limit=upper_rate_limit,
-            atrial_amplitude=None,
-            atrial_pulse_width=None,
             ventricular_amplitude=ventricular_amplitude,
             ventricular_pulse_width=ventricular_pulse_width,
-            arp=None,
             vrp=vrp)
 
 

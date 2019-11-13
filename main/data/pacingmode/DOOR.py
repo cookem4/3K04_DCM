@@ -1,6 +1,6 @@
 import json
 
-from main.data.PacingMode import PacingMode
+from main.data.pacingmode.PacingMode import PacingMode
 
 
 class DOOR(PacingMode):
@@ -15,12 +15,8 @@ class DOOR(PacingMode):
             atrial_pulse_width=atrial_pulse_width,
             ventricular_amplitude=ventricular_amplitude,
             ventricular_pulse_width=ventricular_pulse_width,
-            arp=None,
-            vrp=None,
             sensor_rate=sensor_rate,
-            av_delay=av_delay,
-            atrial_sensitivity=None,
-            ventricular_sensitivity=None)
+            av_delay=av_delay)
 
 
 class DOORBuilder:

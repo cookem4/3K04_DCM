@@ -1,6 +1,6 @@
 import json
 
-from main.data.PacingMode import PacingMode
+from main.data.pacingmode.PacingMode import PacingMode
 
 
 class AAIR(PacingMode):
@@ -13,14 +13,9 @@ class AAIR(PacingMode):
             upper_rate_limit=upper_rate_limit,
             atrial_amplitude=atrial_amplitude,
             atrial_pulse_width=atrial_pulse_width,
-            ventricular_amplitude=None,
-            ventricular_pulse_width=None,
             arp=arp,
-            vrp=None,
             sensor_rate=sensor_rate,
-            av_delay=None,
-            atrial_sensitivity=atrial_sensitivity,
-            ventricular_sensitivity=None)
+            atrial_sensitivity=atrial_sensitivity)
 
 
 class AAIRBuilder:

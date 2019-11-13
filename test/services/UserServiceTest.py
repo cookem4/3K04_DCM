@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from main.data.PacingModeBuilder import PacingModeBuilder, PacingModes
+from main.data.pacingmode.PacingModeBuilder import PacingModeBuilder, PacingModes
 from main.services.UserService import UserService, UserBuilder, User
 
 

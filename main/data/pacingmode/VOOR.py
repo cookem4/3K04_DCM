@@ -1,6 +1,6 @@
 import json
 
-from main.data.PacingMode import PacingMode
+from main.data.pacingmode.PacingMode import PacingMode
 
 
 class VOOR(PacingMode):
@@ -10,16 +10,9 @@ class VOOR(PacingMode):
         super().__init__(
             lower_rate_limit=lower_rate_limit,
             upper_rate_limit=upper_rate_limit,
-            atrial_amplitude=None,
-            atrial_pulse_width=None,
             ventricular_amplitude=ventricular_amplitude,
             ventricular_pulse_width=ventricular_pulse_width,
-            arp=None,
-            vrp=None,
-            sensor_rate=sensor_rate,
-            av_delay=None,
-            atrial_sensitivity=None,
-            ventricular_sensitivity=None)
+            sensor_rate=sensor_rate)
 
 
 class VOORBuilder:

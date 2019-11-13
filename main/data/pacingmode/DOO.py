@@ -1,6 +1,6 @@
 import json
 
-from main.data.PacingMode import PacingMode
+from main.data.pacingmode.PacingMode import PacingMode
 
 
 class DOO(PacingMode):
@@ -14,9 +14,7 @@ class DOO(PacingMode):
             atrial_amplitude=atrial_amplitude,
             atrial_pulse_width=atrial_pulse_width,
             ventricular_amplitude=ventricular_amplitude,
-            ventricular_pulse_width=ventricular_pulse_width,
-            arp=None,
-            vrp=None)
+            ventricular_pulse_width=ventricular_pulse_width)
 
 
 class DOOBuilder:

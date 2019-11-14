@@ -7,6 +7,12 @@ from main.views.AppFrameBase import AppFrameBase
 class MainPage(AppFrameBase):
     def __init__(self, parent):
         super().__init__(parent)
+        '''
+        if(serialLinkObject.is_connection_established()):
+            print("YES")
+        else:
+            print("NO")
+        '''
         username = self.session_service.get().username
         self.currUserJson = self.user_service.read(username).to_json()
 

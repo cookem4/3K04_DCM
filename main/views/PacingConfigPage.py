@@ -280,8 +280,8 @@ class PacingConfigPage(AppFrameBase):
 
         # Set textbox values based on user profile
         # String slicing of json object
-        '''
-        print(self.currUserJson["pacing_mode_settings"])
+        
+        #print(self.currUserJson["pacing_mode_settings"])
         lowerRateLimitSlice = self.currUserJson["pacing_mode_settings"][
                               self.currUserJson["pacing_mode_settings"].index("lower_rate_limit\": ") + len(
                                   "lower_rate_limit\": "):self.currUserJson["pacing_mode_settings"].index(
@@ -343,7 +343,7 @@ class PacingConfigPage(AppFrameBase):
         self.usrAtrialSensitivity.set("" if (atrialSensitivitySlice == "null") else atrialSensitivitySlice)
         self.usrVentricularSensitivity.set(
             "" if (ventricularSensitivitySlice == "null") else ventricularSensitivitySlice)
-        '''
+        
 
     def load_current_user_json(self):
         return self.user_service.read(self.username).to_json()

@@ -59,7 +59,7 @@ class SerialCommunicator():
 
 def test():
     paceDOOR = DOOR(66, 200, 3, 3, 4, 4, 100, 225)
-    com: SerialCommunicator = SerialCommunicator("COM13")
+    com: SerialCommunicator = SerialCommunicator("COM12")
     com.send_pacing_data(paceDOOR)
 
 

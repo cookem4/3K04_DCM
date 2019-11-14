@@ -10,7 +10,7 @@ from threading import Thread
 import time
 matplotlib.use("TkAgg")
 import math
-import multiprocessing
+
 
 class EGMDataPage(AppFrameBase):
 
@@ -77,19 +77,8 @@ class EGMDataPage(AppFrameBase):
         canvas.draw()
         canvas.get_tk_widget().grid(row=3, column=0, columnspan=3, padx=(135, 0), pady=(30, 0), sticky=tk.W)
 
-        #Setup labels based on pacing status
-        if self.serial_indicators.isConnected():
-            self.connectionStateText.config(text="Connection Established", foreground="white", background="green")
-            self.startBtn.config(state=tk.NORMAL)
-        else:
-            self.connectionStateText.config(text="Connection Not Established", foreground="black", background="gray")
-
-
         #configure thread control variable
-        self.threadControllerGrahping = False
-        self.threadControllerLabel = True
-        self.connectionThread = Thread(target = self.ConnectionThread, args = ())
-        self.connectionThread.start()
+        self.threadController = False
 
     def drop_down_callback(self, *args):
         print(self.displaySelection.get())
@@ -110,16 +99,14 @@ class EGMDataPage(AppFrameBase):
         return self.user_service.read(self.username).to_json()
 
     def toggleGraphing(self):
-        if self.threadControllerGrahping:
-            self.threadControllerGrahping = False
-            self.setToGraph = [[],[]]
+        if(self.threadController):
+            self.threadController = False
         else:
-            self.threadControllerGrahping = True
-            myThread = Thread(target = self.GraphingThread, args = ())
+            self.threadController = True
+            myThread = Thread(target = self.MyThread, args = ())
             myThread.start()
-
-        self.graphingEnabled = not self.graphingEnabled
-        if self.graphingEnabled:
+        self.graphingEnabled = not (self.graphingEnabled)
+        if (self.graphingEnabled):
             self.startBtn.config(text="Stop")
         else:
             self.startBtn.config(text="Start")
@@ -145,52 +132,28 @@ class EGMDataPage(AppFrameBase):
 
     def go_back(self):
         self.parent.switch_frame(MainPage.MainPage)
-        self.threadControllerGrahping = False
-        self.threadControllerLabel = False
 
-    def ConnectionThread(self):
-        ###This thread will disable the start button if there is no connection and if disconnection occurs while
-        ### a device is connected it will act to end graphing then disable the button
-        # start by trying to connect to the pacemaker
-        if not self.serial_indicators.isConnected():
-            self.serial_service.connect_to_pacemaker()
-            if self.serial_service.is_connection_established():
-                self.serial_indicators.setConnection(True)
-                self.serial_indicators.setCurrConnectionID(self.serial_service.get_device_ID())
-                self.serial_indicators.setLastConnectionID(self.serial_service.get_last_device_connected())
 
-        while self.threadControllerLabel:
-            if not self.threadControllerLabel:
-                break
-            time.sleep(1)
-            if not self.threadControllerLabel:
-                break
-            if self.serial_indicators.isConnected():
-                self.connectionStateText.config(text = "Connection Established", foreground="white", background = "green")
-                self.startBtn.config(state=tk.NORMAL)
-            else:
-                self.connectionStateText.config(text = "Connection Not Established", foreground="black", background = "gray")
 
-    def GraphingThread(self):
-        #want to set thread controller based on if a device is connected
-        while self.threadControllerGrahping:
+#################################
+#####Create axis labels and scrolling axis then all good
+################################
+        
+    def MyThread(self):
+        while(self.threadController):
             print("Graphing...")
-            if not self.threadControllerGrahping:
-                break
             time.sleep(0.1)
-            if not self.threadControllerGrahping:
-                break
             self.addCntr = self.addCntr + 1
             self.setToGraph[0].append(math.sin(self.addCntr))
             self.setToGraph[1].append(self.addCntr**0.5)
             self.a.clear()
             f = Figure(figsize=(10, 4), dpi=100)
             self.a = f.add_subplot(111)
-            if self.displaySelection.get() == 'Atrium':
+            if (self.displaySelection.get() == 'Atrium'):
                 self.a.plot(range(len(self.setToGraph[0])), self.setToGraph[0])
-            elif self.displaySelection.get() == 'Ventrical':
+            elif (self.displaySelection.get() == 'Ventrical'):
                 self.a.plot(range(len(self.setToGraph[1])), self.setToGraph[1])
-            elif self.displaySelection.get() == 'Both':
+            elif (self.displaySelection.get() == 'Both'):
                 self.a.plot(range(len(self.setToGraph[0])), self.setToGraph[0], self.setToGraph[1])
             #f.xlabel("Time", axes=self.a)
             #f.ylabel("Voltage (V)", axes=self.a)

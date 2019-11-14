@@ -675,7 +675,7 @@ class PacingConfigPage(AppFrameBase):
                 av_delay=entry_to_value(self.avDelayEntry),
                 atrial_sensitivity=entry_to_value(self.atrialSensitivityEntry),
                 ventricular_sensitivity=entry_to_value(self.ventricularSensitivityEntry))
-
+            
             if self.pacingSelection.get() == "AOO":
                 pacing_mode.__class__ = AOO
             if self.pacingSelection.get() == "VOO":

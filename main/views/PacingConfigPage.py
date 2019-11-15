@@ -13,7 +13,8 @@ from main.data.pacingmode.VVI import VVI
 from main.data.pacingmode.VVIR import VVIR
 from main.views import MainPage
 from main.views.AppFrameBase import AppFrameBase
-
+from threading import Thread
+import time
 
 def entry_to_value(entry):
     entry_string = entry.get()
@@ -99,7 +100,7 @@ class PacingConfigPage(AppFrameBase):
         # self.currIDLabel.grid(row=4, column=0, columnspan=2, padx=(30, 0), pady=(10, 0), sticky=tk.W)
         self.currIDLabel.place(relx=0.05, rely=0.8, anchor='sw')
 
-        self.currID = tk.Label(self, bg="black", text="123456")
+        self.currID = tk.Label(self, bg="black", text="None")
         self.currID.config(font=(20), foreground="white")
         # self.currID.grid(row=4, column=0, columnspan=2, padx=(0, 130), pady=(10, 0), sticky=tk.E)
         self.currID.place(relx=0.2, rely=0.8, anchor='sw')
@@ -109,7 +110,7 @@ class PacingConfigPage(AppFrameBase):
         # self.prevIDLabel.grid(row=5, column=0, columnspan=2, padx=(30, 0), pady=(10, 0), sticky=tk.W)
         self.prevIDLabel.place(relx=0.05, rely=0.85, anchor='sw')
 
-        self.prevID = tk.Label(self, bg="black", text="654321")
+        self.prevID = tk.Label(self, bg="black", text="None")
         self.prevID.config(font=(20), foreground="white")
         # self.prevID.grid(row=5, column=0, columnspan=2, padx=(0, 140), pady=(10, 0), sticky=tk.E)
         self.prevID.place(relx=0.2, rely=0.85, anchor='sw')
@@ -343,7 +344,12 @@ class PacingConfigPage(AppFrameBase):
         self.usrAtrialSensitivity.set("" if (atrialSensitivitySlice == "null") else atrialSensitivitySlice)
         self.usrVentricularSensitivity.set(
             "" if (ventricularSensitivitySlice == "null") else ventricularSensitivitySlice)
-        
+
+        #Set up background thread
+        self.threadController = True
+        self.isConnectionEstablished = False
+        self.myThread = Thread(target = self.MyThread, args = ())
+        self.myThread.start()
 
     def load_current_user_json(self):
         return self.user_service.read(self.username).to_json()
@@ -584,6 +590,8 @@ class PacingConfigPage(AppFrameBase):
 
     def go_back(self):
         self.parent.switch_frame(MainPage.MainPage)
+        self.threadController = False
+                                                
 
     def save_data(self):
         # Update variables based on drop down selection
@@ -646,3 +654,24 @@ class PacingConfigPage(AppFrameBase):
             # Update displayed programmed mode
             self.currUserJson = self.load_current_user_json()
             self.actualModeLabel.config(text=self.currUserJson["pacing_mode_name"])
+
+    #Thread to check connection status. Condition will change to self.serial_service.is_connection_established()
+    def MyThread(self):
+        while(self.threadController):
+            if(not(self.threadController)):
+                break
+            time.sleep(1)
+            if(not(self.threadController)):
+                break
+            if(self.isConnectionEstablished):
+                self.connectionStateText.config(text = "Connection Established", foreground="white", background = "green")
+                self.currID.config(text = str(123456))
+                self.prevID.config(text =str(654321))
+                print("YES")
+            else:
+                self.connectionStateText.config(text = "Connection Not Established", foreground="black", background = "gray")
+                self.currID.config(text = "None")
+                self.prevID.config(text = "None")
+                print("NO")
+            self.isConnectionEstablished = not(self.isConnectionEstablished)
+        print("DONE")

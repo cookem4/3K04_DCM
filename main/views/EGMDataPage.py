@@ -76,7 +76,11 @@ class EGMDataPage(AppFrameBase):
         canvas.get_tk_widget().grid(row=3, column=0, columnspan=3, padx=(135, 0), pady=(30, 0), sticky=tk.W)
 
         #configure thread control variable
-        self.threadController = False
+        self.threadControllerGrahping = False
+        self.threadControllerLabel = True
+        self.isConnectionEstablished = False
+        self.myThread2 = Thread(target = self.MyThread2, args = ())
+        self.myThread2.start()
 
     def drop_down_callback(self, *args):
         print(self.displaySelection.get())
@@ -97,10 +101,11 @@ class EGMDataPage(AppFrameBase):
         return self.user_service.read(self.username).to_json()
 
     def toggleGraphing(self):
-        if(self.threadController):
-            self.threadController = False
+        if(self.threadControllerGrahping):
+            self.threadControllerGrahping = False
+            self.setToGraph = [[],[]]
         else:
-            self.threadController = True
+            self.threadControllerGrahping = True
             myThread = Thread(target = self.MyThread, args = ())
             myThread.start()
             
@@ -132,17 +137,32 @@ class EGMDataPage(AppFrameBase):
 
     def go_back(self):
         self.parent.switch_frame(MainPage.MainPage)
-        self.threadController = False
+        self.threadControllerGrpahing = False
+        self.threadControllerLabel = False
 
-
-#################################
-#####Create axis labels and scrolling axis then all good
-################################
-        
+    def MyThread2(self):
+        ###This thread will disable the start button if there is no connection and if disconnection occurs while
+            ### a device is connected it will act to end graphing then disable the button
+        while(self.threadControllerLabel):
+            if(not(self.threadControllerLabel)):
+                break
+            time.sleep(1)
+            if(not(self.threadControllerLabel)):
+                break
+            if(self.isConnectionEstablished):
+                self.connectionStateText.config(text = "Connection Established", foreground="white", background = "green")
+            else:
+                self.connectionStateText.config(text = "Connection Not Established", foreground="black", background = "gray")
+            self.isConnectionEstablished = not(self.isConnectionEstablished)
     def MyThread(self):
-        while(self.threadController):
+        #want to set thread controller based on if a device is connected
+        while(self.threadControllerGrahping):
             print("Graphing...")
+            if(not(self.threadControllerGrahping)):
+                break
             time.sleep(0.1)
+            if(not(self.threadControllerGrahping)):
+                break
             self.addCntr = self.addCntr + 1
             self.setToGraph[0].append(math.sin(self.addCntr))
             self.setToGraph[1].append(self.addCntr**0.5)

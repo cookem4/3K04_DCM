@@ -112,9 +112,10 @@ class SerialCommunicator:
 
 
 def test():
-    paceDOOR = DOOR(66, 200, 3, 3, 4, 4, 100, 225)
+    paceDOOR = DOOR(33, 200, 3, 3, 4, 4, 100, 225)
     com: SerialCommunicator = SerialCommunicator("COM1")
-    com.connect_to_pacemaker()
+    result = com.send_pacing_data(paceDOOR)
+    print(result)
 
 
 if __name__ == '__main__':

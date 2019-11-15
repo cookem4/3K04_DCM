@@ -1,4 +1,3 @@
-
 error_messages = {
     "LRL": "Lower rate limit must be below 40",
     "URL": "Lower rate limit must be above 220",
@@ -22,23 +21,51 @@ class PacingValidationResult:
         self.error = error
 
 
+class PM_LIMIT:
+    LOWER_RATE_LIMIT = {"min": 0, "max": 40}
+    UPPER_RATE_LIMIT = {"min": 0, "max": 220}
+    ATRIAL_AMPLITUDE = {"min": 0, "max": 5}
+    ATRIAL_PULSE_WIDTH = {"min": 0, "max": 5}
+    VENTRICULAR_AMPLITUDE = {"min": 0, "max": 5}
+    VENTRICULAR_PULSE_WIDTH = {"min": 0, "max": 5}
+    VRP = {"min": 150, "max": 500}
+    ARP = {"min": 150, "max": 500}
+    SENSOR_RATE = {"min": 50, "max": 175}
+    AV_DELAY = {"min": 70, "max": 300}
+    ATRIAL_SENSITIVITY = {"min": 1, "max": 10}
+    VENTRICULAR_SENSITIVITY = {"min": 1, "max": 10}
+
+
 class PacingValueRange:
 
     def __init__(self, pm):
         self.constraints = {
-            "LRL": pm.lower_rate_limit >= 40,
-            "URL": pm.upper_rate_limit <= 220,
+            "LRL": pm.lower_rate_limit >= PM_LIMIT.LOWER_RATE_LIMIT["max"],
+            "URL": pm.upper_rate_limit <= PM_LIMIT.UPPER_RATE_LIMIT["max"],
             "URL_gt_LRL": pm.upper_rate_limit > pm.lower_rate_limit,
-            "AA": pm.atrial_amplitude is None or 0 < pm.atrial_amplitude <= 5,
-            "APW": pm.atrial_pulse_width is None or 0 < pm.atrial_pulse_width <= 5,
-            "VA": pm.ventricular_amplitude is None or 0 < pm.ventricular_amplitude <= 5,
-            "VPW": pm.ventricular_pulse_width is None or 0 < pm.ventricular_pulse_width <= 5,
-            "VRP": pm.vrp is None or 150 <= pm.vrp <= 500,
-            "ARP": pm.arp is None or 150 <= pm.arp <= 500,
-            "SR": pm.sensor_rate is None or 50 <= pm.sensor_rate <= 175,
-            "AV": pm.av_delay is None or 70 <= pm.av_delay <= 300,
-            "AS": pm.atrial_sensitivity is None or 1 <= pm.atrial_sensitivity <= 10,
-            "VS": pm.ventricular_sensitivity is None or 1 <= pm.ventricular_sensitivity <= 10
+            "AA": pm.atrial_amplitude is None or \
+                  PM_LIMIT.ATRIAL_AMPLITUDE["min"] < pm.atrial_amplitude <= PM_LIMIT.ATRIAL_AMPLITUDE["max"],
+            "APW": pm.atrial_pulse_width is None or \
+                   PM_LIMIT.ATRIAL_PULSE_WIDTH["min"] < pm.atrial_pulse_width <= PM_LIMIT.ATRIAL_PULSE_WIDTH["max"],
+            "VA": pm.ventricular_amplitude is None or \
+                  PM_LIMIT.VENTRICULAR_AMPLITUDE["min"] <= pm.ventricular_amplitude <= \
+                  PM_LIMIT.VENTRICULAR_AMPLITUDE["max"],
+            "VPW": pm.ventricular_pulse_width is None or \
+                   PM_LIMIT.VENTRICULAR_PULSE_WIDTH["min"] < pm.ventricular_pulse_width <= \
+                   PM_LIMIT.VENTRICULAR_PULSE_WIDTH["max"],
+            "VRP": pm.vrp is None or \
+                   PM_LIMIT.VRP["min"] <= pm.vrp <= PM_LIMIT.VRP["max"],
+            "ARP": pm.arp is None or \
+                   PM_LIMIT.ARP["min"] <= pm.arp <= PM_LIMIT.ARP["max"],
+            "SR": pm.sensor_rate is None or \
+                  PM_LIMIT.SENSOR_RATE["min"] <= pm.sensor_rate <= PM_LIMIT.SENSOR_RATE["max"],
+            "AV": pm.av_delay is None or \
+                  PM_LIMIT.AV_DELAY["min"] <= pm.av_delay <= PM_LIMIT.AV_DELAY["max"],
+            "AS": pm.atrial_sensitivity is None or \
+                  PM_LIMIT.ATRIAL_SENSITIVITY["min"] <= pm.atrial_sensitivity <= PM_LIMIT.ATRIAL_SENSITIVITY["max"],
+            "VS": pm.ventricular_sensitivity is None or \
+                  PM_LIMIT.VENTRICULAR_SENSITIVITY["min"] <= pm.ventricular_sensitivity <=
+                  PM_LIMIT.VENTRICULAR_SENSITIVITY["max"]
         }
 
     def validate(self):

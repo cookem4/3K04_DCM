@@ -1,6 +1,8 @@
 import json
 
 from main.data.pacing.PacingMode import PacingMode
+from main.data.pacing.PacingModes import toSerial
+from main.data.serial.SerialUtils import flatten_to_bytearray
 
 
 class AAI(PacingMode):
@@ -13,6 +15,17 @@ class AAI(PacingMode):
             atrial_amplitude=atrial_amplitude,
             atrial_pulse_width=atrial_pulse_width,
             arp=arp)
+
+    def serialize(self) -> bytearray:
+        serial_self = self.as_serial
+        serial_bytes = [0 for x in range(6)]
+        serial_bytes[0] = toSerial(self.NAME)
+        serial_bytes[1] = serial_self.lower_rate_limit
+        serial_bytes[2] = serial_self.upper_rate_limit
+        serial_bytes[3] = serial_self.atrial_amplitude
+        serial_bytes[4] = serial_self.atrial_pulse_width
+        serial_bytes[5] = serial_self.arp
+        return flatten_to_bytearray(serial_bytes)
 
 
 class AAIBuilder:

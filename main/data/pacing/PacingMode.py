@@ -1,10 +1,11 @@
+import abc
 import json
 
-from main.data.pacing.PacingValueRange import PacingValueRange
-from main.data.serial.SerialPacingFormat import SerialPacingFormat
+from main.data.pacing.PacingValueRange import PacingValueRange, PM_LIMIT
+from main.data.serial.SerialUtils import to_serial_byte
 
 
-class PacingMode:
+class PacingMode(abc.ABC):
     NAME: str
 
     def __init__(self, lower_rate_limit, upper_rate_limit, atrial_amplitude=None,
@@ -25,13 +26,58 @@ class PacingMode:
         self.atrial_sensitivity = atrial_sensitivity
         self.ventricular_sensitivity = ventricular_sensitivity
 
+    @abc.abstractmethod
+    def serialize(self) -> bytearray:
+        pass
 
     def to_string(self):
         return json.dumps(self.__dict__)
 
-    def serialize(self) -> bytearray:
-        return SerialPacingFormat(self).getBytes()
-
     @property
     def validation_result(self):
         return PacingValueRange(self).validate()
+
+    @property
+    def as_serial(self):
+        return SerialPacingMode(self)
+
+
+class SerialPacingMode:
+
+    def __init__(self, pm: PacingMode):
+        self.lower_rate_limit = to_serial_byte(
+            val=pm.lower_rate_limit,
+            max_value=PM_LIMIT.LOWER_RATE_LIMIT["max"])
+        self.upper_rate_limit = to_serial_byte(
+            val=pm.upper_rate_limit,
+            max_value=PM_LIMIT.UPPER_RATE_LIMIT["max"])
+        self.atrial_amplitude = to_serial_byte(
+            val=pm.atrial_amplitude,
+            max_value=PM_LIMIT.ATRIAL_AMPLITUDE["max"])
+        self.atrial_pulse_width = to_serial_byte(
+            val=pm.atrial_pulse_width,
+            max_value=PM_LIMIT.ATRIAL_PULSE_WIDTH["max"])
+        self.ventricular_amplitude = to_serial_byte(
+            val=pm.ventricular_amplitude,
+            max_value=PM_LIMIT.VENTRICULAR_AMPLITUDE["max"])
+        self.ventricular_pulse_width = to_serial_byte(
+            val=pm.ventricular_pulse_width,
+            max_value=PM_LIMIT.VENTRICULAR_PULSE_WIDTH["max"])
+        self.arp = to_serial_byte(
+            val=pm.arp,
+            max_value=PM_LIMIT.ARP["max"])
+        self.vrp = to_serial_byte(
+            val=pm.vrp,
+            max_value=PM_LIMIT.VRP["max"])
+        self.sensor_rate = to_serial_byte(
+            val=pm.sensor_rate,
+            max_value=PM_LIMIT.SENSOR_RATE["max"])
+        self.av_delay = to_serial_byte(
+            val=pm.av_delay,
+            max_value=PM_LIMIT.AV_DELAY["max"])
+        self.atrial_sensitivity = to_serial_byte(
+            val=pm.atrial_sensitivity,
+            max_value=PM_LIMIT.ATRIAL_SENSITIVITY["max"])
+        self.ventricular_sensitivity = to_serial_byte(
+            val=pm.ventricular_sensitivity,
+            max_value=PM_LIMIT.VENTRICULAR_SENSITIVITY["max"])

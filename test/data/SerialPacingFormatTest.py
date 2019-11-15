@@ -3,7 +3,7 @@ import unittest
 from main.data.pacing.modes.AAI import AAI
 from main.data.pacing.modes.AOO import AOO
 from main.data.pacing.modes.DOOR import DOOR
-from main.data.serial.SerialPacingFormat import SerialPacingFormat
+from main.data.serial.SerialUtils import SerialPacingMode
 
 
 class SerialPacingFormatTest(unittest.TestCase):
@@ -11,9 +11,9 @@ class SerialPacingFormatTest(unittest.TestCase):
         paceAAI = AAI(50, 150, 3, 4, 300)
         paceAOO = AOO(66, 175, 3, 2)
         paceDOOR = DOOR(66, 200, 3, 3, 4, 4, 100, 225)
-        sutAAI: SerialPacingFormat = SerialPacingFormat(paceAAI)
-        sutAOO: SerialPacingFormat = SerialPacingFormat(paceAOO)
-        sutDOOR: SerialPacingFormat = SerialPacingFormat(paceDOOR)
+        sutAAI: SerialPacingMode = SerialPacingMode(paceAAI)
+        sutAOO: SerialPacingMode = SerialPacingMode(paceAOO)
+        sutDOOR: SerialPacingMode = SerialPacingMode(paceDOOR)
 
         bAAI: bytearray = sutAAI.getBytes()
         bAOO: bytearray = sutAOO.getBytes()

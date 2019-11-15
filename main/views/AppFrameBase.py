@@ -4,11 +4,12 @@ from PIL import Image, ImageTk
 
 from main.services.SessionService import SessionService
 from main.services.UserService import UserService
-
+from main.communication.SerialCommunicator import SerialCommunicator
 
 class AppFrameBase(tk.Frame):
     session_service: SessionService = SessionService.get_instance()
     user_service: UserService = UserService()
+    serial_service: SerialCommunicator = SerialCommunicator("COM12")
 
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)

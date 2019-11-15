@@ -6,9 +6,10 @@ from matplotlib.figure import Figure
 
 from main.views import MainPage
 from main.views.AppFrameBase import AppFrameBase
-
+from threading import Thread
+import time
 matplotlib.use("TkAgg")
-
+import math
 
 class EGMDataPage(AppFrameBase):
 
@@ -23,9 +24,11 @@ class EGMDataPage(AppFrameBase):
         # Based on what drop down menu selection is chosen, this list will be indexed differently
         # This list will constantly be udpated from the serial module
         # First index is atrial pacing second is ventricle pacing
-        self.setToGraph = [[5, 6, 1, 3, 8, 9, 3, 5, 5, 6, 1, 3, 8, 9, 3, 5],
-                           [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 14, 15, 16]]
-
+        #self.setToGraph = [[5, 6, 1, 3, 8, 9, 3, 5, 5, 6, 1, 3, 8, 9, 3, 5],
+                          # [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 14, 15, 16]]
+        self.setToGraph = [[0],[0]]
+        self.addCntr = 0
+        
         self.connectionStateText = tk.Label(self, bg="gray", text="Connection Not Established")
         self.connectionStateText.config(font=("Helvetica", 25), foreground="white")
         self.connectionStateText.grid(row=0, column=0, columnspan=3, padx=(90, 0), pady=(20, 0), sticky=tk.N)
@@ -72,6 +75,13 @@ class EGMDataPage(AppFrameBase):
         canvas.draw()
         canvas.get_tk_widget().grid(row=3, column=0, columnspan=3, padx=(135, 0), pady=(30, 0), sticky=tk.W)
 
+        #configure thread control variable
+        self.threadControllerGrahping = False
+        self.threadControllerLabel = True
+        self.isConnectionEstablished = False
+        self.myThread2 = Thread(target = self.MyThread2, args = ())
+        self.myThread2.start()
+
     def drop_down_callback(self, *args):
         print(self.displaySelection.get())
         if (self.graphingEnabled):
@@ -91,6 +101,15 @@ class EGMDataPage(AppFrameBase):
         return self.user_service.read(self.username).to_json()
 
     def toggleGraphing(self):
+        if(self.threadControllerGrahping):
+            self.threadControllerGrahping = False
+            self.setToGraph = [[],[]]
+        else:
+            self.threadControllerGrahping = True
+            myThread = Thread(target = self.MyThread, args = ())
+            myThread.start()
+            
+
         self.graphingEnabled = not (self.graphingEnabled)
         if (self.graphingEnabled):
             self.startBtn.config(text="Stop")
@@ -118,3 +137,46 @@ class EGMDataPage(AppFrameBase):
 
     def go_back(self):
         self.parent.switch_frame(MainPage.MainPage)
+        self.threadControllerGrpahing = False
+        self.threadControllerLabel = False
+
+    def MyThread2(self):
+        ###This thread will disable the start button if there is no connection and if disconnection occurs while
+            ### a device is connected it will act to end graphing then disable the button
+        while(self.threadControllerLabel):
+            if(not(self.threadControllerLabel)):
+                break
+            time.sleep(1)
+            if(not(self.threadControllerLabel)):
+                break
+            if(self.isConnectionEstablished):
+                self.connectionStateText.config(text = "Connection Established", foreground="white", background = "green")
+            else:
+                self.connectionStateText.config(text = "Connection Not Established", foreground="black", background = "gray")
+            self.isConnectionEstablished = not(self.isConnectionEstablished)
+    def MyThread(self):
+        #want to set thread controller based on if a device is connected
+        while(self.threadControllerGrahping):
+            print("Graphing...")
+            if(not(self.threadControllerGrahping)):
+                break
+            time.sleep(0.1)
+            if(not(self.threadControllerGrahping)):
+                break
+            self.addCntr = self.addCntr + 1
+            self.setToGraph[0].append(math.sin(self.addCntr))
+            self.setToGraph[1].append(self.addCntr**0.5)
+            self.a.clear()
+            f = Figure(figsize=(10, 4), dpi=100)
+            self.a = f.add_subplot(111)
+            if (self.displaySelection.get() == 'Atrium'):
+                self.a.plot(range(len(self.setToGraph[0])), self.setToGraph[0])
+            elif (self.displaySelection.get() == 'Ventrical'):
+                self.a.plot(range(len(self.setToGraph[1])), self.setToGraph[1])
+            elif (self.displaySelection.get() == 'Both'):
+                self.a.plot(range(len(self.setToGraph[0])), self.setToGraph[0], self.setToGraph[1])
+            #f.xlabel("Time", axes=self.a)
+            #f.ylabel("Voltage (V)", axes=self.a)
+            canvas = FigureCanvasTkAgg(f, self)
+            canvas.draw()
+            canvas.get_tk_widget().grid(row=3, column=0, columnspan=3, padx=(135, 0), pady=(30, 0), sticky=tk.W)

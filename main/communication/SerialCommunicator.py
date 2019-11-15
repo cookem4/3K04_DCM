@@ -1,66 +1,121 @@
 import time
 from datetime import datetime, timedelta
 
-from serial import Serial, SerialException, SerialTimeoutException
+from serial import SerialTimeoutException, SerialException, EIGHTBITS, Serial, to_bytes
 
+from main.communication.interfaces.SerialInterface import SerialInterface
 from main.data.pacingmode.DOOR import DOOR
 from main.data.pacingmode.PacingMode import PacingMode
 from main.data.serial.SerialIdentifier import SerialIdentifier
 
+RESPONSE_TIME_LIMIT = 15  # seconds
+TIMEOUT = 5  # minutes
 
-class SerialCommunicator():
-    baudrate = 115200
+serial = None
+port: str = "COM1"
+baudrate = 115200
+time_since_last_usage = 0
 
-    def __init__(self, port: str):
-        self.port = port
-        self.ser = Serial(port, SerialCommunicator.baudrate)
 
-    def reinit(self):
-        self.ser = Serial(self.port, SerialCommunicator.baudrate)
+def set_port(new_port: str):
+    global port
+    port = new_port
 
-    def send_pacing_data(self, data: PacingMode):
-        self.reinit()
-        output = [SerialIdentifier.SEND_DATA.value, data.serialize()]
+
+def serial_safe(serial_using_function):
+    def new_function(*args, **kwargs):
+        global time_since_last_usage
+        time_since_last_usage = datetime.now()
+        output = None
         try:
-            while not self.ser.is_open:
-                self.ser.open()
-            for x in output:
-                self.ser.write(x + b'\r\n')
-                time.sleep(1)
-                out = ''
-                while self.ser.inWaiting() > 0:
-                    out += self.ser.read(1)
-                if out != '':
-                    print(out)
-
-            while self.ser.is_open:
-                self.ser.close()
-        except (SerialException, SerialTimeoutException) as e:
-            self.ser.close()
+            open_serial()
+            output = serial_using_function(*args, **kwargs)
+            close_serial()
+        except (SerialException, SerialTimeoutException, Exception) as e:
+            close_serial()
             print(e)
-            print("FUCK")
-            pass
+        return output
 
+    return new_function
+
+
+def open_serial():
+    global serial
+    if serial is None:
+        serial = Serial(
+            port=port,
+            baudrate=baudrate,
+            write_timeout=0,
+            bytesize=EIGHTBITS)
+    else:
+        if not serial.is_open:
+            serial.open()
+
+
+def close_serial():
+    global serial
+    if serial is not None and serial.is_open:
+        serial.close()
+
+
+def check_response(expected_response: SerialIdentifier):
+    for i in range(RESPONSE_TIME_LIMIT):
+        out = serial.read(2)
+        if out != '':
+            print(out)
+        if int(out) == int(expected_response.value.hex()):
+            return True
+        time.sleep(1)
+    return False
+
+
+def await_data(response_size):
+    for i in range(RESPONSE_TIME_LIMIT):
+        out = serial.read(response_size)
+        if len(out) == response_size:
+            return out
+    return []
+
+
+def send(identifier: SerialIdentifier, data_bytearray: bytearray = bytearray(0)):
+    bytes_to_send = to_bytes(identifier.value + data_bytearray)
+    serial.write(bytes_to_send)
+
+
+class SerialCommunicator:
+
+    def __init__(self, com_port: str):
+        set_port(com_port)
+
+    @serial_safe
+    def connect_to_pacemaker(self):
+        send(SerialIdentifier.CONNECT)
+        check_response(SerialIdentifier.CONNECT)
+        id = await_data(6)
+        print(id)
+
+    @serial_safe
+    def send_pacing_data(self, data: PacingMode):
+        send(SerialIdentifier.SEND_DATA, data.serialize())
+        return check_response(SerialIdentifier.RECEIVED_DATA)
+
+    @serial_safe
     def is_connection_established(self):
-        start_time = datetime.now()
-        self.ser.open()
-        self.ser.write(SerialIdentifier.CONNECT)
-        tdata = self.ser.read()
-        while datetime.now() - start_time > timedelta(seconds=5):
-            if SerialIdentifier.CONNECT in tdata:
-                return True
-            tdata = self.ser.read()
-            time.sleep(1)
-            data_left = self.ser.inWaiting()
-            tdata += self.ser.read(data_left)
+        send(SerialIdentifier.PING)
+        return check_response(SerialIdentifier.PING)
 
-        return False
+    def check_timeout(self):
+        global time_since_last_usage
+        if time_since_last_usage - datetime.now() > timedelta(minutes=TIMEOUT):
+            return False
+        else:
+            return True
 
 
 def test():
     paceDOOR = DOOR(66, 200, 3, 3, 4, 4, 100, 225)
-    com: SerialCommunicator = SerialCommunicator("COM13")
-    com.send_pacing_data(paceDOOR)
+    com: SerialCommunicator = SerialCommunicator("COM1")
+    com.connect_to_pacemaker()
 
 
 if __name__ == '__main__':

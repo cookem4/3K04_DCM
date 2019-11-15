@@ -1,5 +1,5 @@
-from main.data.pacingmode.PacingMode import PacingMode
-from main.data.pacingmode.PacingModeBuilder import PacingModeBuilder
+from main.data.pacing.PacingMode import PacingMode
+from main.data.pacing.PacingModeBuilder import PacingModeBuilder
 
 
 class User:

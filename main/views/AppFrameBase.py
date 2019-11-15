@@ -2,9 +2,10 @@ import tkinter as tk
 
 from PIL import Image, ImageTk
 
+from main.communication.SerialCommunicator import SerialCommunicator
 from main.services.SessionService import SessionService
 from main.services.UserService import UserService
-from main.communication.SerialCommunicator import SerialCommunicator
+
 
 class AppFrameBase(tk.Frame):
     session_service: SessionService = SessionService.get_instance()

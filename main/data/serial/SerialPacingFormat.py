@@ -1,4 +1,4 @@
-from main.data.pacingmode.PacingModes import toSerial
+from main.data.pacing.PacingModes import toSerial
 
 
 def to_single_byte(val):

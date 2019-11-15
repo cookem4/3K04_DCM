@@ -1,14 +1,14 @@
-from main.data.pacingmode.PacingModes import PacingModes
-from main.data.pacingmode.AAI import AAIBuilder
-from main.data.pacingmode.VVI import VVIBuilder
-from main.data.pacingmode.AOO import AOOBuilder
-from main.data.pacingmode.VOO import VOOBuilder
-from main.data.pacingmode.DOO import DOOBuilder
-from main.data.pacingmode.VVIR import VVIRBuilder
-from main.data.pacingmode.AAIR import AAIRBuilder
-from main.data.pacingmode.AOOR import AOORBuilder
-from main.data.pacingmode.VOOR import VOORBuilder
-from main.data.pacingmode.DOOR import DOORBuilder
+from main.data.pacing.PacingModes import PacingModes
+from main.data.pacing.modes.AAI import AAIBuilder
+from main.data.pacing.modes.VVI import VVIBuilder
+from main.data.pacing.modes.AOO import AOOBuilder
+from main.data.pacing.modes.VOO import VOOBuilder
+from main.data.pacing.modes.DOO import DOOBuilder
+from main.data.pacing.modes.VVIR import VVIRBuilder
+from main.data.pacing.modes.AAIR import AAIRBuilder
+from main.data.pacing.modes.AOOR import AOORBuilder
+from main.data.pacing.modes.VOOR import VOORBuilder
+from main.data.pacing.modes.DOOR import DOORBuilder
 
 
 class PacingModeBuilder:

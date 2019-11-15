@@ -2,7 +2,7 @@ import json
 
 from cryptography.fernet import InvalidToken
 
-from main.data.pacingmode.PacingMode import PacingMode
+from main.data.pacing.PacingMode import PacingMode
 from main.data.user.User import User, UserBuilder
 from main.exceptions import MaxUsersExceededException
 from main.repositories.JSONRepository import JSONRepository

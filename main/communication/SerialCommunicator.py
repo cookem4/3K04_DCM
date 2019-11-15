@@ -3,9 +3,8 @@ from datetime import datetime, timedelta
 
 from serial import SerialTimeoutException, SerialException, EIGHTBITS, Serial, to_bytes
 
-from main.communication.interfaces.SerialInterface import SerialInterface
-from main.data.pacingmode.DOOR import DOOR
-from main.data.pacingmode.PacingMode import PacingMode
+from main.data.pacing.modes.DOOR import DOOR
+from main.data.pacing.PacingMode import PacingMode
 from main.data.serial.SerialIdentifier import SerialIdentifier
 
 RESPONSE_TIME_LIMIT = 15  # seconds

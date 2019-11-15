@@ -1,6 +1,6 @@
 import json
 
-from main.data.pacingmode.PacingMode import PacingMode
+from main.data.pacing.PacingMode import PacingMode
 
 
 class AOO(PacingMode):

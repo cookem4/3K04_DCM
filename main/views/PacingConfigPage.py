@@ -1,20 +1,21 @@
+import time
 import tkinter as tk
+from threading import Thread
 
-from main.data.pacingmode.PacingMode import PacingMode
-from main.data.pacingmode.AAI import AAI
-from main.data.pacingmode.AAIR import AAIR
-from main.data.pacingmode.AOO import AOO
-from main.data.pacingmode.AOOR import AOOR
-from main.data.pacingmode.DOO import DOO
-from main.data.pacingmode.DOOR import DOOR
-from main.data.pacingmode.VOO import VOO
-from main.data.pacingmode.VOOR import VOOR
-from main.data.pacingmode.VVI import VVI
-from main.data.pacingmode.VVIR import VVIR
+from main.data.pacing.PacingMode import PacingMode
+from main.data.pacing.modes.AAI import AAI
+from main.data.pacing.modes.AAIR import AAIR
+from main.data.pacing.modes.AOO import AOO
+from main.data.pacing.modes.AOOR import AOOR
+from main.data.pacing.modes.DOO import DOO
+from main.data.pacing.modes.DOOR import DOOR
+from main.data.pacing.modes.VOO import VOO
+from main.data.pacing.modes.VOOR import VOOR
+from main.data.pacing.modes.VVI import VVI
+from main.data.pacing.modes.VVIR import VVIR
 from main.views import MainPage
 from main.views.AppFrameBase import AppFrameBase
-from threading import Thread
-import time
+
 
 def entry_to_value(entry):
     entry_string = entry.get()
@@ -281,8 +282,8 @@ class PacingConfigPage(AppFrameBase):
 
         # Set textbox values based on user profile
         # String slicing of json object
-        
-        #print(self.currUserJson["pacing_mode_settings"])
+
+        # print(self.currUserJson["pacing_mode_settings"])
         lowerRateLimitSlice = self.currUserJson["pacing_mode_settings"][
                               self.currUserJson["pacing_mode_settings"].index("lower_rate_limit\": ") + len(
                                   "lower_rate_limit\": "):self.currUserJson["pacing_mode_settings"].index(
@@ -345,10 +346,10 @@ class PacingConfigPage(AppFrameBase):
         self.usrVentricularSensitivity.set(
             "" if (ventricularSensitivitySlice == "null") else ventricularSensitivitySlice)
 
-        #Set up background thread
+        # Set up background thread
         self.threadController = True
         self.isConnectionEstablished = False
-        self.myThread = Thread(target = self.MyThread, args = ())
+        self.myThread = Thread(target=self.MyThread, args=())
         self.myThread.start()
 
     def load_current_user_json(self):
@@ -591,7 +592,6 @@ class PacingConfigPage(AppFrameBase):
     def go_back(self):
         self.parent.switch_frame(MainPage.MainPage)
         self.threadController = False
-                                                
 
     def save_data(self):
         # Update variables based on drop down selection
@@ -609,7 +609,7 @@ class PacingConfigPage(AppFrameBase):
                 av_delay=entry_to_value(self.avDelayEntry),
                 atrial_sensitivity=entry_to_value(self.atrialSensitivityEntry),
                 ventricular_sensitivity=entry_to_value(self.ventricularSensitivityEntry))
-            
+
             if self.pacingSelection.get() == "AOO":
                 pacing_mode.__class__ = AOO
             if self.pacingSelection.get() == "VOO":
@@ -631,17 +631,17 @@ class PacingConfigPage(AppFrameBase):
             if self.pacingSelection.get() == "VOOR":
                 pacing_mode.__class__ = VOOR
 
-            #transmit serial data:
-            #self.serial_service.send_pacing_data(pacing_mode)
-            
-            display_error_message = not pacing_mode.validate()
+            # transmit serial data:
+            # self.serial_service.send_pacing_data(pacing_mode)
+
+            display_error_message = not pacing_mode.validation_result.success
         except Exception as e:
             print(e)
             display_error_message = True  # If non numerica entries
 
-        if (display_error_message):
+        if display_error_message:
             self.errorLabel.config(font=(25), foreground="red")
-            self.errorLabel.config(text="Invalid Entry Provided", width=33)
+            self.errorLabel.config(text=pacing_mode.validation_result.error, width=50)
             # self.errorLabel.grid(row=10, column=2, columnspan=3, padx=(0, 0), pady=(0, 0), sticky=tk.E)
             self.errorLabel.place(relx=0.55, rely=0.92, anchor='sw')
         else:
@@ -655,23 +655,24 @@ class PacingConfigPage(AppFrameBase):
             self.currUserJson = self.load_current_user_json()
             self.actualModeLabel.config(text=self.currUserJson["pacing_mode_name"])
 
-    #Thread to check connection status. Condition will change to self.serial_service.is_connection_established()
+    # Thread to check connection status. Condition will change to self.serial_service.is_connection_established()
     def MyThread(self):
-        while(self.threadController):
-            if(not(self.threadController)):
+        while self.threadController:
+            if not (self.threadController):
                 break
             time.sleep(1)
-            if(not(self.threadController)):
+            if (not (self.threadController)):
                 break
-            if(self.isConnectionEstablished):
-                self.connectionStateText.config(text = "Connection Established", foreground="white", background = "green")
-                self.currID.config(text = str(123456))
-                self.prevID.config(text =str(654321))
+            if self.isConnectionEstablished:
+                self.connectionStateText.config(text="Connection Established", foreground="white", background="green")
+                self.currID.config(text=str(123456))
+                self.prevID.config(text=str(654321))
                 print("YES")
             else:
-                self.connectionStateText.config(text = "Connection Not Established", foreground="black", background = "gray")
-                self.currID.config(text = "None")
-                self.prevID.config(text = "None")
+                self.connectionStateText.config(text="Connection Not Established", foreground="black",
+                                                background="gray")
+                self.currID.config(text="None")
+                self.prevID.config(text="None")
                 print("NO")
-            self.isConnectionEstablished = not(self.isConnectionEstablished)
+            self.isConnectionEstablished = not self.isConnectionEstablished
         print("DONE")

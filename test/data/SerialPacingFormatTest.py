@@ -1,8 +1,8 @@
 import unittest
 
-from main.data.pacingmode.AAI import AAI
-from main.data.pacingmode.AOO import AOO
-from main.data.pacingmode.DOOR import DOOR
+from main.data.pacing.modes.AAI import AAI
+from main.data.pacing.modes.AOO import AOO
+from main.data.pacing.modes.DOOR import DOOR
 from main.data.serial.SerialPacingFormat import SerialPacingFormat
 
 

@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from main.communication.SerialCommunicator import SerialCommunicator
-from main.data.pacingmode.DOOR import DOOR
+from main.data.pacing.modes.DOOR import DOOR
 
 
 class TestSerialCommunicator(TestCase):

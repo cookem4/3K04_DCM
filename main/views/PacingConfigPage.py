@@ -643,7 +643,7 @@ class PacingConfigPage(AppFrameBase):
 
     def save_data(self):
         # Update variables based on drop down selection
-        pacingErrorStr = "Invalid Parameters"
+        pacingErrorStr = "Entries cannot be empty"
         try:
             pacing_mode: PacingMode = PacingMode(
                 lower_rate_limit=entry_to_value(self.lowerRateLimitEntry),
@@ -694,7 +694,7 @@ class PacingConfigPage(AppFrameBase):
             self.errorLabel.config(font=(25), foreground="red")
             self.errorLabel.config(text=pacingErrorStr, width=50)
             # self.errorLabel.grid(row=10, column=2, columnspan=3, padx=(0, 0), pady=(0, 0), sticky=tk.E)
-            self.errorLabel.place(relx=0.55, rely=0.92, anchor='sw')
+            self.errorLabel.place(relx=0.05, rely=0.5, anchor='sw')
         else:
             # Update saved pacing mode based on username and drop down selection
             self.user_service.update_pacing_mode(self.username, pacing_mode)

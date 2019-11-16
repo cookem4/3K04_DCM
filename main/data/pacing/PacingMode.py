@@ -5,7 +5,7 @@ from main.data.pacing.PacingValueRange import PacingValueRange, PM_LIMIT
 from main.data.serial.SerialUtils import to_serial_byte
 
 
-class PacingMode(abc.ABC):
+class PacingMode():
     NAME: str
 
     def __init__(self, lower_rate_limit, upper_rate_limit, atrial_amplitude=None,
@@ -27,10 +27,6 @@ class PacingMode(abc.ABC):
         self.av_delay = av_delay
         self.atrial_sensitivity = atrial_sensitivity
         self.ventricular_sensitivity = ventricular_sensitivity
-
-    @abc.abstractmethod
-    def serialize(self) -> bytearray:
-        pass
 
     def to_string(self):
         return json.dumps(self.__dict__)

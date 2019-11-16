@@ -3,8 +3,8 @@ from datetime import datetime, timedelta
 
 from serial import SerialTimeoutException, SerialException, EIGHTBITS, Serial, to_bytes
 
-from main.data.pacing.modes.DOOR import DOOR
 from main.data.pacing.PacingMode import PacingMode
+from main.data.pacing.modes.DOOR import DOOR
 from main.data.serial.SerialIdentifier import SerialIdentifier
 
 RESPONSE_TIME_LIMIT = 15  # seconds
@@ -14,6 +14,7 @@ serial = None
 port: str = "COM1"
 baudrate = 115200
 time_since_last_usage = 0
+listen_for_egm = False
 
 
 def set_port(new_port: str):
@@ -85,13 +86,13 @@ class SerialCommunicator:
 
     def __init__(self, com_port: str):
         set_port(com_port)
+        self.device_id = None
 
     @serial_safe
     def connect_to_pacemaker(self):
         send(SerialIdentifier.CONNECT)
         check_response(SerialIdentifier.CONNECT)
-        id = await_data(6)
-        print(id)
+        self.device_id = await_data(6)
 
     @serial_safe
     def send_pacing_data(self, data: PacingMode):

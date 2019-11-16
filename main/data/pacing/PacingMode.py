@@ -10,7 +10,7 @@ class PacingMode(abc.ABC):
 
     def __init__(self, lower_rate_limit, upper_rate_limit, atrial_amplitude=None,
                  atrial_pulse_width=None, ventricular_amplitude=None,
-                 ventricular_pulse_width=None, arp=None, vrp=None, sensor_rate=None, av_delay=None,
+                 ventricular_pulse_width=None, arp=None, vrp=None, activity_threshold=None, reaction_time=None, recovery_time=None, av_delay=None,
                  atrial_sensitivity=None,
                  ventricular_sensitivity=None):
         self.lower_rate_limit = lower_rate_limit
@@ -21,7 +21,9 @@ class PacingMode(abc.ABC):
         self.ventricular_pulse_width = ventricular_pulse_width
         self.arp = arp
         self.vrp = vrp
-        self.sensor_rate = sensor_rate
+        self.activity_threshold=activity_threshold
+        self.reaction_time = reaction_time
+        self.recovery_time = recovery_time
         self.av_delay = av_delay
         self.atrial_sensitivity = atrial_sensitivity
         self.ventricular_sensitivity = ventricular_sensitivity
@@ -69,8 +71,14 @@ class SerialPacingMode:
         self.vrp = to_serial_byte(
             val=pm.vrp,
             max_value=PM_LIMIT.VRP["max"])
-        self.sensor_rate = to_serial_byte(
-            val=pm.sensor_rate,
+        self.activity_threshold = to_serial_byte(
+            val=pm.activity_threshold,
+            max_value=PM_LIMIT.SENSOR_RATE["max"])
+        self.reaction_time = to_serial_byte(
+            val=pm.reaction_time,
+            max_value=PM_LIMIT.SENSOR_RATE["max"])
+        self.recovery_time = to_serial_byte(
+            val=pm.recovery_time,
             max_value=PM_LIMIT.SENSOR_RATE["max"])
         self.av_delay = to_serial_byte(
             val=pm.av_delay,

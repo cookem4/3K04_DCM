@@ -1,5 +1,5 @@
 from main.views.GUIApplication import DCM_GUI
-from main.communication.SerialCommunicator import test
+from main.communication.SerialCommunicator import SerialCommunicator
 
 if __name__ == '__main__':
 
@@ -15,7 +15,8 @@ if __name__ == '__main__':
     us.print()
     us.delete("parker")
     '''
-    
+    #serialTest = SerialCommunicator("COM12")
+    #print(serialTest.is_connection_established())
     # Create GUI instance
     app = DCM_GUI()
     app.mainloop()

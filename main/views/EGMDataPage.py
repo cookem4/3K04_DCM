@@ -28,9 +28,9 @@ class EGMDataPage(AppFrameBase):
                           # [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 14, 15, 16]]
         self.setToGraph = [[0],[0]]
         self.addCntr = 0
-        
+
         self.connectionStateText = tk.Label(self, bg="gray", text="Connection Not Established")
-        self.connectionStateText.config(font=("Helvetica", 25), foreground="white")
+        self.connectionStateText.config(font=("Helvetica", 25), foreground="black")
         self.connectionStateText.grid(row=0, column=0, columnspan=3, padx=(90, 0), pady=(20, 0), sticky=tk.N)
 
         self.screenInfo = tk.Label(self, bg="light gray", text="EGM Data", width=50)
@@ -42,6 +42,7 @@ class EGMDataPage(AppFrameBase):
         self.backBtn.grid(row=4, column=0, columnspan=1, pady=(20, 0), padx=(15, 0), sticky=tk.W)
 
         self.startBtn = tk.Button(self, text="Start", width=8, height=1, command=self.toggleGraphing)
+        self.startBtn.config(state = tk.DISABLED)
         self.startBtn.config(font=("Helvetica", 10))
         self.startBtn.grid(row=2, column=1, columnspan=1, pady=(20, 0), padx=(150, 0), sticky=tk.W)
         self.graphingEnabled = False
@@ -74,6 +75,14 @@ class EGMDataPage(AppFrameBase):
         canvas = FigureCanvasTkAgg(f, self)
         canvas.draw()
         canvas.get_tk_widget().grid(row=3, column=0, columnspan=3, padx=(135, 0), pady=(30, 0), sticky=tk.W)
+
+        #Setup labels based on pacing status
+        if self.serial_indicators.isConnected():
+            self.connectionStateText.config(text="Connection Established", foreground="white", background="green")
+            self.startBtn.config(state=tk.NORMAL)
+        else:
+            self.connectionStateText.config(text="Connection Not Established", foreground="black", background="gray")
+
 
         #configure thread control variable
         self.threadControllerGrahping = False
@@ -108,7 +117,6 @@ class EGMDataPage(AppFrameBase):
             self.threadControllerGrahping = True
             myThread = Thread(target = self.MyThread, args = ())
             myThread.start()
-            
 
         self.graphingEnabled = not (self.graphingEnabled)
         if (self.graphingEnabled):
@@ -137,23 +145,32 @@ class EGMDataPage(AppFrameBase):
 
     def go_back(self):
         self.parent.switch_frame(MainPage.MainPage)
-        self.threadControllerGrpahing = False
+        self.threadControllerGrahping = False
         self.threadControllerLabel = False
 
     def MyThread2(self):
         ###This thread will disable the start button if there is no connection and if disconnection occurs while
-            ### a device is connected it will act to end graphing then disable the button
-        while(self.threadControllerLabel):
-            if(not(self.threadControllerLabel)):
+        ### a device is connected it will act to end graphing then disable the button
+        # start by trying to connect to the pacemaker
+        if not self.serial_indicators.isConnected():
+            self.serial_service.connect_to_pacemaker()
+            if self.serial_service.is_connection_established():
+                self.serial_indicators.setConnection(True)
+                self.serial_indicators.setCurrConnectionID(self.serial_service.get_device_ID())
+                self.serial_indicators.setLastConnectionID(self.serial_service.get_last_device_connected())
+
+        while self.threadControllerLabel:
+            if not self.threadControllerLabel:
                 break
             time.sleep(1)
-            if(not(self.threadControllerLabel)):
+            if not self.threadControllerLabel:
                 break
-            if(self.isConnectionEstablished):
+            if self.serial_indicators.isConnected():
                 self.connectionStateText.config(text = "Connection Established", foreground="white", background = "green")
+                self.startBtn.config(state=tk.NORMAL)
             else:
                 self.connectionStateText.config(text = "Connection Not Established", foreground="black", background = "gray")
-            self.isConnectionEstablished = not(self.isConnectionEstablished)
+
     def MyThread(self):
         #want to set thread controller based on if a device is connected
         while(self.threadControllerGrahping):

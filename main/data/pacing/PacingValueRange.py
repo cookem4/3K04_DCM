@@ -1,6 +1,6 @@
 error_messages = {
-    "LRL": "Lower rate limit must be below 40",
-    "URL": "Lower rate limit must be above 220",
+    "LRL": "Lower rate limit must be above 40",
+    "URL": "Upper rate limit must be below 220",
     "URL_gt_LRL": "Upper rate limit must be greater than lower rate limit",
     "AA": "Atrial Amplitude must be between 0-5",
     "APW": "Atrial pulse width must be between 0-5",
@@ -24,8 +24,8 @@ class PacingValidationResult:
 
 
 class PM_LIMIT:
-    LOWER_RATE_LIMIT = {"min": 0, "max": 40}
-    UPPER_RATE_LIMIT = {"min": 0, "max": 220}
+    LOWER_RATE_LIMIT = {"min": 40, "max": 220}
+    UPPER_RATE_LIMIT = {"min": 40, "max": 220}
     ATRIAL_AMPLITUDE = {"min": 0, "max": 5}
     ATRIAL_PULSE_WIDTH = {"min": 0, "max": 5}
     VENTRICULAR_AMPLITUDE = {"min": 0, "max": 5}
@@ -44,7 +44,7 @@ class PacingValueRange:
 
     def __init__(self, pm):
         self.constraints = {
-            "LRL": pm.lower_rate_limit >= PM_LIMIT.LOWER_RATE_LIMIT["max"],
+            "LRL": pm.lower_rate_limit >= PM_LIMIT.LOWER_RATE_LIMIT["min"],
             "URL": pm.upper_rate_limit <= PM_LIMIT.UPPER_RATE_LIMIT["max"],
             "URL_gt_LRL": pm.upper_rate_limit > pm.lower_rate_limit,
             "AA": pm.atrial_amplitude is None or \

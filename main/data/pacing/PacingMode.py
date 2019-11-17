@@ -69,13 +69,13 @@ class SerialPacingMode:
             max_value=PM_LIMIT.VRP["max"])
         self.activity_threshold = to_serial_byte(
             val=pm.activity_threshold,
-            max_value=PM_LIMIT.SENSOR_RATE["max"])
+            max_value=PM_LIMIT.ACTIVITY_THRESHOLD["max"])
         self.reaction_time = to_serial_byte(
             val=pm.reaction_time,
-            max_value=PM_LIMIT.SENSOR_RATE["max"])
+            max_value=PM_LIMIT.REACTION_TIME["max"])
         self.recovery_time = to_serial_byte(
             val=pm.recovery_time,
-            max_value=PM_LIMIT.SENSOR_RATE["max"])
+            max_value=PM_LIMIT.RECOVERY_TIME["max"])
         self.av_delay = to_serial_byte(
             val=pm.av_delay,
             max_value=PM_LIMIT.AV_DELAY["max"])

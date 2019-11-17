@@ -16,7 +16,6 @@ from main.data.pacing.modes.VVIR import VVIR
 from main.views import MainPage
 from main.views.AppFrameBase import AppFrameBase
 
-
 def entry_to_value(entry):
     entry_string = entry.get()
     return float(entry_string) if entry_string != "" else None
@@ -55,7 +54,7 @@ class PacingConfigPage(AppFrameBase):
         self.boxesToDisplay = [True, True, True, False, True, False, False, False, False, False, False, False, False, False]
 
         self.connectionStateText = tk.Label(self, bg="gray", text="Connection Not Established")
-        self.connectionStateText.config(font=("Helvetica", 25), foreground="white")
+        self.connectionStateText.config(font=("Helvetica", 25), foreground="black")
         # self.connectionStateText.grid(row=0, column=0, columnspan=4, padx=(self.xPadding, 0), pady=(20, 0), sticky=tk.N)
         self.connectionStateText.place(relx=0.325, rely=0.03, anchor='nw')
 
@@ -380,6 +379,22 @@ class PacingConfigPage(AppFrameBase):
         self.usrVentricularSensitivity.set(
             "" if (ventricularSensitivitySlice == "null") else ventricularSensitivitySlice)
 
+        #Set up labels based on pacing status
+        if self.serial_indicators.isConnected():
+            self.connectionStateText.config(text="Connection Established", foreground="white",
+                                            background="green")
+            if self.serial_indicators.getLastConnectionID() is not None or self.serial_indicators.getCurrConnectionID() is not None:
+                self.currID.config(text=str(self.serial_indicators.getCurrConnectionID()))
+                self.prevID.config(text=str(self.serial_indicators.getLastConnectionID()))
+            else:
+                self.currID.config(text="None")
+                self.prevID.config(text="None")
+        else:
+            self.connectionStateText.config(text="Connection Not Established", foreground="black",
+                                            background="gray")
+            self.currID.config(text="None")
+            self.prevID.config(text="None")
+
         # Set up background thread
         self.threadController = True
         self.isConnectionEstablished = False
@@ -682,8 +697,6 @@ class PacingConfigPage(AppFrameBase):
             if self.pacingSelection.get() == "VOOR":
                 pacing_mode.__class__ = VOOR
 
-            # transmit serial data:
-            # self.serial_service.send_pacing_data(pacing_mode)
             pacingErrorStr = pacing_mode.validation_result.error
             display_error_message = not pacing_mode.validation_result.success
         except Exception as e:
@@ -700,30 +713,57 @@ class PacingConfigPage(AppFrameBase):
             self.user_service.update_pacing_mode(self.username, pacing_mode)
 
             self.errorLabel.config(text="", width=1)  # Shrink to remove, deleting wasn't working
-            self.saveDeviceLabel.config(bg="green", fg="black")
+
 
             # Update displayed programmed mode
             self.currUserJson = self.load_current_user_json()
             self.actualModeLabel.config(text=self.currUserJson["pacing_mode_name"])
 
+            # Update saving indicator
+            self.saveDeviceLabel.config(bg="green", fg="black")
+            tk.Tk().after(200, lambda: self.saveDeviceLabel.config(bg="gray", fg="white"))
+            tk.Tk().after(200, lambda: self.saveDeviceLabel.config(bg="green", fg="black"))
+            tk.Tk().after(200, lambda: self.saveDeviceLabel.config(bg="gray", fg="white"))
+            tk.Tk().after(200, lambda: self.saveDeviceLabel.config(bg="green", fg="black"))
+            tk.Tk().after(200, lambda: self.saveDeviceLabel.config(bg="gray", fg="white"))
+            tk.Tk().after(200, lambda: self.saveDeviceLabel.config(bg="green", fg="black"))
+            tk.Tk().after(200, lambda: self.saveDeviceLabel.config(bg="gray", fg="white"))
+            tk.Tk().after(200, lambda: self.saveDeviceLabel.config(bg="green", fg="black"))
+            tk.Tk().after(200, lambda: self.saveDeviceLabel.config(bg="gray", fg="white"))
+
+            # transmit serial data:
+            self.serial_service.send_pacing_data(pacing_mode)
+
+
     # Thread to check connection status. Condition will change to self.serial_service.is_connection_established()
+    # This is essentially a background thread for serial data
     def MyThread(self):
+        # start by trying to connect to the pacemaker
+        if not self.serial_indicators.isConnected():
+            self.serial_service.connect_to_pacemaker()
+            if self.serial_service.is_connection_established():
+                self.serial_indicators.setConnection(True)
+                self.serial_indicators.setCurrConnectionID(self.serial_service.get_device_ID())
+                self.serial_indicators.setLastConnectionID(self.serial_service.get_last_device_connected())
+
         while self.threadController:
-            if not (self.threadController):
+            if not self.threadController:
                 break
             time.sleep(1)
-            if (not (self.threadController)):
+            if not self.threadController:
                 break
-            if self.isConnectionEstablished:
-                self.connectionStateText.config(text="Connection Established", foreground="white", background="green")
-                self.currID.config(text=str(123456))
-                self.prevID.config(text=str(654321))
-                print("YES")
+            if self.serial_indicators.isConnected():
+                self.connectionStateText.config(text="Connection Established", foreground="white",
+                                                background="green")
+                if self.serial_indicators.getLastConnectionID() is not None or self.serial_indicators.getCurrConnectionID() is not None:
+                    self.currID.config(text=str(self.serial_indicators.getCurrConnectionID()))
+                    self.prevID.config(text=str(self.serial_indicators.getLastConnectionID()))
+                else:
+                    self.currID.config(text="None")
+                    self.prevID.config(text="None")
             else:
                 self.connectionStateText.config(text="Connection Not Established", foreground="black",
                                                 background="gray")
                 self.currID.config(text="None")
                 self.prevID.config(text="None")
-                print("NO")
-            self.isConnectionEstablished = not self.isConnectionEstablished
-        print("DONE")
+                print("NOT CONNECTED")

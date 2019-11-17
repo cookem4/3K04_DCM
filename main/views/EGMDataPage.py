@@ -68,14 +68,13 @@ class EGMDataPage(AppFrameBase):
 
         f = Figure(figsize=(10, 4), dpi=100)
         self.a = f.add_subplot(111)
-        self.a.plot([0], [0])
-        # a.title("EGM Data for Device 123345")
-        # a.xlabel("Time (s)")
-        # a.ylabel("Voltage")
+        #self.a.plot([0], [0])
+        self.a.set_xlabel("Time (ms)")
+        self.a.set_ylabel("Voltage")
 
-        canvas = FigureCanvasTkAgg(f, self)
-        canvas.draw()
-        canvas.get_tk_widget().grid(row=3, column=0, columnspan=3, padx=(135, 0), pady=(30, 0), sticky=tk.W)
+        self.canvas = FigureCanvasTkAgg(f, self)
+        #self.canvas.draw()
+        self.canvas.get_tk_widget().grid(row=3, column=0, columnspan=3, padx=(135, 0), pady=(30, 0), sticky=tk.W)
 
         #Setup labels based on pacing status
         if self.serial_indicators.isConnected():
@@ -94,17 +93,14 @@ class EGMDataPage(AppFrameBase):
     def drop_down_callback(self, *args):
         print(self.displaySelection.get())
         if self.graphingEnabled:
-            f = Figure(figsize=(10, 4), dpi=100)
-            self.a = f.add_subplot(111)
+            self.a.cla()
             if self.displaySelection.get() == 'Atrium':
                 self.a.plot(range(len(self.setToGraph[0])), self.setToGraph[0])
             elif self.displaySelection.get() == 'Ventrical':
                 self.a.plot(range(len(self.setToGraph[1])), self.setToGraph[1])
             elif self.displaySelection.get() == 'Both':
                 self.a.plot(range(len(self.setToGraph[0])), self.setToGraph[0], self.setToGraph[1])
-            canvas = FigureCanvasTkAgg(f, self)
-            canvas.draw()
-            canvas.get_tk_widget().grid(row=3, column=0, columnspan=3, padx=(135, 0), pady=(30, 0), sticky=tk.W)
+            self.canvas.draw()
 
     def load_current_user_json(self):
         return self.user_service.read(self.username).to_json()
@@ -124,24 +120,18 @@ class EGMDataPage(AppFrameBase):
         else:
             self.startBtn.config(text="Start")
         if self.graphingEnabled:
-            f = Figure(figsize=(10, 4), dpi=100)
-            self.a = f.add_subplot(111)
+            self.a.cla()
             if self.displaySelection.get() == 'Atrium':
                 self.a.plot(range(len(self.setToGraph[0])), self.setToGraph[0])
             elif self.displaySelection.get() == 'Ventrical':
                 self.a.plot(range(len(self.setToGraph[1])), self.setToGraph[1])
             elif self.displaySelection.get() == 'Both':
                 self.a.plot(range(len(self.setToGraph[0])), self.setToGraph[0], self.setToGraph[1])
-            canvas = FigureCanvasTkAgg(f, self)
-            canvas.draw()
-            canvas.get_tk_widget().grid(row=3, column=0, columnspan=3, padx=(135, 0), pady=(30, 0), sticky=tk.W)
+            self.canvas.draw()
         else:
-            f = Figure(figsize=(10, 4), dpi=100)
-            self.a = f.add_subplot(111)
+            self.a.cla()
             self.a.plot([0], [0])
-            canvas = FigureCanvasTkAgg(f, self)
-            canvas.draw()
-            canvas.get_tk_widget().grid(row=3, column=0, columnspan=3, padx=(135, 0), pady=(30, 0), sticky=tk.W)
+            self.canvas.draw()
 
     def go_back(self):
         self.parent.switch_frame(MainPage.MainPage)
@@ -183,17 +173,12 @@ class EGMDataPage(AppFrameBase):
             self.addCntr = self.addCntr + 1
             self.setToGraph[0].append(math.sin(self.addCntr))
             self.setToGraph[1].append(self.addCntr**0.5)
-            self.a.clear()
-            f = Figure(figsize=(10, 4), dpi=100)
-            self.a = f.add_subplot(111)
+            self.a.cla()
             if self.displaySelection.get() == 'Atrium':
                 self.a.plot(range(len(self.setToGraph[0])), self.setToGraph[0])
             elif self.displaySelection.get() == 'Ventrical':
                 self.a.plot(range(len(self.setToGraph[1])), self.setToGraph[1])
             elif self.displaySelection.get() == 'Both':
                 self.a.plot(range(len(self.setToGraph[0])), self.setToGraph[0], self.setToGraph[1])
-            #f.xlabel("Time", axes=self.a)
-            #f.ylabel("Voltage (V)", axes=self.a)
-            canvas = FigureCanvasTkAgg(f, self)
-            canvas.draw()
-            canvas.get_tk_widget().grid(row=3, column=0, columnspan=3, padx=(135, 0), pady=(30, 0), sticky=tk.W)
+
+            self.canvas.draw()

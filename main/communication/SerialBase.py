@@ -8,7 +8,7 @@ from main.data.serial.SerialIdentifier import SerialIdentifier
 
 
 class SerialBase:
-    RESPONSE_TIME_LIMIT = 15  # seconds
+    RESPONSE_TIME_LIMIT = 10  # seconds
     TIMEOUT = 5  # minutes
 
     def __init__(self, port, baudrate=115200, bytesize=EIGHTBITS):

@@ -26,10 +26,10 @@ class SerialCommunicator(SerialBase, SerialInterface):
         return True
 
     def get_device_ID(self) -> int:
-        return self.device_id
+        return int(self.device_id, 16)
 
     def get_last_device_connected(self) -> str:
-        return self.device_id
+        return str(int(self.device_id, 16))
 
     def is_pacing_being_saved(self) -> bool:
         return self.listen_for_egm

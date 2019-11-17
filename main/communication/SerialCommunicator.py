@@ -1,123 +1,84 @@
-import time
-from datetime import datetime, timedelta
+from threading import Thread
 
-from serial import SerialTimeoutException, SerialException, EIGHTBITS, Serial, to_bytes
+from serial import EIGHTBITS
 
+from main.communication.SerialBase import SerialBase
+from main.communication.SerialDecorator import serial_safe_methods, serial_ignore
+from main.communication.interfaces.SerialInterface import SerialInterface
+from main.data.egm.EGMPoint import EGMPoint
 from main.data.pacing.PacingMode import PacingMode
 from main.data.pacing.modes.DOOR import DOOR
 from main.data.serial.SerialIdentifier import SerialIdentifier
 
-RESPONSE_TIME_LIMIT = 15  # seconds
-TIMEOUT = 5  # minutes
 
-serial = None
-port: str = "COM1"
-baudrate = 115200
-time_since_last_usage = 0
-listen_for_egm = False
+@serial_safe_methods
+class SerialCommunicator(SerialBase, SerialInterface):
 
+    def __init__(self, port, baudrate=115200, bytesize=EIGHTBITS):
+        super().__init__(port, baudrate, bytesize)
+        self.device_id = bytes(0)
+        self.listen_for_egm = False
+        self.egm_thread = None
+        self.egm_data = []
 
-def set_port(new_port: str):
-    global port
-    port = new_port
+    @property
+    def run_serial_decorator(self):
+        return True
 
+    def get_device_ID(self) -> int:
+        return self.device_id
 
-def serial_safe(serial_using_function):
-    def new_function(*args, **kwargs):
-        global time_since_last_usage
-        time_since_last_usage = datetime.now()
-        output = None
-        try:
-            open_serial()
-            output = serial_using_function(*args, **kwargs)
-            close_serial()
-        except (SerialException, SerialTimeoutException, Exception) as e:
-            close_serial()
-            print(e)
-        return output
+    def get_last_device_connected(self) -> str:
+        return self.device_id
 
-    return new_function
+    def is_pacing_being_saved(self) -> bool:
+        return self.listen_for_egm
 
-
-def open_serial():
-    global serial
-    if serial is None:
-        serial = Serial(
-            port=port,
-            baudrate=baudrate,
-            write_timeout=0,
-            bytesize=EIGHTBITS)
-    else:
-        if not serial.is_open:
-            serial.open()
-
-
-def close_serial():
-    global serial
-    if serial is not None and serial.is_open:
-        serial.close()
-
-
-def check_response(expected_response: SerialIdentifier):
-    for i in range(RESPONSE_TIME_LIMIT):
-        out = serial.read(2)
-        if out != '':
-            print(out)
-        if int(out) == int(expected_response.value.hex()):
-            return True
-        time.sleep(1)
-    return False
-
-
-def await_data(response_size):
-    for i in range(RESPONSE_TIME_LIMIT):
-        out = serial.read(response_size)
-        if len(out) == response_size:
-            return out
-    return []
-
-
-def send(identifier: SerialIdentifier, data_bytearray: bytearray = bytearray(0)):
-    bytes_to_send = to_bytes(identifier.value + data_bytearray)
-    serial.write(bytes_to_send)
-
-
-class SerialCommunicator:
-
-    def __init__(self, com_port: str):
-        set_port(com_port)
-        self.device_id = None
-
-    @serial_safe
     def connect_to_pacemaker(self):
-        send(SerialIdentifier.CONNECT)
-        check_response(SerialIdentifier.CONNECT)
-        self.device_id = await_data(6)
+        self.send(SerialIdentifier.CONNECT)
+        self.check_response(SerialIdentifier.CONNECT)
+        self.device_id = self.await_data(6)
 
-    @serial_safe
+    def disconnect_from_pacemaker(self):
+        self.send(SerialIdentifier.DISCONNECT)
+
     def send_pacing_data(self, data: PacingMode):
-        send(SerialIdentifier.SEND_DATA, data.serialize())
-        return check_response(SerialIdentifier.RECEIVED_DATA)
+        self.send(SerialIdentifier.SEND_DATA, data.serialize())
+        return self.check_response(SerialIdentifier.RECEIVED_DATA)
 
-    @serial_safe
     def is_connection_established(self):
-        send(SerialIdentifier.PING)
-        return check_response(SerialIdentifier.PING)
+        self.send(SerialIdentifier.PING)
+        return self.check_response(SerialIdentifier.PING)
 
-    def check_timeout(self):
-        global time_since_last_usage
-        if time_since_last_usage - datetime.now() > timedelta(minutes=TIMEOUT):
-            return False
-        else:
-            return True
+    @serial_ignore
+    def egm_loop(self):
+        while self.listen_for_egm:
+            if self.serial.inWaiting() == 14:
+                raw_egm_data = self.serial.read(self.serial.inWaiting())
+                atrium_byte = int(raw_egm_data[:2], 16)
+                atrium_time_byte = int(raw_egm_data[2:6], 16)
+                ventricle_byte = int(raw_egm_data[6:8], 16)
+                ventricle_time_byte = int(raw_egm_data[8:12], 16)
+                egm_point = EGMPoint(atrium_byte, ventricle_byte, atrium_time_byte, ventricle_time_byte)
+                self.egm_data.append(egm_point)
 
+    def request_EGM_data(self):
+        self.send(SerialIdentifier.REQUEST_EGM)
+        self.listen_for_egm = True
+        self.egm_thread = Thread(target=self.egm_loop)
+        self.egm_thread.start()
 
-def test():
-    paceDOOR = DOOR(33, 200, 3, 3, 4, 4, 100, 225)
-    com: SerialCommunicator = SerialCommunicator("COM1")
-    result = com.send_pacing_data(paceDOOR)
-    print(result)
+    def end_egm_data(self):
+        self.send(SerialIdentifier.STOP_EGM)
+        self.listen_for_egm = False
+        self.egm_thread.join()
+
+    def get_graphing_data(self) -> list:
+        return self.egm_data
 
 
 if __name__ == '__main__':
-    test()
+    paceDOOR = DOOR(33, 200, 3, 3, 4, 4, 100, 225)
+    com = SerialCommunicator("COM1")
+    result = com.send_pacing_data(paceDOOR)
+    print("woo" if result else "nards")

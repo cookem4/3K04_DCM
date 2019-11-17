@@ -18,10 +18,6 @@ class SerialInterface(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def receive_EGM_data(self) -> list:
-        pass
-
-    @abc.abstractmethod
     def check_timeout(self) -> bool:
         pass
 

@@ -10,6 +10,7 @@ from threading import Thread
 import time
 matplotlib.use("TkAgg")
 import math
+import multiprocessing
 
 class EGMDataPage(AppFrameBase):
 
@@ -42,7 +43,7 @@ class EGMDataPage(AppFrameBase):
         self.backBtn.grid(row=4, column=0, columnspan=1, pady=(20, 0), padx=(15, 0), sticky=tk.W)
 
         self.startBtn = tk.Button(self, text="Start", width=8, height=1, command=self.toggleGraphing)
-        self.startBtn.config(state = tk.DISABLED)
+        #self.startBtn.config(state = tk.DISABLED)
         self.startBtn.config(font=("Helvetica", 10))
         self.startBtn.grid(row=2, column=1, columnspan=1, pady=(20, 0), padx=(150, 0), sticky=tk.W)
         self.graphingEnabled = False
@@ -87,8 +88,8 @@ class EGMDataPage(AppFrameBase):
         #configure thread control variable
         self.threadControllerGrahping = False
         self.threadControllerLabel = True
-        self.myThread2 = Thread(target = self.MyThread2, args = ())
-        self.myThread2.start()
+        self.connectionThread = Thread(target = self.ConnectionThread, args = ())
+        self.connectionThread.start()
 
     def drop_down_callback(self, *args):
         print(self.displaySelection.get())
@@ -114,7 +115,7 @@ class EGMDataPage(AppFrameBase):
             self.setToGraph = [[],[]]
         else:
             self.threadControllerGrahping = True
-            myThread = Thread(target = self.MyThread, args = ())
+            myThread = Thread(target = self.GraphingThread, args = ())
             myThread.start()
 
         self.graphingEnabled = not self.graphingEnabled
@@ -147,7 +148,7 @@ class EGMDataPage(AppFrameBase):
         self.threadControllerGrahping = False
         self.threadControllerLabel = False
 
-    def MyThread2(self):
+    def ConnectionThread(self):
         ###This thread will disable the start button if there is no connection and if disconnection occurs while
         ### a device is connected it will act to end graphing then disable the button
         # start by trying to connect to the pacemaker
@@ -170,7 +171,7 @@ class EGMDataPage(AppFrameBase):
             else:
                 self.connectionStateText.config(text = "Connection Not Established", foreground="black", background = "gray")
 
-    def MyThread(self):
+    def GraphingThread(self):
         #want to set thread controller based on if a device is connected
         while self.threadControllerGrahping:
             print("Graphing...")

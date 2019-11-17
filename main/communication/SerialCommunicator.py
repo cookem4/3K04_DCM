@@ -1,9 +1,10 @@
+import time
 from threading import Thread
 
 from serial import EIGHTBITS
 
 from main.communication.SerialBase import SerialBase
-from main.communication.SerialDecorator import serial_safe_methods, serial_ignore
+from main.communication.SerialDecorator import serial_safe_methods, leave_serial_open
 from main.communication.interfaces.SerialInterface import SerialInterface
 from main.data.egm.EGMPoint import EGMPoint
 from main.data.pacing.PacingMode import PacingMode
@@ -50,18 +51,20 @@ class SerialCommunicator(SerialBase, SerialInterface):
         self.send(SerialIdentifier.PING)
         return self.check_response(SerialIdentifier.PING)
 
-    @serial_ignore
     def egm_loop(self):
         while self.listen_for_egm:
-            if self.serial.inWaiting() == 14:
-                raw_egm_data = self.serial.read(self.serial.inWaiting())
+            if self.serial.inWaiting() >= 14:
+                raw_egm_data = self.serial.read(12)
                 atrium_byte = int(raw_egm_data[:2], 16)
                 atrium_time_byte = int(raw_egm_data[2:6], 16)
                 ventricle_byte = int(raw_egm_data[6:8], 16)
                 ventricle_time_byte = int(raw_egm_data[8:12], 16)
                 egm_point = EGMPoint(atrium_byte, ventricle_byte, atrium_time_byte, ventricle_time_byte)
+                print(str(egm_point))
                 self.egm_data.append(egm_point)
+        time.sleep(.1)
 
+    @leave_serial_open
     def request_EGM_data(self):
         self.send(SerialIdentifier.REQUEST_EGM)
         self.listen_for_egm = True
@@ -78,7 +81,17 @@ class SerialCommunicator(SerialBase, SerialInterface):
 
 
 if __name__ == '__main__':
-    paceDOOR = DOOR(33, 200, 3, 3, 4, 4, 100, 225)
+    paceDOOR = DOOR(lower_rate_limit=33,
+                    upper_rate_limit=200,
+                    atrial_amplitude=3,
+                    atrial_pulse_width=3,
+                    ventricular_amplitude=4,
+                    ventricular_pulse_width=4,
+                    activity_threshold=5,
+                    reaction_time=20,
+                    recovery_time=12,
+                    av_delay=225)
     com = SerialCommunicator("COM1")
-    result = com.send_pacing_data(paceDOOR)
-    print("woo" if result else "nards")
+    com.request_EGM_data()
+    time.sleep(30)
+    com.end_egm_data()

@@ -18,31 +18,52 @@ def serial_safe_methods(serial_using_class: SerialBase):
                 pass
 
             x = self.oInstance.__getattribute__(item)
-            if callable(x) and hasattr(self.oInstance, 'run_serial_decorator') and x.__name__ != "function_to_ignore":
-                return self.serial_safe(x)
+            if callable(x) and hasattr(self.oInstance, 'run_serial_decorator'):
+                if x.__name__ == "dont_close_serial":
+                    return self.open_serial_before(x)
+                else:
+                    return self.close_serial_after(self.open_serial_before(x))
             else:
                 return x
 
-        def serial_safe(self, serial_using_function):
+        # def serial_safe(self, serial_using_function):
+        #     def new_function(*args, **kwargs):
+        #         self.oInstance.time_since_last_call = datetime.now()
+        #         output = None
+        #         try:
+        #             self.oInstance.open()
+        #             output = serial_using_function(*args, **kwargs)
+        #             self.oInstance.close()
+        #         except (SerialException, SerialTimeoutException, Exception) as e:
+        #             self.oInstance.close()
+        #             print(e)
+        #         return output
+        #
+        #     return new_function
+
+        def open_serial_before(self, serial_using_function):
             def new_function(*args, **kwargs):
                 self.oInstance.time_since_last_call = datetime.now()
-                output = None
+                self.oInstance.open()
+                return serial_using_function(*args, **kwargs)
+            return new_function
+
+        def close_serial_after(self, serial_using_function):
+            def new_function(*args, **kwargs):
                 try:
-                    self.oInstance.open()
                     output = serial_using_function(*args, **kwargs)
                     self.oInstance.close()
                 except (SerialException, SerialTimeoutException, Exception) as e:
                     self.oInstance.close()
                     print(e)
                 return output
-
             return new_function
 
     return DecoratorClass
 
 
-def serial_ignore(func):
-    def function_to_ignore(*args, **kwargs):
+def leave_serial_open(func):
+    def dont_close_serial(*args, **kwargs):
         return func(*args, **kwargs)
 
-    return function_to_ignore
+    return dont_close_serial

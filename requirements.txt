@@ -86,7 +86,7 @@ tqdm==4.33.0
 traitlets==4.3.2
 twofish==0.3.0
 tzlocal==1.5.1
-urllib3==1.24.1
+urllib3==1.24.2
 vine==1.3.0
 virtualenv==16.7.2
 waitress==1.3.0

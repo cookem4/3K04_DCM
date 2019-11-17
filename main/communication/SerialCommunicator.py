@@ -17,14 +17,11 @@ class SerialCommunicator(SerialBase, SerialInterface):
 
     def __init__(self, port, baudrate=115200, bytesize=EIGHTBITS):
         super().__init__(port, baudrate, bytesize)
+        self.run_serial_decorator = True  # This is neccessary to stop the decorator from going into an infinite loop
         self.device_id = bytes(0)
         self.listen_for_egm = False
         self.egm_thread = None
         self.egm_data = []
-
-    @property
-    def run_serial_decorator(self):
-        return True
 
     def get_device_ID(self) -> int:
         return int(self.device_id, 16)

@@ -26,26 +26,12 @@ def serial_safe_methods(serial_using_class: SerialBase):
             else:
                 return x
 
-        # def serial_safe(self, serial_using_function):
-        #     def new_function(*args, **kwargs):
-        #         self.oInstance.time_since_last_call = datetime.now()
-        #         output = None
-        #         try:
-        #             self.oInstance.open()
-        #             output = serial_using_function(*args, **kwargs)
-        #             self.oInstance.close()
-        #         except (SerialException, SerialTimeoutException, Exception) as e:
-        #             self.oInstance.close()
-        #             print(e)
-        #         return output
-        #
-        #     return new_function
-
         def open_serial_before(self, serial_using_function):
             def new_function(*args, **kwargs):
                 self.oInstance.time_since_last_call = datetime.now()
                 self.oInstance.open()
                 return serial_using_function(*args, **kwargs)
+
             return new_function
 
         def close_serial_after(self, serial_using_function):
@@ -57,6 +43,7 @@ def serial_safe_methods(serial_using_class: SerialBase):
                     self.oInstance.close()
                     print(e)
                 return output
+
             return new_function
 
     return DecoratorClass

@@ -1,6 +1,7 @@
 import tkinter as tk
 
 import matplotlib
+matplotlib.use("Agg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 
@@ -8,7 +9,6 @@ from main.views import MainPage
 from main.views.AppFrameBase import AppFrameBase
 from threading import Thread
 import time
-matplotlib.use("TkAgg")
 import math
 import multiprocessing
 

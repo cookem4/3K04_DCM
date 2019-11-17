@@ -52,12 +52,10 @@ class SerialCommunicator(SerialBase, SerialInterface):
         while self.listen_for_egm:
             if self.serial.inWaiting() >= 14:
                 raw_egm_data = self.serial.read(12)
-                atrium_byte = int(raw_egm_data[:2], 16)
-                atrium_time_byte = int(raw_egm_data[2:6], 16)
-                ventricle_byte = int(raw_egm_data[6:8], 16)
-                ventricle_time_byte = int(raw_egm_data[8:12], 16)
-                egm_point = EGMPoint(atrium_byte, ventricle_byte, atrium_time_byte, ventricle_time_byte)
-                print(str(egm_point))
+                time_byte = int(raw_egm_data[:4], 16)
+                atrium_byte = int(raw_egm_data[4:8], 16)
+                ventricle_byte = int(raw_egm_data[8:12], 16)
+                egm_point = EGMPoint(atrium_byte, ventricle_byte, time_byte)
                 self.egm_data.append(egm_point)
         time.sleep(.1)
 

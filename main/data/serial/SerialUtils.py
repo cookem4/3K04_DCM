@@ -1,18 +1,22 @@
 from math import floor
 
+from serial import SerialException
 
-def to_serial_byte(val, max_value):
+
+def to_serial_byte(val, max_value=65535):
     if val is None:
         return None
+    if val > max_value:
+        raise SerialException("to_serial_byte: val {0} must be less than max {1}".format(val, max_value))
     int_val = round(val * 65535 / max_value)
     msb = floor(int_val / 256)
     lsb = int_val % 256
     return [msb, lsb]
 
 
-def double_byte_to_value(double_byte: list, max_value):
+def double_byte_to_value(double_byte: list, max_value=65535):
     int_val = 256 * double_byte[0] + double_byte[1]
-    return max_value * int_val / 65535
+    return round(max_value * int_val / 65535, 2)
 
 
 def flatten_to_bytearray(list_of_lists) -> bytearray:

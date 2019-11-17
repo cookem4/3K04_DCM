@@ -9,3 +9,6 @@ class SerialIdentifier(enum.Enum):
     STOP_EGM = bytes([3])
     PING = bytes([4])
     DISCONNECT = bytes([5])
+
+
+

@@ -36,6 +36,7 @@ def serial_safe_methods(serial_using_class: SerialBase):
 
         def close_serial_after(self, serial_using_function):
             def new_function(*args, **kwargs):
+                output = None
                 try:
                     output = serial_using_function(*args, **kwargs)
                     self.oInstance.close()

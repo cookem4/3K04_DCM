@@ -8,7 +8,9 @@ error_messages = {
     "VPW": "Ventricular pulse width must be between 0-5",
     "VRP": "VRP must be between 150-500",
     "ARP": "ARP must be between 150-500",
-    "SR": "Sensor rate must be between 50-175",
+    "AT": "Activity threshold must be between 0-6",
+    "REACT": "Reaction time must be between 10-50",
+    "RECT": "Recovery time must be between 2-16",
     "AV": "AV delay must be between 70-300",
     "AS": "Atrial Sensitivity must be between 1-10",
     "VS": "Ventricular Sensitivity must be between 1-10"
@@ -30,7 +32,9 @@ class PM_LIMIT:
     VENTRICULAR_PULSE_WIDTH = {"min": 0, "max": 5}
     VRP = {"min": 150, "max": 500}
     ARP = {"min": 150, "max": 500}
-    SENSOR_RATE = {"min": 50, "max": 175}
+    ACTIVITY_THRESHOLD = {"min": 0, "max": 6}
+    REACTION_TIME = {"min": 10, "max": 50}
+    RECOVERY_TIME = {"min": 2, "max": 16}
     AV_DELAY = {"min": 70, "max": 300}
     ATRIAL_SENSITIVITY = {"min": 1, "max": 10}
     VENTRICULAR_SENSITIVITY = {"min": 1, "max": 10}
@@ -57,10 +61,12 @@ class PacingValueRange:
                    PM_LIMIT.VRP["min"] <= pm.vrp <= PM_LIMIT.VRP["max"],
             "ARP": pm.arp is None or \
                    PM_LIMIT.ARP["min"] <= pm.arp <= PM_LIMIT.ARP["max"],
-            "SR": pm.sensor_rate is None or \
-                  PM_LIMIT.SENSOR_RATE["min"] <= pm.sensor_rate <= PM_LIMIT.SENSOR_RATE["max"],
-            "AV": pm.av_delay is None or \
-                  PM_LIMIT.AV_DELAY["min"] <= pm.av_delay <= PM_LIMIT.AV_DELAY["max"],
+            "AT": pm.activity_threshold is None or \
+                  PM_LIMIT.ACTIVITY_THRESHOLD["min"] <= pm.activity_threshold <= PM_LIMIT.ACTIVITY_THRESHOLD["max"],
+            "REACT": pm.activity_threshold is None or \
+                  PM_LIMIT.REACTION_TIME["min"] <= pm.reaction_time <= PM_LIMIT.REACTION_TIME["max"],
+            "RECT": pm.av_delay is None or \
+                  PM_LIMIT.RECOVERY_TIME["min"] <= pm.recovery_time <= PM_LIMIT.RECOVERY_TIME["max"],
             "AS": pm.atrial_sensitivity is None or \
                   PM_LIMIT.ATRIAL_SENSITIVITY["min"] <= pm.atrial_sensitivity <= PM_LIMIT.ATRIAL_SENSITIVITY["max"],
             "VS": pm.ventricular_sensitivity is None or \

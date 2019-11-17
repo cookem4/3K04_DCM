@@ -83,6 +83,10 @@ class MainPage(AppFrameBase):
         self.session_service.invalidate()
         self.parent.switch_frame(LoginPage.LoginPage)
         self.threadController = False
+        self.serial_service.disconnect_from_pacemaker()
+        self.serial_indicators.setConnection(False)
+        self.serial_indicators.setLastConnectionID(None)
+        self.serial_indicators.setCurrConnectionID(None)
 
     #May want to make a separate thread that checks for disconnection
 

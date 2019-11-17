@@ -87,20 +87,19 @@ class EGMDataPage(AppFrameBase):
         #configure thread control variable
         self.threadControllerGrahping = False
         self.threadControllerLabel = True
-        self.isConnectionEstablished = False
         self.myThread2 = Thread(target = self.MyThread2, args = ())
         self.myThread2.start()
 
     def drop_down_callback(self, *args):
         print(self.displaySelection.get())
-        if (self.graphingEnabled):
+        if self.graphingEnabled:
             f = Figure(figsize=(10, 4), dpi=100)
             self.a = f.add_subplot(111)
-            if (self.displaySelection.get() == 'Atrium'):
+            if self.displaySelection.get() == 'Atrium':
                 self.a.plot(range(len(self.setToGraph[0])), self.setToGraph[0])
-            elif (self.displaySelection.get() == 'Ventrical'):
+            elif self.displaySelection.get() == 'Ventrical':
                 self.a.plot(range(len(self.setToGraph[1])), self.setToGraph[1])
-            elif (self.displaySelection.get() == 'Both'):
+            elif self.displaySelection.get() == 'Both':
                 self.a.plot(range(len(self.setToGraph[0])), self.setToGraph[0], self.setToGraph[1])
             canvas = FigureCanvasTkAgg(f, self)
             canvas.draw()
@@ -110,7 +109,7 @@ class EGMDataPage(AppFrameBase):
         return self.user_service.read(self.username).to_json()
 
     def toggleGraphing(self):
-        if(self.threadControllerGrahping):
+        if self.threadControllerGrahping:
             self.threadControllerGrahping = False
             self.setToGraph = [[],[]]
         else:
@@ -118,19 +117,19 @@ class EGMDataPage(AppFrameBase):
             myThread = Thread(target = self.MyThread, args = ())
             myThread.start()
 
-        self.graphingEnabled = not (self.graphingEnabled)
-        if (self.graphingEnabled):
+        self.graphingEnabled = not self.graphingEnabled
+        if self.graphingEnabled:
             self.startBtn.config(text="Stop")
         else:
             self.startBtn.config(text="Start")
-        if (self.graphingEnabled):
+        if self.graphingEnabled:
             f = Figure(figsize=(10, 4), dpi=100)
             self.a = f.add_subplot(111)
-            if (self.displaySelection.get() == 'Atrium'):
+            if self.displaySelection.get() == 'Atrium':
                 self.a.plot(range(len(self.setToGraph[0])), self.setToGraph[0])
-            elif (self.displaySelection.get() == 'Ventrical'):
+            elif self.displaySelection.get() == 'Ventrical':
                 self.a.plot(range(len(self.setToGraph[1])), self.setToGraph[1])
-            elif (self.displaySelection.get() == 'Both'):
+            elif self.displaySelection.get() == 'Both':
                 self.a.plot(range(len(self.setToGraph[0])), self.setToGraph[0], self.setToGraph[1])
             canvas = FigureCanvasTkAgg(f, self)
             canvas.draw()
@@ -173,12 +172,12 @@ class EGMDataPage(AppFrameBase):
 
     def MyThread(self):
         #want to set thread controller based on if a device is connected
-        while(self.threadControllerGrahping):
+        while self.threadControllerGrahping:
             print("Graphing...")
-            if(not(self.threadControllerGrahping)):
+            if not self.threadControllerGrahping:
                 break
             time.sleep(0.1)
-            if(not(self.threadControllerGrahping)):
+            if not self.threadControllerGrahping:
                 break
             self.addCntr = self.addCntr + 1
             self.setToGraph[0].append(math.sin(self.addCntr))
@@ -186,11 +185,11 @@ class EGMDataPage(AppFrameBase):
             self.a.clear()
             f = Figure(figsize=(10, 4), dpi=100)
             self.a = f.add_subplot(111)
-            if (self.displaySelection.get() == 'Atrium'):
+            if self.displaySelection.get() == 'Atrium':
                 self.a.plot(range(len(self.setToGraph[0])), self.setToGraph[0])
-            elif (self.displaySelection.get() == 'Ventrical'):
+            elif self.displaySelection.get() == 'Ventrical':
                 self.a.plot(range(len(self.setToGraph[1])), self.setToGraph[1])
-            elif (self.displaySelection.get() == 'Both'):
+            elif self.displaySelection.get() == 'Both':
                 self.a.plot(range(len(self.setToGraph[0])), self.setToGraph[0], self.setToGraph[1])
             #f.xlabel("Time", axes=self.a)
             #f.ylabel("Voltage (V)", axes=self.a)

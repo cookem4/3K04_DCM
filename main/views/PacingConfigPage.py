@@ -719,6 +719,7 @@ class PacingConfigPage(AppFrameBase):
             self.currUserJson = self.load_current_user_json()
             self.actualModeLabel.config(text=self.currUserJson["pacing_mode_name"])
 
+            '''
             # Update saving indicator
             self.saveDeviceLabel.config(bg="green", fg="black")
             tk.Tk().after(200, lambda: self.saveDeviceLabel.config(bg="gray", fg="white"))
@@ -730,7 +731,7 @@ class PacingConfigPage(AppFrameBase):
             tk.Tk().after(200, lambda: self.saveDeviceLabel.config(bg="gray", fg="white"))
             tk.Tk().after(200, lambda: self.saveDeviceLabel.config(bg="green", fg="black"))
             tk.Tk().after(200, lambda: self.saveDeviceLabel.config(bg="gray", fg="white"))
-
+            '''
             # transmit serial data:
             self.serial_service.send_pacing_data(pacing_mode)
 

@@ -149,17 +149,33 @@ class EGMDataPage(AppFrameBase):
                 self.serial_indicators.setCurrConnectionID(self.serial_service.get_device_ID())
                 self.serial_indicators.setLastConnectionID(self.serial_service.get_last_device_connected())
 
+        if self.serial_indicators.isConnected():
+            self.connectionStateText.config(text = "Connection Established", foreground="white", background = "green")
+            self.startBtn.config(state=tk.NORMAL)
+        else:
+            self.connectionStateText.config(text = "Connection Not Established", foreground="black", background = "gray")
+
+        lastDisconnectCheck = int(round(time.time() * 1000))
         while self.threadControllerLabel:
-            if not self.threadControllerLabel:
-                break
-            time.sleep(1)
-            if not self.threadControllerLabel:
-                break
-            if self.serial_indicators.isConnected():
-                self.connectionStateText.config(text = "Connection Established", foreground="white", background = "green")
-                self.startBtn.config(state=tk.NORMAL)
-            else:
-                self.connectionStateText.config(text = "Connection Not Established", foreground="black", background = "gray")
+            time.sleep(0.5)
+            if int(round(time.time() * 1000)) - lastDisconnectCheck > 10000:
+                if self.serial_service.is_connection_established():
+                    self.serial_indicators.setConnection(True)
+                    self.serial_indicators.setCurrConnectionID(self.serial_service.get_device_ID())
+                    self.serial_indicators.setLastConnectionID(self.serial_service.get_last_device_connected())
+                    self.connectionStateText.config(text="Connection Established", foreground="white",
+                                                    background="green")
+                    self.startBtn.config(state=tk.NORMAL)
+                else:
+                    self.serial_indicators.setConnection(False)
+                    self.serial_indicators.setCurrConnectionID(None)
+                    self.serial_indicators.setLastConnectionID(None)
+                    self.startBtn.config(state=tk.DISABLED)
+                    self.connectionStateText.config(text="Connection Not Established", foreground="black",
+                                                    background="gray")
+                lastDisconnectCheck = int(round(time.time() * 1000))
+
+
 
     def GraphingThread(self):
         #want to set thread controller based on if a device is connected

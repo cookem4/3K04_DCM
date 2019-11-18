@@ -1,8 +1,8 @@
 class SerialConnectionIndicators():
     def __init__(self):
         self.isConnectionEstablished = False
-        self.currConnectionID = 0
-        self.lastConnectionID = 0
+        self.currConnectionID = None
+        self.lastConnectionID = None
 
     def isConnected(self):
         return self.isConnectionEstablished

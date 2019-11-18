@@ -16,6 +16,7 @@ from main.data.pacing.modes.VVIR import VVIR
 from main.views import MainPage
 from main.views.AppFrameBase import AppFrameBase
 
+
 def entry_to_value(entry):
     entry_string = entry.get()
     return float(entry_string) if entry_string != "" else None
@@ -51,7 +52,8 @@ class PacingConfigPage(AppFrameBase):
 
         # Vector that tells us what text entry boxes should be shown
         # This one is to display only the boxes for the AOO mode
-        self.boxesToDisplay = [True, True, True, False, True, False, False, False, False, False, False, False, False, False]
+        self.boxesToDisplay = [True, True, True, False, True, False, False, False, False, False, False, False, False,
+                               False]
 
         self.connectionStateText = tk.Label(self, bg="gray", text="Connection Not Established")
         self.connectionStateText.config(font=("Helvetica", 25), foreground="black")
@@ -234,8 +236,9 @@ class PacingConfigPage(AppFrameBase):
         self.activityThresholdLabel = tk.Label(self, bg="black", text="Activity Threshold:")
         self.activityThresholdLabel.config(font=(25), foreground="white")
 
-        self.activityThresholdEntry = tk.Entry(self, textvariable=self.usrActivityThreshold, width=10, font=(25), bg=self.enabled_bg,
-                                        disabledbackground=self.disabled_bg)
+        self.activityThresholdEntry = tk.Entry(self, textvariable=self.usrActivityThreshold, width=10, font=(25),
+                                               bg=self.enabled_bg,
+                                               disabledbackground=self.disabled_bg)
 
         self.activityThresholdUnit = tk.Label(self, bg="black", text="Very Low - High (0-6)")
         self.activityThresholdUnit.config(font=(25), foreground="white")
@@ -245,8 +248,9 @@ class PacingConfigPage(AppFrameBase):
         self.reactionTimeLabel = tk.Label(self, bg="black", text="Reaction Time:")
         self.reactionTimeLabel.config(font=(25), foreground="white")
 
-        self.reactionTimeEntry = tk.Entry(self, textvariable=self.usrReactionTime, width=10, font=(25), bg=self.enabled_bg,
-                                        disabledbackground=self.disabled_bg)
+        self.reactionTimeEntry = tk.Entry(self, textvariable=self.usrReactionTime, width=10, font=(25),
+                                          bg=self.enabled_bg,
+                                          disabledbackground=self.disabled_bg)
 
         self.reactionTimeUnit = tk.Label(self, bg="black", text="sec")
         self.reactionTimeUnit.config(font=(25), foreground="white")
@@ -256,12 +260,13 @@ class PacingConfigPage(AppFrameBase):
         self.recoveryTimeLabel = tk.Label(self, bg="black", text="Recovery Time:")
         self.recoveryTimeLabel.config(font=(25), foreground="white")
 
-        self.recoveryTimeEntry = tk.Entry(self, textvariable=self.usrRecoveryTime, width=10, font=(25), bg=self.enabled_bg,
-                                        disabledbackground=self.disabled_bg)
+        self.recoveryTimeEntry = tk.Entry(self, textvariable=self.usrRecoveryTime, width=10, font=(25),
+                                          bg=self.enabled_bg,
+                                          disabledbackground=self.disabled_bg)
 
         self.recoveryTimeUnit = tk.Label(self, bg="black", text="min")
         self.recoveryTimeUnit.config(font=(25), foreground="white")
-        
+
         #########################
 
         self.avDelayLabel = tk.Label(self, bg="black", text="Fixed AV Delay:")
@@ -338,17 +343,20 @@ class PacingConfigPage(AppFrameBase):
                    self.currUserJson["pacing_mode_settings"].index("vrp\": ") + len("vrp\": "):self.currUserJson[
                        "pacing_mode_settings"].index(", \"activity_threshold\": ")]
         activityThresholdSlice = self.currUserJson["pacing_mode_settings"][
-                          self.currUserJson["pacing_mode_settings"].index("activity_threshold\": ") + len("activity_threshold\": "):
-                          self.currUserJson[
-                              "pacing_mode_settings"].index(", \"reaction_time\": ")]
+                                 self.currUserJson["pacing_mode_settings"].index("activity_threshold\": ") + len(
+                                     "activity_threshold\": "):
+                                 self.currUserJson[
+                                     "pacing_mode_settings"].index(", \"reaction_time\": ")]
         reactionTimeSlice = self.currUserJson["pacing_mode_settings"][
-                          self.currUserJson["pacing_mode_settings"].index("reaction_time\": ") + len("reaction_time\": "):
-                          self.currUserJson[
-                              "pacing_mode_settings"].index(", \"recovery_time\": ")]
+                            self.currUserJson["pacing_mode_settings"].index("reaction_time\": ") + len(
+                                "reaction_time\": "):
+                            self.currUserJson[
+                                "pacing_mode_settings"].index(", \"recovery_time\": ")]
         recoveryTimeSlice = self.currUserJson["pacing_mode_settings"][
-                          self.currUserJson["pacing_mode_settings"].index("recovery_time\": ") + len("recovery_time\": "):
-                          self.currUserJson[
-                              "pacing_mode_settings"].index(", \"av_delay\": ")]
+                            self.currUserJson["pacing_mode_settings"].index("recovery_time\": ") + len(
+                                "recovery_time\": "):
+                            self.currUserJson[
+                                "pacing_mode_settings"].index(", \"av_delay\": ")]
         avDelaySlice = self.currUserJson["pacing_mode_settings"][
                        self.currUserJson["pacing_mode_settings"].index("av_delay\": ") + len("av_delay\": "):
                        self.currUserJson[
@@ -379,7 +387,7 @@ class PacingConfigPage(AppFrameBase):
         self.usrVentricularSensitivity.set(
             "" if (ventricularSensitivitySlice == "null") else ventricularSensitivitySlice)
 
-        #Set up labels based on pacing status
+        # Set up labels based on pacing status
         if self.serial_indicators.isConnected():
             self.connectionStateText.config(text="Connection Established", foreground="white",
                                             background="green")
@@ -398,7 +406,7 @@ class PacingConfigPage(AppFrameBase):
         # Set up background thread
         self.threadController = True
         self.isConnectionEstablished = False
-        self.myThread = Thread(target=self.MyThread, args=())
+        self.myThread = Thread(target=self.ConnectThread, args=())
         self.myThread.start()
 
     def load_current_user_json(self):
@@ -424,29 +432,39 @@ class PacingConfigPage(AppFrameBase):
         # Sets which boxes are grayed out based on drop down menu selection
         # Update variables based on drop down selection
         if self.pacingSelection.get() == "AOO":
-            self.boxesToDisplay = [True, True, True, False, True, False, False, False, False, False, False, False, False, False]
+            self.boxesToDisplay = [True, True, True, False, True, False, False, False, False, False, False, False,
+                                   False, False]
             # self.set_states(VLE="disabled", VPW="disabled", ARP="disabled", VRP="disabled")
         if self.pacingSelection.get() == "VOO":
-            self.boxesToDisplay = [True, True, False, True, False, True, False, False, False, False, False, False, False, False]
+            self.boxesToDisplay = [True, True, False, True, False, True, False, False, False, False, False, False,
+                                   False, False]
             # self.set_states(ALE="disabled", APW="disabled", ARP="disabled", VRP="disabled")
         if self.pacingSelection.get() == "AAI":
-            self.boxesToDisplay = [True, True, True, False, True, False, True, False, False, False, False, False, False, False]
+            self.boxesToDisplay = [True, True, True, False, True, False, True, False, False, False, False, False, False,
+                                   False]
             # self.set_states(VLE="disabled", VPW="disabled", VRP="disabled")
         if self.pacingSelection.get() == "VVI":
-            self.boxesToDisplay = [True, True, False, True, False, True, False, True, False, False, False, False, False, False]
+            self.boxesToDisplay = [True, True, False, True, False, True, False, True, False, False, False, False, False,
+                                   False]
             # self.set_states(ALE="disabled", APW="disabled", ARP="disabled")
         if self.pacingSelection.get() == "DOO":
-            self.boxesToDisplay = [True, True, True, True, True, True, False, False, False, False, False, True, False, False]
+            self.boxesToDisplay = [True, True, True, True, True, True, False, False, False, False, False, True, False,
+                                   False]
         if self.pacingSelection.get() == "AOOR":
-            self.boxesToDisplay = [True, True, True, False, True, False, False, False, True, True, True, False, False, False]
+            self.boxesToDisplay = [True, True, True, False, True, False, False, False, True, True, True, False, False,
+                                   False]
         if self.pacingSelection.get() == "VOOR":
-            self.boxesToDisplay = [True, True, False, True, False, True, False, False, True, True, True, False, False, False]
+            self.boxesToDisplay = [True, True, False, True, False, True, False, False, True, True, True, False, False,
+                                   False]
         if self.pacingSelection.get() == "AAIR":
-            self.boxesToDisplay = [True, True, True, False, True, False, True, False, True, True, True, False, True, False]
+            self.boxesToDisplay = [True, True, True, False, True, False, True, False, True, True, True, False, True,
+                                   False]
         if self.pacingSelection.get() == "VVIR":
-            self.boxesToDisplay = [True, True, False, True, False, True, False, True, True, True, True, False, False, True]
+            self.boxesToDisplay = [True, True, False, True, False, True, False, True, True, True, True, False, False,
+                                   True]
         if self.pacingSelection.get() == "DOOR":
-            self.boxesToDisplay = [True, True, True, True, True, True, False, False, True, True, True, True, False, False]
+            self.boxesToDisplay = [True, True, True, True, True, True, False, False, True, True, True, True, False,
+                                   False]
         # Show only if the corresponding vector element is true
         rowCounter = 0.25  # keeps track of what row the entry box is to be displayed in
         if (self.boxesToDisplay[0]):
@@ -714,7 +732,6 @@ class PacingConfigPage(AppFrameBase):
 
             self.errorLabel.config(text="", width=1)  # Shrink to remove, deleting wasn't working
 
-
             # Update displayed programmed mode
             self.currUserJson = self.load_current_user_json()
             self.actualModeLabel.config(text=self.currUserJson["pacing_mode_name"])
@@ -735,36 +752,42 @@ class PacingConfigPage(AppFrameBase):
             # transmit serial data:
             self.serial_service.send_pacing_data(pacing_mode)
 
-
     # Thread to check connection status. Condition will change to self.serial_service.is_connection_established()
     # This is essentially a background thread for serial data
-    def MyThread(self):
+    def ConnectThread(self):
         # start by trying to connect to the pacemaker
+        time.sleep(1)
         if not self.serial_indicators.isConnected():
             self.serial_service.connect_to_pacemaker()
             if self.serial_service.is_connection_established():
                 self.serial_indicators.setConnection(True)
                 self.serial_indicators.setCurrConnectionID(self.serial_service.get_device_ID())
                 self.serial_indicators.setLastConnectionID(self.serial_service.get_last_device_connected())
-
+        lastDisconnectCheck = int(round(time.time() * 1000))
         while self.threadController:
-            if not self.threadController:
-                break
-            time.sleep(1)
-            if not self.threadController:
-                break
-            if self.serial_indicators.isConnected():
-                self.connectionStateText.config(text="Connection Established", foreground="white",
-                                                background="green")
-                if self.serial_indicators.getLastConnectionID() is not None or self.serial_indicators.getCurrConnectionID() is not None:
-                    self.currID.config(text=str(self.serial_indicators.getCurrConnectionID()))
-                    self.prevID.config(text=str(self.serial_indicators.getLastConnectionID()))
+            time.sleep(0.5)
+            if int(round(time.time() * 1000)) - lastDisconnectCheck > 10000:
+                if self.serial_service.is_connection_established():
+                    self.serial_indicators.setConnection(True)
+                    self.serial_indicators.setCurrConnectionID(self.serial_service.get_device_ID())
+                    self.serial_indicators.setLastConnectionID(self.serial_service.get_last_device_connected())
                 else:
+                    self.serial_indicators.setConnection(False)
+                    self.serial_indicators.setCurrConnectionID(None)
+                    self.serial_indicators.setLastConnectionID(None)
+                lastDisconnectCheck = int(round(time.time() * 1000))
+                if self.serial_indicators.isConnected():
+                    self.connectionStateText.config(text="Connection Established", foreground="white",
+                                                    background="green")
+                    if self.serial_indicators.getLastConnectionID() is not None or self.serial_indicators.getCurrConnectionID() is not None:
+                        self.currID.config(text=str(self.serial_indicators.getCurrConnectionID()))
+                        self.prevID.config(text=str(self.serial_indicators.getLastConnectionID()))
+                    else:
+                        self.currID.config(text="None")
+                        self.prevID.config(text="None")
+                else:
+                    self.connectionStateText.config(text="Connection Not Established", foreground="black",
+                                                    background="gray")
                     self.currID.config(text="None")
                     self.prevID.config(text="None")
-            else:
-                self.connectionStateText.config(text="Connection Not Established", foreground="black",
-                                                background="gray")
-                self.currID.config(text="None")
-                self.prevID.config(text="None")
-                print("NOT CONNECTED")
+                    print("NOT CONNECTED")

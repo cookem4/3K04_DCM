@@ -68,12 +68,13 @@ class MainPage(AppFrameBase):
             self.prevIDLabel.config(text="Previous Device ID: None")
 
         self.threadController = True
-        self.myThread = Thread(target = self.MyThread, args = ())
+        self.myThread = Thread(target = self.ConnectionThread, args = ())
         self.myThread.start()
 
     def edit_pacing_modes_callback(self):
-        self.parent.switch_frame(PacingConfigPage.PacingConfigPage)
         self.threadController = False
+        self.parent.switch_frame(PacingConfigPage.PacingConfigPage)
+
 
     def view_current_EGM_data_callback(self):
         self.parent.switch_frame(EGMDataPage.EGMDataPage)
@@ -88,35 +89,66 @@ class MainPage(AppFrameBase):
         self.serial_indicators.setLastConnectionID(None)
         self.serial_indicators.setCurrConnectionID(None)
 
-    #May want to make a separate thread that checks for disconnection
+
 
     #Thread to check connection status. Condition will change to self.serial_service.is_connection_established()
     #This is essentially a background thread for serial data
-    def MyThread(self):
+    def ConnectionThread(self):
         # start by trying to connect to the pacemaker
         if not self.serial_indicators.isConnected():
             self.serial_service.connect_to_pacemaker()
-            if self.serial_service.is_connection_established():
-                self.serial_indicators.setConnection(True)
-                self.serial_indicators.setCurrConnectionID(self.serial_service.get_device_ID())
-                self.serial_indicators.setLastConnectionID(self.serial_service.get_last_device_connected())
+        if self.serial_service.is_connection_established():
+            self.serial_indicators.setConnection(True)
+            self.serial_indicators.setCurrConnectionID(self.serial_service.get_device_ID())
+            self.serial_indicators.setLastConnectionID(self.serial_service.get_last_device_connected())
+        if self.serial_indicators.isConnected():
+            self.connectionStateText.config(text="Connection Established", foreground="white",
+                                            background="green")
+            if self.serial_indicators.getCurrConnectionID() is not None or self.serial_indicators.getLastConnectionID() is not None:
+                self.currIDLabel.config(
+                    text="Connected Device ID: " + str(self.serial_indicators.getCurrConnectionID()))
+                self.prevIDLabel.config(
+                    text="Previous Device ID: " + str(self.serial_indicators.getLastConnectionID()))
+            else:
+                self.currIDLabel.config(text="Connected Device ID: None")
+                self.prevIDLabel.config(text="Previous Device ID: None")
+            print("CONNECTED")
+        else:
+            self.connectionStateText.config(text="Connection Not Established", foreground="black",
+                                            background="gray")
+            self.currIDLabel.config(text="Connected Device ID: None")
+            self.prevIDLabel.config(text="Previous Device ID: None")
+            print("NOT CONNECTED")
 
         while self.threadController:
-            if not self.threadController:
-                break
-            time.sleep(1)
-            if not self.threadController:
-                break
-            if self.serial_indicators.isConnected():
-                self.connectionStateText.config(text = "Connection Established", foreground="white", background = "green")
-                if self.serial_indicators.getCurrConnectionID() is not None or self.serial_indicators.getLastConnectionID() is not None:
-                    self.currIDLabel.config(text = "Connected Device ID: " + str(self.serial_indicators.getCurrConnectionID()))
-                    self.prevIDLabel.config(text = "Previous Device ID: " + str(self.serial_indicators.getLastConnectionID()))
+            time.sleep(0.5)
+            print("HERE" + str(i))
+            i = i + 1
+            if int(round(time.time() * 1000)) - lastDisconnectCheck > 10000:
+                if self.serial_service.is_connection_established():
+                    self.serial_indicators.setConnection(True)
+                    self.serial_indicators.setCurrConnectionID(self.serial_service.get_device_ID())
+                    self.serial_indicators.setLastConnectionID(self.serial_service.get_last_device_connected())
                 else:
+                    self.serial_indicators.setConnection(False)
+                    self.serial_indicators.setCurrConnectionID(None)
+                    self.serial_indicators.setLastConnectionID(None)
+                lastDisconnectCheck = int(round(time.time() * 1000))
+                if self.serial_indicators.isConnected():
+                    self.connectionStateText.config(text="Connection Established", foreground="white",
+                                                    background="green")
+                    if self.serial_indicators.getCurrConnectionID() is not None or self.serial_indicators.getLastConnectionID() is not None:
+                        self.currIDLabel.config(
+                            text="Connected Device ID: " + str(self.serial_indicators.getCurrConnectionID()))
+                        self.prevIDLabel.config(
+                            text="Previous Device ID: " + str(self.serial_indicators.getLastConnectionID()))
+                    else:
+                        self.currIDLabel.config(text="Connected Device ID: None")
+                        self.prevIDLabel.config(text="Previous Device ID: None")
+                    print("CONNECTED")
+                else:
+                    self.connectionStateText.config(text="Connection Not Established", foreground="black",
+                                                    background="gray")
                     self.currIDLabel.config(text="Connected Device ID: None")
                     self.prevIDLabel.config(text="Previous Device ID: None")
-            else:
-                self.connectionStateText.config(text = "Connection Not Established", foreground="black", background = "gray")
-                self.currIDLabel.config(text = "Connected Device ID: None")
-                self.prevIDLabel.config(text = "Previous Device ID: None")
-                print("NOT CONNECTED")
+                    print("NOT CONNECTED")

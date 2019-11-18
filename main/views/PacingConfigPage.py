@@ -763,6 +763,21 @@ class PacingConfigPage(AppFrameBase):
                 self.serial_indicators.setConnection(True)
                 self.serial_indicators.setCurrConnectionID(self.serial_service.get_device_ID())
                 self.serial_indicators.setLastConnectionID(self.serial_service.get_last_device_connected())
+        if self.serial_indicators.isConnected():
+            self.connectionStateText.config(text="Connection Established", foreground="white",
+                                            background="green")
+            if self.serial_indicators.getLastConnectionID() is not None or self.serial_indicators.getCurrConnectionID() is not None:
+                self.currID.config(text=str(self.serial_indicators.getCurrConnectionID()))
+                self.prevID.config(text=str(self.serial_indicators.getLastConnectionID()))
+            else:
+                self.currID.config(text="None")
+                self.prevID.config(text="None")
+        else:
+            self.connectionStateText.config(text="Connection Not Established", foreground="black",
+                                            background="gray")
+            self.currID.config(text="None")
+            self.prevID.config(text="None")
+            print("NOT CONNECTED")
         lastDisconnectCheck = int(round(time.time() * 1000))
         while self.threadController:
             time.sleep(0.5)

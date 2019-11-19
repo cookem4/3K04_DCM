@@ -80,11 +80,11 @@ class EGMDataPage(AppFrameBase):
         fig = matplotlib.figure.Figure(figsize=(10, 4), dpi=100)
         ax = fig.add_subplot(1, 1, 1)
         canvas = FigureCanvasTkAgg(fig, master=self)
+        ax.set_xlabel("Time (ms)")
+        ax.set_ylabel("Voltage")
         canvas.draw()
         canvas._tkcanvas.grid(row=3, column=0, columnspan=3, padx=(135, 0), pady=(30, 0), sticky=tk.W)
         line, = ax.plot([0], [0])
-        # ax.set_xlabel("Time (ms)")
-        # ax.set_ylabel("Voltage")
         ani = animation.FuncAnimation(fig, self.GraphAnimation, interval=200)
         canvas.draw()
 
@@ -93,10 +93,26 @@ class EGMDataPage(AppFrameBase):
             ax.clear()
             if self.displaySelection.get() == 'Atrium':
                 ax.plot(range(len(self.setToGraph[0])), self.setToGraph[0])
+                ax.set_ylim([min(self.setToGraph[0]), max(self.setToGraph[0])])
+                ax.set_xlim([len(self.setToGraph[0]) - 10, len(self.setToGraph[0])])
             elif self.displaySelection.get() == 'Ventrical':
                 ax.plot(range(len(self.setToGraph[1])), self.setToGraph[1])
+                ax.set_ylim([min(self.setToGraph[1]), max(self.setToGraph[1])])
+                ax.set_xlim([len(self.setToGraph[1]) - 10, len(self.setToGraph[1])])
             elif self.displaySelection.get() == 'Both':
                 ax.plot(range(len(self.setToGraph[0])), self.setToGraph[0], self.setToGraph[1])
+                ax.set_xlim([len(self.setToGraph[0]) - 10, len(self.setToGraph[0])])
+                myMin = 0
+                myMax = 0
+                if(min(self.setToGraph[0]) > min(self.setToGraph[1])):
+                    myMin = min(self.setToGraph[1])
+                if(max(self.setToGraph[0]) > max(self.setToGraph[1])):
+                    myMax = max(self.setToGraph[0])
+                ax.set_ylim([myMin, myMax])
+            ax.set_xlabel("Time (ms)")
+            ax.set_ylabel("Voltage")
+
+
         else:
             ax.clear()
 
@@ -174,4 +190,4 @@ class EGMDataPage(AppFrameBase):
             self.addCntr = self.addCntr + 1
             self.setToGraph[0].append(math.sin(self.addCntr))
             self.setToGraph[1].append(self.addCntr ** 0.5)
-            time.sleep(0.1)
+            time.sleep(0.2)

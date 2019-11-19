@@ -11,6 +11,8 @@ error_messages = {
     "AT": "Activity threshold must be between 0-6",
     "REACT": "Reaction time must be between 10-50",
     "RECT": "Recovery time must be between 2-16",
+    "SR": "Max sensor rate must be between 50-175",
+    "RF": "Response factor must be between 1-16",
     "AV": "AV delay must be between 70-300",
     "AS": "Atrial Sensitivity must be between 1-10",
     "VS": "Ventricular Sensitivity must be between 1-10"
@@ -35,6 +37,8 @@ class PM_LIMIT:
     ACTIVITY_THRESHOLD = {"min": 0, "max": 6}
     REACTION_TIME = {"min": 10, "max": 50}
     RECOVERY_TIME = {"min": 2, "max": 16}
+    MAX_SENSOR_RATE = {"min": 50, "max": 175}
+    RESPONSE_FACTOR = {"min": 1, "max": 16}
     AV_DELAY = {"min": 70, "max": 300}
     ATRIAL_SENSITIVITY = {"min": 1, "max": 10}
     VENTRICULAR_SENSITIVITY = {"min": 1, "max": 10}
@@ -65,8 +69,12 @@ class PacingValueRange:
                   PM_LIMIT.ACTIVITY_THRESHOLD["min"] <= pm.activity_threshold <= PM_LIMIT.ACTIVITY_THRESHOLD["max"],
             "REACT": pm.activity_threshold is None or \
                   PM_LIMIT.REACTION_TIME["min"] <= pm.reaction_time <= PM_LIMIT.REACTION_TIME["max"],
-            "RECT": pm.av_delay is None or \
+            "RECT": pm.recovery_time is None or \
                   PM_LIMIT.RECOVERY_TIME["min"] <= pm.recovery_time <= PM_LIMIT.RECOVERY_TIME["max"],
+            "SR": pm.max_sensor_rate is None or \
+                    PM_LIMIT.MAX_SENSOR_RATE["min"] <= pm.max_sensor_rate <= PM_LIMIT.MAX_SENSOR_RATE["max"],
+            "RF": pm.response_factor is None or \
+                    PM_LIMIT.RESPONSE_FACTOR["min"] <= pm.response_factor <= PM_LIMIT.RESPONSE_FACTOR["max"],
             "AS": pm.atrial_sensitivity is None or \
                   PM_LIMIT.ATRIAL_SENSITIVITY["min"] <= pm.atrial_sensitivity <= PM_LIMIT.ATRIAL_SENSITIVITY["max"],
             "VS": pm.ventricular_sensitivity is None or \

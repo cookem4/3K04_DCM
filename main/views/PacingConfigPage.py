@@ -44,6 +44,8 @@ class PacingConfigPage(AppFrameBase):
         self.usrActivityThreshold = tk.StringVar()
         self.usrReactionTime = tk.StringVar()
         self.usrRecoveryTime = tk.StringVar()
+        self.usrMaxSensorRate = tk.StringVar()
+        self.usrResponseFactor = tk.StringVar()
         self.usrAtrialSensitivity = tk.StringVar()
         self.usrVentricularSensitivity = tk.StringVar()
         self.usrAVDelay = tk.StringVar()
@@ -53,7 +55,7 @@ class PacingConfigPage(AppFrameBase):
         # Vector that tells us what text entry boxes should be shown
         # This one is to display only the boxes for the AOO mode
         self.boxesToDisplay = [True, True, True, False, True, False, False, False, False, False, False, False, False,
-                               False]
+                               False, False, False]
 
         self.connectionStateText = tk.Label(self, bg="gray", text="Connection Not Established")
         self.connectionStateText.config(font=("Helvetica", 25), foreground="black")
@@ -274,6 +276,30 @@ class PacingConfigPage(AppFrameBase):
 
         #########################
 
+        self.maxSensorRateLabel = tk.Label(self, bg="black", text="Max Sensor Rate:")
+        self.maxSensorRateLabel.config(font=(25), foreground="white")
+
+        self.maxSensorRateEntry = tk.Entry(self, textvariable=self.usrMaxSensorRate, width=10, font=(25),
+                                          bg=self.enabled_bg,
+                                          disabledbackground=self.disabled_bg)
+
+        self.maxSensorRateUnit = tk.Label(self, bg="black", text="ppm")
+        self.maxSensorRateUnit.config(font=(25), foreground="white")
+
+        #########################
+
+        self.responseFactorLabel = tk.Label(self, bg="black", text="Response Factor:")
+        self.responseFactorLabel.config(font=(25), foreground="white")
+
+        self.responseFactorEntry = tk.Entry(self, textvariable=self.usrResponseFactor, width=10, font=(25),
+                                           bg=self.enabled_bg,
+                                           disabledbackground=self.disabled_bg)
+
+        self.responseFactorUnit = tk.Label(self, bg="black", text="")
+        self.responseFactorUnit.config(font=(25), foreground="white")
+
+        #########################
+
         self.avDelayLabel = tk.Label(self, bg="black", text="Fixed AV Delay:")
         self.avDelayLabel.config(font=(25), foreground="white")
 
@@ -361,6 +387,16 @@ class PacingConfigPage(AppFrameBase):
                             self.currUserJson["pacing_mode_settings"].index("recovery_time\": ") + len(
                                 "recovery_time\": "):
                             self.currUserJson[
+                                "pacing_mode_settings"].index(", \"max_sensor_rate\": ")]
+        maxSensorRateSlice = self.currUserJson["pacing_mode_settings"][
+                            self.currUserJson["pacing_mode_settings"].index("max_sensor_rate\": ") + len(
+                                "max_sensor_rate\": "):
+                            self.currUserJson[
+                                "pacing_mode_settings"].index(", \"response_factor\": ")]
+        responseFactorSlice = self.currUserJson["pacing_mode_settings"][
+                            self.currUserJson["pacing_mode_settings"].index("response_factor\": ") + len(
+                                "response_factor\": "):
+                            self.currUserJson[
                                 "pacing_mode_settings"].index(", \"av_delay\": ")]
         avDelaySlice = self.currUserJson["pacing_mode_settings"][
                        self.currUserJson["pacing_mode_settings"].index("av_delay\": ") + len("av_delay\": "):
@@ -387,6 +423,8 @@ class PacingConfigPage(AppFrameBase):
         self.usrActivityThreshold.set("" if (activityThresholdSlice == "null") else activityThresholdSlice)
         self.usrReactionTime.set("" if (reactionTimeSlice == "null") else reactionTimeSlice)
         self.usrRecoveryTime.set("" if (recoveryTimeSlice == "null") else recoveryTimeSlice)
+        self.usrMaxSensorRate.set("" if (maxSensorRateSlice == "null") else maxSensorRateSlice)
+        self.usrResponseFactor.set("" if (responseFactorSlice == "null") else responseFactorSlice)
         self.usrAVDelay.set("" if (avDelaySlice == "null") else avDelaySlice)
         self.usrAtrialSensitivity.set("" if (atrialSensitivitySlice == "null") else atrialSensitivitySlice)
         self.usrVentricularSensitivity.set(
@@ -430,6 +468,8 @@ class PacingConfigPage(AppFrameBase):
         self.activityThresholdEntry.delete(0, tk.END)
         self.reactionTimeEntry.delete(0, tk.END)
         self.recoveryTimeEntry.delete(0, tk.END)
+        self.maxSensorRateEntry.delete(0, tk.END)
+        self.responseFactorEntry.delete(0, tk.END)
         self.avDelayEntry.delete(0, tk.END)
         self.atrialSensitivityEntry.delete(0, tk.END)
         self.ventricularSensitivityEntry.delete(0, tk.END)
@@ -438,40 +478,41 @@ class PacingConfigPage(AppFrameBase):
         # Update variables based on drop down selection
         if self.pacingSelection.get() == "AOO":
             self.boxesToDisplay = [True, True, True, False, True, False, False, False, False, False, False, False,
-                                   False, False]
+                                   False, False, False, False]
             # self.set_states(VLE="disabled", VPW="disabled", ARP="disabled", VRP="disabled")
         if self.pacingSelection.get() == "VOO":
             self.boxesToDisplay = [True, True, False, True, False, True, False, False, False, False, False, False,
-                                   False, False]
+                                   False, False, False, False]
             # self.set_states(ALE="disabled", APW="disabled", ARP="disabled", VRP="disabled")
         if self.pacingSelection.get() == "AAI":
             self.boxesToDisplay = [True, True, True, False, True, False, True, False, False, False, False, False, False,
-                                   False]
+                                   False, False, False]
             # self.set_states(VLE="disabled", VPW="disabled", VRP="disabled")
         if self.pacingSelection.get() == "VVI":
             self.boxesToDisplay = [True, True, False, True, False, True, False, True, False, False, False, False, False,
-                                   False]
+                                   False, False, False]
             # self.set_states(ALE="disabled", APW="disabled", ARP="disabled")
         if self.pacingSelection.get() == "DOO":
             self.boxesToDisplay = [True, True, True, True, True, True, False, False, False, False, False, True, False,
-                                   False]
+                                   False, False, False]
         if self.pacingSelection.get() == "AOOR":
-            self.boxesToDisplay = [True, True, True, False, True, False, False, False, True, True, True, False, False,
+            self.boxesToDisplay = [True, True, True, False, True, False, False, False, True, True, True, True, True, False, False,
                                    False]
         if self.pacingSelection.get() == "VOOR":
-            self.boxesToDisplay = [True, True, False, True, False, True, False, False, True, True, True, False, False,
+            self.boxesToDisplay = [True, True, False, True, False, True, False, False, True, True, True, True, True, False, False,
                                    False]
         if self.pacingSelection.get() == "AAIR":
-            self.boxesToDisplay = [True, True, True, False, True, False, True, False, True, True, True, False, True,
+            self.boxesToDisplay = [True, True, True, False, True, False, True, False, True, True, True, True, True, False, True,
                                    False]
         if self.pacingSelection.get() == "VVIR":
-            self.boxesToDisplay = [True, True, False, True, False, True, False, True, True, True, True, False, False,
+            self.boxesToDisplay = [True, True, False, True, False, True, False, True, True, True, True, True, True, False, False,
                                    True]
         if self.pacingSelection.get() == "DOOR":
-            self.boxesToDisplay = [True, True, True, True, True, True, False, False, True, True, True, True, False,
+            self.boxesToDisplay = [True, True, True, True, True, True, False, False, True, True, True, True, True, True, False,
                                    False]
         # Show only if the corresponding vector element is true
         rowCounter = 0.25  # keeps track of what row the entry box is to be displayed in
+        addAmount = 0.06
         if (self.boxesToDisplay[0]):
             '''
             self.lowerRateLabel.grid(row=rowCounter, column=2, padx=(200, 0), pady=(50, 0), sticky=tk.E)
@@ -481,7 +522,7 @@ class PacingConfigPage(AppFrameBase):
             self.lowerRateLabel.place(relx=0.53, rely=rowCounter, anchor='sw')
             self.lowerRateLimitEntry.place(relx=0.7, rely=rowCounter, anchor='sw')
             self.lowerRateUnitLabel.place(relx=0.78, rely=rowCounter, anchor='sw')
-            rowCounter = rowCounter + 0.08
+            rowCounter = rowCounter + addAmount
         else:
             self.lowerRateLabel.place_forget()
             self.lowerRateLimitEntry.place_forget()
@@ -496,7 +537,7 @@ class PacingConfigPage(AppFrameBase):
             self.upperRateLabel.place(relx=0.53, rely=rowCounter, anchor='sw')
             self.upperRateLimitEntry.place(relx=0.7, rely=rowCounter, anchor='sw')
             self.upperRateUnitLabel.place(relx=0.78, rely=rowCounter, anchor='sw')
-            rowCounter = rowCounter + 0.08
+            rowCounter = rowCounter + addAmount
         else:
             self.upperRateLabel.place_forget()
             self.upperRateLimitEntry.place_forget()
@@ -511,7 +552,7 @@ class PacingConfigPage(AppFrameBase):
             self.atrialAmpLabel.place(relx=0.53, rely=rowCounter, anchor='sw')
             self.atrialLimitEntry.place(relx=0.7, rely=rowCounter, anchor='sw')
             self.atrialLimitUnit.place(relx=0.78, rely=rowCounter, anchor='sw')
-            rowCounter = rowCounter + 0.08
+            rowCounter = rowCounter + addAmount
         else:
             self.atrialAmpLabel.place_forget()
             self.atrialLimitEntry.place_forget()
@@ -526,7 +567,7 @@ class PacingConfigPage(AppFrameBase):
             self.ventricalAmpLabel.place(relx=0.53, rely=rowCounter, anchor='sw')
             self.ventricalLimitEntry.place(relx=0.7, rely=rowCounter, anchor='sw')
             self.ventricalLimitUnit.place(relx=0.78, rely=rowCounter, anchor='sw')
-            rowCounter = rowCounter + 0.08
+            rowCounter = rowCounter + addAmount
         else:
             self.ventricalAmpLabel.place_forget()
             self.ventricalLimitEntry.place_forget()
@@ -541,7 +582,7 @@ class PacingConfigPage(AppFrameBase):
             self.atrialPulseWidthLabel.place(relx=0.53, rely=rowCounter, anchor='sw')
             self.atrialPulseWidthEntry.place(relx=0.7, rely=rowCounter, anchor='sw')
             self.atrialPulseWidthUnit.place(relx=0.78, rely=rowCounter, anchor='sw')
-            rowCounter = rowCounter + 0.08
+            rowCounter = rowCounter + addAmount
         else:
             self.atrialPulseWidthLabel.place_forget()
             self.atrialPulseWidthEntry.place_forget()
@@ -556,7 +597,7 @@ class PacingConfigPage(AppFrameBase):
             self.ventricalPulseWidthLabel.place(relx=0.53, rely=rowCounter, anchor='sw')
             self.ventricalPulseWidthEntry.place(relx=0.7, rely=rowCounter, anchor='sw')
             self.ventricalPulseWidthUnit.place(relx=0.78, rely=rowCounter, anchor='sw')
-            rowCounter = rowCounter + 0.08
+            rowCounter = rowCounter + addAmount
         else:
             self.ventricalPulseWidthLabel.place_forget()
             self.ventricalPulseWidthEntry.place_forget()
@@ -571,7 +612,7 @@ class PacingConfigPage(AppFrameBase):
             self.arpLabel.place(relx=0.53, rely=rowCounter, anchor='sw')
             self.arpEntry.place(relx=0.7, rely=rowCounter, anchor='sw')
             self.arpUnit.place(relx=0.78, rely=rowCounter, anchor='sw')
-            rowCounter = rowCounter + 0.08
+            rowCounter = rowCounter + addAmount
         else:
             self.arpLabel.place_forget()
             self.arpEntry.place_forget()
@@ -586,7 +627,7 @@ class PacingConfigPage(AppFrameBase):
             self.vrpLabel.place(relx=0.53, rely=rowCounter, anchor='sw')
             self.vrpEntry.place(relx=0.7, rely=rowCounter, anchor='sw')
             self.vrpUnit.place(relx=0.78, rely=rowCounter, anchor='sw')
-            rowCounter = rowCounter + 0.08
+            rowCounter = rowCounter + addAmount
         else:
             self.vrpLabel.place_forget()
             self.vrpEntry.place_forget()
@@ -595,7 +636,7 @@ class PacingConfigPage(AppFrameBase):
             self.activityThresholdLabel.place(relx=0.53, rely=rowCounter, anchor='sw')
             self.activityThresholdEntry.place(relx=0.7, rely=rowCounter, anchor='sw')
             self.activityThresholdUnit.place(relx=0.78, rely=rowCounter, anchor='sw')
-            rowCounter = rowCounter + 0.08
+            rowCounter = rowCounter + addAmount
         else:
             self.activityThresholdLabel.place_forget()
             self.activityThresholdEntry.place_forget()
@@ -604,7 +645,7 @@ class PacingConfigPage(AppFrameBase):
             self.reactionTimeLabel.place(relx=0.53, rely=rowCounter, anchor='sw')
             self.reactionTimeEntry.place(relx=0.7, rely=rowCounter, anchor='sw')
             self.reactionTimeUnit.place(relx=0.78, rely=rowCounter, anchor='sw')
-            rowCounter = rowCounter + 0.08
+            rowCounter = rowCounter + addAmount
         else:
             self.reactionTimeLabel.place_forget()
             self.reactionTimeEntry.place_forget()
@@ -613,12 +654,30 @@ class PacingConfigPage(AppFrameBase):
             self.recoveryTimeLabel.place(relx=0.53, rely=rowCounter, anchor='sw')
             self.recoveryTimeEntry.place(relx=0.7, rely=rowCounter, anchor='sw')
             self.recoveryTimeUnit.place(relx=0.78, rely=rowCounter, anchor='sw')
-            rowCounter = rowCounter + 0.08
+            rowCounter = rowCounter + addAmount
         else:
             self.recoveryTimeLabel.place_forget()
             self.recoveryTimeEntry.place_forget()
             self.recoveryTimeUnit.place_forget()
         if (self.boxesToDisplay[11]):
+            self.maxSensorRateLabel.place(relx=0.53, rely=rowCounter, anchor='sw')
+            self.maxSensorRateEntry.place(relx=0.7, rely=rowCounter, anchor='sw')
+            self.maxSensorRateUnit.place(relx=0.78, rely=rowCounter, anchor='sw')
+            rowCounter = rowCounter + addAmount
+        else:
+            self.maxSensorRateLabel.place_forget()
+            self.maxSensorRateEntry.place_forget()
+            self.maxSensorRateUnit.place_forget()
+        if (self.boxesToDisplay[12]):
+            self.responseFactorLabel.place(relx=0.53, rely=rowCounter, anchor='sw')
+            self.responseFactorEntry.place(relx=0.7, rely=rowCounter, anchor='sw')
+            self.responseFactorUnit.place(relx=0.78, rely=rowCounter, anchor='sw')
+            rowCounter = rowCounter + addAmount
+        else:
+            self.responseFactorLabel.place_forget()
+            self.responseFactorEntry.place_forget()
+            self.responseFactorUnit.place_forget()
+        if (self.boxesToDisplay[13]):
             '''
             self.avDelayLabel.grid(row=rowCounter, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
             self.avDelayEntry.grid(row=rowCounter, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
@@ -628,12 +687,12 @@ class PacingConfigPage(AppFrameBase):
             self.avDelayLabel.place(relx=0.53, rely=rowCounter, anchor='sw')
             self.avDelayEntry.place(relx=0.7, rely=rowCounter, anchor='sw')
             self.avDelayUnit.place(relx=0.78, rely=rowCounter, anchor='sw')
-            rowCounter = rowCounter + 0.08
+            rowCounter = rowCounter + addAmount
         else:
             self.avDelayLabel.place_forget()
             self.avDelayEntry.place_forget()
             self.avDelayUnit.place_forget()
-        if (self.boxesToDisplay[12]):
+        if (self.boxesToDisplay[14]):
             '''
             self.atrialSensitivityLabel.grid(row=rowCounter, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
             self.atrialSensitivityEntry.grid(row=rowCounter, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
@@ -643,12 +702,12 @@ class PacingConfigPage(AppFrameBase):
             self.atrialSensitivityLabel.place(relx=0.53, rely=rowCounter, anchor='sw')
             self.atrialSensitivityEntry.place(relx=0.7, rely=rowCounter, anchor='sw')
             self.atrialSensitivityUnit.place(relx=0.78, rely=rowCounter, anchor='sw')
-            rowCounter = rowCounter + 0.08
+            rowCounter = rowCounter + addAmount
         else:
             self.atrialSensitivityLabel.place_forget()
             self.atrialSensitivityEntry.place_forget()
             self.atrialSensitivityUnit.place_forget()
-        if (self.boxesToDisplay[13]):
+        if (self.boxesToDisplay[15]):
             '''
             self.ventricularSensitivityLabel.grid(row=rowCounter, column=2, padx=(200, 0), pady=(20, 0), sticky=tk.E)
             self.ventricularSensitivityEntry.grid(row=rowCounter, column=3, pady=(20, 0), padx=(15, 0), sticky=tk.W)
@@ -658,7 +717,6 @@ class PacingConfigPage(AppFrameBase):
             self.ventricularSensitivityLabel.place(relx=0.53, rely=rowCounter, anchor='sw')
             self.ventricularSensitivityEntry.place(relx=0.7, rely=rowCounter, anchor='sw')
             self.ventricularSensitivityUnit.place(relx=0.78, rely=rowCounter, anchor='sw')
-            rowCounter = rowCounter + 0.08
         else:
             self.ventricularSensitivityLabel.place_forget()
             self.ventricularSensitivityEntry.place_forget()
@@ -695,6 +753,8 @@ class PacingConfigPage(AppFrameBase):
                 activity_threshold=entry_to_value(self.activityThresholdEntry),
                 reaction_time=entry_to_value(self.reactionTimeEntry),
                 recovery_time=entry_to_value(self.recoveryTimeEntry),
+                max_sensor_rate=entry_to_value(self.maxSensorRateEntry),
+                response_factor=entry_to_value(self.responseFactorEntry),
                 av_delay=entry_to_value(self.avDelayEntry),
                 atrial_sensitivity=entry_to_value(self.atrialSensitivityEntry),
                 ventricular_sensitivity=entry_to_value(self.ventricularSensitivityEntry))
@@ -741,19 +801,6 @@ class PacingConfigPage(AppFrameBase):
             self.currUserJson = self.load_current_user_json()
             self.actualModeLabel.config(text=self.currUserJson["pacing_mode_name"])
 
-            '''
-            # Update saving indicator
-            self.saveDeviceLabel.config(bg="green", fg="black")
-            tk.Tk().after(200, lambda: self.saveDeviceLabel.config(bg="gray", fg="white"))
-            tk.Tk().after(200, lambda: self.saveDeviceLabel.config(bg="green", fg="black"))
-            tk.Tk().after(200, lambda: self.saveDeviceLabel.config(bg="gray", fg="white"))
-            tk.Tk().after(200, lambda: self.saveDeviceLabel.config(bg="green", fg="black"))
-            tk.Tk().after(200, lambda: self.saveDeviceLabel.config(bg="gray", fg="white"))
-            tk.Tk().after(200, lambda: self.saveDeviceLabel.config(bg="green", fg="black"))
-            tk.Tk().after(200, lambda: self.saveDeviceLabel.config(bg="gray", fg="white"))
-            tk.Tk().after(200, lambda: self.saveDeviceLabel.config(bg="green", fg="black"))
-            tk.Tk().after(200, lambda: self.saveDeviceLabel.config(bg="gray", fg="white"))
-            '''
             # transmit serial data:
             self.serial_service.send_pacing_data(pacing_mode)
 

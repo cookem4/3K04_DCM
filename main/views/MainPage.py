@@ -119,12 +119,13 @@ class MainPage(AppFrameBase):
             self.currIDLabel.config(text="Connected Device ID: None")
             self.prevIDLabel.config(text="Previous Device ID: None")
             print("NOT CONNECTED")
-
+        i=0
+        lastDisconnectCheck = int(round(time.time() * 1000))
         while self.threadController:
             time.sleep(0.5)
             print("HERE" + str(i))
             i = i + 1
-            if int(round(time.time() * 2000)) - lastDisconnectCheck > 20000:
+            if int(round(time.time() * 1000)) - lastDisconnectCheck > 5000:
                 if self.serial_service.is_connection_established():
                     self.serial_indicators.setConnection(True)
                     self.serial_indicators.setCurrConnectionID(self.serial_service.get_device_ID())

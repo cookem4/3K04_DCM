@@ -1,6 +1,7 @@
 import tkinter as tk
 
 import matplotlib
+
 matplotlib.use("Agg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
@@ -11,6 +12,8 @@ from threading import Thread
 import time
 import math
 import multiprocessing
+import matplotlib.animation as animation
+
 
 class EGMDataPage(AppFrameBase):
 
@@ -25,9 +28,9 @@ class EGMDataPage(AppFrameBase):
         # Based on what drop down menu selection is chosen, this list will be indexed differently
         # This list will constantly be udpated from the serial module
         # First index is atrial pacing second is ventricle pacing
-        #self.setToGraph = [[5, 6, 1, 3, 8, 9, 3, 5, 5, 6, 1, 3, 8, 9, 3, 5],
-                          # [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 14, 15, 16]]
-        self.setToGraph = [[0],[0]]
+        # self.setToGraph = [[5, 6, 1, 3, 8, 9, 3, 5, 5, 6, 1, 3, 8, 9, 3, 5],
+        # [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 14, 15, 16]]
+        self.setToGraph = [[0], [0]]
         self.addCntr = 0
 
         self.connectionStateText = tk.Label(self, bg="gray", text="Connection Not Established")
@@ -43,10 +46,9 @@ class EGMDataPage(AppFrameBase):
         self.backBtn.grid(row=4, column=0, columnspan=1, pady=(20, 0), padx=(15, 0), sticky=tk.W)
 
         self.startBtn = tk.Button(self, text="Start", width=8, height=1, command=self.toggleGraphing)
-        #self.startBtn.config(state = tk.DISABLED)
+        self.startBtn.config(state = tk.DISABLED)
         self.startBtn.config(font=("Helvetica", 10))
         self.startBtn.grid(row=2, column=1, columnspan=1, pady=(20, 0), padx=(150, 0), sticky=tk.W)
-        self.graphingEnabled = False
 
         self.displayModeLabel = tk.Label(self, bg="black", text="Display Mode:")
         self.displayModeLabel.config(font=(25), foreground="white")
@@ -62,81 +64,69 @@ class EGMDataPage(AppFrameBase):
         # Sets callback listener for drop down menu
         self.displaySelection.trace("w", self.drop_down_callback)
 
-        ##############################################
-        #### The following creates a graph ###########
-        ##############################################
-
-        f = Figure(figsize=(10, 4), dpi=100)
-        self.a = f.add_subplot(111)
-        #self.a.plot([0], [0])
-        self.a.set_xlabel("Time (ms)")
-        self.a.set_ylabel("Voltage")
-
-        self.canvas = FigureCanvasTkAgg(f, self)
-        #self.canvas.draw()
-        self.canvas.get_tk_widget().grid(row=3, column=0, columnspan=3, padx=(135, 0), pady=(30, 0), sticky=tk.W)
-
-        #Setup labels based on pacing status
+        # Setup labels based on pacing status
         if self.serial_indicators.isConnected():
             self.connectionStateText.config(text="Connection Established", foreground="white", background="green")
             self.startBtn.config(state=tk.NORMAL)
         else:
             self.connectionStateText.config(text="Connection Not Established", foreground="black", background="gray")
 
-
-        #configure thread control variable
-        self.threadControllerGrahping = False
+        myThread = Thread(target=self.ConnectionThread, args=())
+        myThread.start()
         self.threadControllerLabel = True
-        self.connectionThread = Thread(target = self.ConnectionThread, args = ())
-        self.connectionThread.start()
+        # Setup base graph
+        global line, ax, canvas
+        self.allowGraphing = False
+        fig = matplotlib.figure.Figure(figsize=(10, 4), dpi=100)
+        ax = fig.add_subplot(1, 1, 1)
+        canvas = FigureCanvasTkAgg(fig, master=self)
+        canvas.draw()
+        canvas._tkcanvas.grid(row=3, column=0, columnspan=3, padx=(135, 0), pady=(30, 0), sticky=tk.W)
+        line, = ax.plot([0], [0])
+        # ax.set_xlabel("Time (ms)")
+        # ax.set_ylabel("Voltage")
+        ani = animation.FuncAnimation(fig, self.GraphAnimation, interval=200)
+        canvas.draw()
+
+    def GraphAnimation(self, i):
+        if self.allowGraphing:
+            ax.clear()
+            if self.displaySelection.get() == 'Atrium':
+                ax.plot(range(len(self.setToGraph[0])), self.setToGraph[0])
+            elif self.displaySelection.get() == 'Ventrical':
+                ax.plot(range(len(self.setToGraph[1])), self.setToGraph[1])
+            elif self.displaySelection.get() == 'Both':
+                ax.plot(range(len(self.setToGraph[0])), self.setToGraph[0], self.setToGraph[1])
+        else:
+            ax.clear()
 
     def drop_down_callback(self, *args):
         print(self.displaySelection.get())
-        if self.graphingEnabled:
-            self.a.cla()
-            if self.displaySelection.get() == 'Atrium':
-                self.a.plot(range(len(self.setToGraph[0])), self.setToGraph[0])
-            elif self.displaySelection.get() == 'Ventrical':
-                self.a.plot(range(len(self.setToGraph[1])), self.setToGraph[1])
-            elif self.displaySelection.get() == 'Both':
-                self.a.plot(range(len(self.setToGraph[0])), self.setToGraph[0], self.setToGraph[1])
-            self.canvas.draw()
 
     def load_current_user_json(self):
         return self.user_service.read(self.username).to_json()
 
     def toggleGraphing(self):
-        if self.threadControllerGrahping:
-            self.threadControllerGrahping = False
-            self.setToGraph = [[],[]]
+        if self.allowGraphing:
+            self.allowGraphing = False
+            self.setToGraph = [[0], [0]]
+            self.addCntr = 0
         else:
-            self.threadControllerGrahping = True
-            myThread = Thread(target = self.GraphingThread, args = ())
+            self.allowGraphing = True
+            # Send request egm data command
+            # self.serial_service.request_EGM_data()
+            myThread = Thread(target=self.FetchDataPoint, args=())
             myThread.start()
 
-        self.graphingEnabled = not self.graphingEnabled
-        if self.graphingEnabled:
+        if self.allowGraphing:
             self.startBtn.config(text="Stop")
         else:
             self.startBtn.config(text="Start")
-        if self.graphingEnabled:
-            self.a.cla()
-            if self.displaySelection.get() == 'Atrium':
-                self.a.plot(range(len(self.setToGraph[0])), self.setToGraph[0])
-            elif self.displaySelection.get() == 'Ventrical':
-                self.a.plot(range(len(self.setToGraph[1])), self.setToGraph[1])
-            elif self.displaySelection.get() == 'Both':
-                self.a.plot(range(len(self.setToGraph[0])), self.setToGraph[0], self.setToGraph[1])
-            self.canvas.draw()
-        else:
-            self.a.cla()
-            self.a.plot([0], [0])
-            self.canvas.draw()
 
     def go_back(self):
-        self.parent.switch_frame(MainPage.MainPage)
-        self.threadControllerGrahping = False
+        self.allowGraphing = False
         self.threadControllerLabel = False
+        self.parent.switch_frame(MainPage.MainPage)
 
     def ConnectionThread(self):
         ###This thread will disable the start button if there is no connection and if disconnection occurs while
@@ -150,51 +140,38 @@ class EGMDataPage(AppFrameBase):
                 self.serial_indicators.setLastConnectionID(self.serial_service.get_last_device_connected())
 
         if self.serial_indicators.isConnected():
-            self.connectionStateText.config(text = "Connection Established", foreground="white", background = "green")
+            self.connectionStateText.config(text="Connection Established", foreground="white", background="green")
             self.startBtn.config(state=tk.NORMAL)
         else:
-            self.connectionStateText.config(text = "Connection Not Established", foreground="black", background = "gray")
-
+            self.connectionStateText.config(text="Connection Not Established", foreground="black", background="gray")
+            self.startBtn.config(state=tk.DISABLED)
+        i = 0
         lastDisconnectCheck = int(round(time.time() * 1000))
         while self.threadControllerLabel:
             time.sleep(0.5)
-            if int(round(time.time() * 1000)) - lastDisconnectCheck > 10000:
-                if self.serial_service.is_connection_established():
-                    self.serial_indicators.setConnection(True)
-                    self.serial_indicators.setCurrConnectionID(self.serial_service.get_device_ID())
-                    self.serial_indicators.setLastConnectionID(self.serial_service.get_last_device_connected())
-                    self.connectionStateText.config(text="Connection Established", foreground="white",
-                                                    background="green")
-                    self.startBtn.config(state=tk.NORMAL)
-                else:
-                    self.serial_indicators.setConnection(False)
-                    self.serial_indicators.setCurrConnectionID(None)
-                    self.serial_indicators.setLastConnectionID(None)
-                    self.startBtn.config(state=tk.DISABLED)
-                    self.connectionStateText.config(text="Connection Not Established", foreground="black",
-                                                    background="gray")
-                lastDisconnectCheck = int(round(time.time() * 1000))
+            if not self.allowGraphing:
+                if int(round(time.time() * 1000)) - lastDisconnectCheck > 10000:
+                    if self.serial_service.is_connection_established():
+                        self.serial_indicators.setConnection(True)
+                        self.serial_indicators.setCurrConnectionID(self.serial_service.get_device_ID())
+                        self.serial_indicators.setLastConnectionID(self.serial_service.get_last_device_connected())
+                        self.connectionStateText.config(text="Connection Established", foreground="white",
+                                                        background="green")
+                        self.startBtn.config(state=tk.NORMAL)
+                    else:
+                        self.serial_indicators.setConnection(False)
+                        self.serial_indicators.setCurrConnectionID(None)
+                        self.serial_indicators.setLastConnectionID(None)
+                        self.startBtn.config(state=tk.DISABLED)
+                        self.connectionStateText.config(text="Connection Not Established", foreground="black",
+                                                        background="gray")
+                    lastDisconnectCheck = int(round(time.time() * 1000))
 
-
-
-    def GraphingThread(self):
-        #want to set thread controller based on if a device is connected
-        while self.threadControllerGrahping:
-            print("Graphing...")
-            if not self.threadControllerGrahping:
-                break
-            time.sleep(0.1)
-            if not self.threadControllerGrahping:
-                break
+    def FetchDataPoint(self):
+        while self.allowGraphing:
+            # Graph data point from serial module here:
+            # self.serial_service.get_graphing_data()
             self.addCntr = self.addCntr + 1
             self.setToGraph[0].append(math.sin(self.addCntr))
-            self.setToGraph[1].append(self.addCntr**0.5)
-            self.a.cla()
-            if self.displaySelection.get() == 'Atrium':
-                self.a.plot(range(len(self.setToGraph[0])), self.setToGraph[0])
-            elif self.displaySelection.get() == 'Ventrical':
-                self.a.plot(range(len(self.setToGraph[1])), self.setToGraph[1])
-            elif self.displaySelection.get() == 'Both':
-                self.a.plot(range(len(self.setToGraph[0])), self.setToGraph[0], self.setToGraph[1])
-
-            self.canvas.draw()
+            self.setToGraph[1].append(self.addCntr ** 0.5)
+            time.sleep(0.1)

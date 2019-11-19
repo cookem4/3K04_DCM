@@ -126,13 +126,18 @@ class PacingConfigPage(AppFrameBase):
 
         self.saveBtn = tk.Button(self, text="Save", width=10, height=1, command=self.save_data)
         self.saveBtn.config(font=("Helvetica", 10))
-        # self.saveBtn.grid(row=6, column=0, pady=(0, 0), padx=(50, 0), sticky=tk.E)
+        if(self.serial_indicators.isConnected()):
+            self.saveBtn.config(state = tk.NORMAL)
+        else:
+            self.saveBtn.config(state=tk.DISABLED)
         self.saveBtn.place(relx=0.12, rely=0.92, anchor='sw')
 
+        '''
         self.saveDeviceLabel = tk.Label(self, bg="gray", text="Saving to Device...")
         self.saveDeviceLabel.config(font=(25), foreground="white")
         # self.saveDeviceLabel.grid(row=6, column=1, padx=(30, 0), pady=(0, 0), sticky=tk.W)
         self.saveDeviceLabel.place(relx=0.20, rely=0.92, anchor='sw')
+        '''
 
         self.errorLabel = tk.Label(self, bg="black", text="Erroneous Parameters Provided", width=33)
 
@@ -756,7 +761,6 @@ class PacingConfigPage(AppFrameBase):
     # This is essentially a background thread for serial data
     def ConnectThread(self):
         # start by trying to connect to the pacemaker
-        time.sleep(1)
         if not self.serial_indicators.isConnected():
             self.serial_service.connect_to_pacemaker()
             if self.serial_service.is_connection_established():
@@ -764,6 +768,7 @@ class PacingConfigPage(AppFrameBase):
                 self.serial_indicators.setCurrConnectionID(self.serial_service.get_device_ID())
                 self.serial_indicators.setLastConnectionID(self.serial_service.get_last_device_connected())
         if self.serial_indicators.isConnected():
+            self.saveBtn.config(state=tk.NORMAL)
             self.connectionStateText.config(text="Connection Established", foreground="white",
                                             background="green")
             if self.serial_indicators.getLastConnectionID() is not None or self.serial_indicators.getCurrConnectionID() is not None:
@@ -773,11 +778,13 @@ class PacingConfigPage(AppFrameBase):
                 self.currID.config(text="None")
                 self.prevID.config(text="None")
         else:
+            self.saveBtn.config(state=tk.DISABLED)
             self.connectionStateText.config(text="Connection Not Established", foreground="black",
                                             background="gray")
             self.currID.config(text="None")
             self.prevID.config(text="None")
             print("NOT CONNECTED")
+        i = 0
         lastDisconnectCheck = int(round(time.time() * 1000))
         while self.threadController:
             time.sleep(0.5)
@@ -794,6 +801,7 @@ class PacingConfigPage(AppFrameBase):
                 if self.serial_indicators.isConnected():
                     self.connectionStateText.config(text="Connection Established", foreground="white",
                                                     background="green")
+                    self.saveBtn.config(state=tk.NORMAL)
                     if self.serial_indicators.getLastConnectionID() is not None or self.serial_indicators.getCurrConnectionID() is not None:
                         self.currID.config(text=str(self.serial_indicators.getCurrConnectionID()))
                         self.prevID.config(text=str(self.serial_indicators.getLastConnectionID()))
@@ -801,6 +809,7 @@ class PacingConfigPage(AppFrameBase):
                         self.currID.config(text="None")
                         self.prevID.config(text="None")
                 else:
+                    self.saveBtn.config(state=tk.DISABLED)
                     self.connectionStateText.config(text="Connection Not Established", foreground="black",
                                                     background="gray")
                     self.currID.config(text="None")

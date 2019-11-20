@@ -55,8 +55,8 @@ class SerialBase:
     def check_response(self, expected_response: SerialIdentifier):
         for i in range(SerialBase.RESPONSE_TIME_LIMIT):
             if self.serial.inWaiting() >= 2:
-                reading = self.serial.read(1)
-                identifier = int.from_bytes(reading,"big")
+                reading = self.serial.read(2)
+                identifier = int(reading,16)
                 if identifier == expected_response.value:
                     return True
             time.sleep(1)

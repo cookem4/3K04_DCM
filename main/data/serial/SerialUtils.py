@@ -28,5 +28,5 @@ def flatten_to_26_bytearray(list_of_lists) -> bytearray:
             for item in sublist:
                 flat_list.append(item)
     length = len(flat_list)
-    flat_list += [0]*(26-length)
+    flat_list += [0]*(25-length)
     return bytearray(flat_list)

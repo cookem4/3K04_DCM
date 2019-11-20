@@ -33,7 +33,8 @@ class SerialBase:
             self.serial.close()
 
     def send(self, identifier: SerialIdentifier, data_bytearray: bytearray = bytearray(0)):
-        bytes_to_send = to_bytes(bytes([identifier.value]) + data_bytearray)
+        numToPad = 26 - 1 - len(data_bytearray)
+        bytes_to_send = to_bytes(bytes([identifier.value]) + data_bytearray + bytearray([0]*numToPad))
         self.serial.write(bytes_to_send)
 
     def check_timeout(self):
@@ -55,7 +56,7 @@ class SerialBase:
     def check_response(self, expected_response: SerialIdentifier):
         for i in range(SerialBase.RESPONSE_TIME_LIMIT):
             if self.serial.inWaiting() >= 2:
-                reading = self.serial.read(1)
+                reading = self.serial.read(2)
                 identifier = int.from_bytes(reading,"big")
                 if identifier == expected_response.value:
                     return True

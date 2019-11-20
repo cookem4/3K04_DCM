@@ -131,7 +131,8 @@ class PacingConfigPage(AppFrameBase):
         if(self.serial_indicators.isConnected()):
             self.saveBtn.config(state = tk.NORMAL)
         else:
-            self.saveBtn.config(state=tk.DISABLED)
+            #self.saveBtn.config(state=tk.DISABLED)
+            print("")
         self.saveBtn.place(relx=0.12, rely=0.92, anchor='sw')
 
         '''
@@ -825,7 +826,7 @@ class PacingConfigPage(AppFrameBase):
                 self.currID.config(text="None")
                 self.prevID.config(text="None")
         else:
-            self.saveBtn.config(state=tk.DISABLED)
+            #self.saveBtn.config(state=tk.DISABLED)
             self.connectionStateText.config(text="Connection Not Established", foreground="black",
                                             background="gray")
             self.currID.config(text="None")
@@ -856,7 +857,7 @@ class PacingConfigPage(AppFrameBase):
                         self.currID.config(text="None")
                         self.prevID.config(text="None")
                 else:
-                    self.saveBtn.config(state=tk.DISABLED)
+                    #self.saveBtn.config(state=tk.DISABLED)
                     self.connectionStateText.config(text="Connection Not Established", foreground="black",
                                                     background="gray")
                     self.currID.config(text="None")

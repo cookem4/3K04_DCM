@@ -24,10 +24,17 @@ class SerialCommunicator(SerialBase, SerialInterface):
         self.egm_data = []
 
     def get_device_ID(self) -> int:
-        return int(self.device_id, 16)
+        print(len(self.device_id))
+        if len(self.device_id) != 0:
+            return int(self.device_id, 16)
+        else:
+            return 0
 
     def get_last_device_connected(self) -> str:
-        return str(int(self.device_id, 16))
+        if len(self.device_id) != 0:
+            return int(self.device_id, 16)
+        else:
+            return 0
 
     def is_pacing_being_saved(self) -> bool:
         return self.listen_for_egm

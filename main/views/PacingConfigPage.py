@@ -435,7 +435,7 @@ class PacingConfigPage(AppFrameBase):
         if self.serial_indicators.isConnected():
             self.connectionStateText.config(text="Connection Established", foreground="white",
                                             background="green")
-            if self.serial_indicators.getLastConnectionID() is not None or self.serial_indicators.getCurrConnectionID() is not None:
+            if self.serial_indicators.getCurrConnectionID() != 0 and self.serial_indicators.getLastConnectionID() != 0:
                 self.currID.config(text=str(self.serial_indicators.getCurrConnectionID()))
                 self.prevID.config(text=str(self.serial_indicators.getLastConnectionID()))
             else:
@@ -819,7 +819,7 @@ class PacingConfigPage(AppFrameBase):
             self.saveBtn.config(state=tk.NORMAL)
             self.connectionStateText.config(text="Connection Established", foreground="white",
                                             background="green")
-            if self.serial_indicators.getLastConnectionID() is not None or self.serial_indicators.getCurrConnectionID() is not None:
+            if self.serial_indicators.getCurrConnectionID() != 0 and self.serial_indicators.getLastConnectionID() != 0:
                 self.currID.config(text=str(self.serial_indicators.getCurrConnectionID()))
                 self.prevID.config(text=str(self.serial_indicators.getLastConnectionID()))
             else:
@@ -850,7 +850,7 @@ class PacingConfigPage(AppFrameBase):
                     self.connectionStateText.config(text="Connection Established", foreground="white",
                                                     background="green")
                     self.saveBtn.config(state=tk.NORMAL)
-                    if self.serial_indicators.getLastConnectionID() is not None or self.serial_indicators.getCurrConnectionID() is not None:
+                    if self.serial_indicators.getCurrConnectionID() != 0 and self.serial_indicators.getLastConnectionID() != 0:
                         self.currID.config(text=str(self.serial_indicators.getCurrConnectionID()))
                         self.prevID.config(text=str(self.serial_indicators.getLastConnectionID()))
                     else:

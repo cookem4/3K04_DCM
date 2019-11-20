@@ -104,7 +104,7 @@ class MainPage(AppFrameBase):
         if self.serial_indicators.isConnected():
             self.connectionStateText.config(text="Connection Established", foreground="white",
                                             background="green")
-            if self.serial_indicators.getCurrConnectionID() is not None or self.serial_indicators.getLastConnectionID() is not None:
+            if self.serial_indicators.getCurrConnectionID() != 0 and self.serial_indicators.getLastConnectionID() != 0:
                 self.currIDLabel.config(
                     text="Connected Device ID: " + str(self.serial_indicators.getCurrConnectionID()))
                 self.prevIDLabel.config(
@@ -138,7 +138,7 @@ class MainPage(AppFrameBase):
                 if self.serial_indicators.isConnected():
                     self.connectionStateText.config(text="Connection Established", foreground="white",
                                                     background="green")
-                    if self.serial_indicators.getCurrConnectionID() is not None or self.serial_indicators.getLastConnectionID() is not None:
+                    if self.serial_indicators.getCurrConnectionID() != 0 and self.serial_indicators.getLastConnectionID() != 0:
                         self.currIDLabel.config(
                             text="Connected Device ID: " + str(self.serial_indicators.getCurrConnectionID()))
                         self.prevIDLabel.config(

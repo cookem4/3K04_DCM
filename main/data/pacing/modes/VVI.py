@@ -2,7 +2,7 @@ import json
 
 from main.data.pacing.PacingMode import PacingMode
 from main.data.pacing.PacingModes import toSerial
-from main.data.serial.SerialUtils import flatten_to_bytearray
+from main.data.serial.SerialUtils import flatten_to_26_bytearray
 
 
 class VVI(PacingMode):
@@ -25,7 +25,7 @@ class VVI(PacingMode):
         serial_bytes[3] = serial_self.ventricular_amplitude
         serial_bytes[4] = serial_self.ventricular_pulse_width
         serial_bytes[5] = serial_self.vrp
-        return flatten_to_bytearray(serial_bytes)
+        return flatten_to_26_bytearray(serial_bytes)
 
 
 class VVIBuilder:

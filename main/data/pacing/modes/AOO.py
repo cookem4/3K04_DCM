@@ -2,7 +2,7 @@ import json
 
 from main.data.pacing.PacingMode import PacingMode
 from main.data.pacing.PacingModes import toSerial
-from main.data.serial.SerialUtils import flatten_to_bytearray
+from main.data.serial.SerialUtils import flatten_to_26_bytearray
 
 
 class AOO(PacingMode):
@@ -23,7 +23,7 @@ class AOO(PacingMode):
         serial_bytes[2] = serial_self.upper_rate_limit
         serial_bytes[3] = serial_self.atrial_amplitude
         serial_bytes[4] = serial_self.atrial_pulse_width
-        return flatten_to_bytearray(serial_bytes)
+        return flatten_to_26_bytearray(serial_bytes)
 
 
 class AOOBuilder:

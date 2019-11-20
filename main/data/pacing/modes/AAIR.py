@@ -2,7 +2,7 @@ import json
 
 from main.data.pacing.PacingMode import PacingMode
 from main.data.pacing.PacingModes import toSerial
-from main.data.serial.SerialUtils import flatten_to_bytearray
+from main.data.serial.SerialUtils import flatten_to_26_bytearray
 
 
 class AAIR(PacingMode):
@@ -38,7 +38,7 @@ class AAIR(PacingMode):
         serial_bytes[9] = serial_self.max_sensor_rate
         serial_bytes[10] = serial_self.response_factor
         serial_bytes[11] = serial_self.atrial_sensitivity
-        return flatten_to_bytearray(serial_bytes)
+        return flatten_to_26_bytearray(serial_bytes)
 
 
 class AAIRBuilder:

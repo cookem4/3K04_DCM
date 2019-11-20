@@ -2,7 +2,7 @@ import json
 
 from main.data.pacing.PacingMode import PacingMode
 from main.data.pacing.PacingModes import toSerial
-from main.data.serial.SerialUtils import flatten_to_bytearray
+from main.data.serial.SerialUtils import flatten_to_26_bytearray
 
 
 class VOOR(PacingMode):
@@ -34,7 +34,7 @@ class VOOR(PacingMode):
         serial_bytes[7] = serial_self.recovery_time
         serial_bytes[8] = serial_self.max_sensor_rate
         serial_bytes[9] = serial_self.response_factor
-        return flatten_to_bytearray(serial_bytes)
+        return flatten_to_26_bytearray(serial_bytes)
 
 
 class VOORBuilder:

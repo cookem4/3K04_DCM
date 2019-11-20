@@ -1,5 +1,5 @@
 from main.data.pacing.PacingValueRange import PM_LIMIT
-from main.data.serial.SerialUtils import to_serial_byte, flatten_to_bytearray
+from main.data.serial.SerialUtils import to_serial_byte, flatten_to_26_bytearray
 
 
 class EGMPoint:
@@ -17,7 +17,7 @@ class EGMPoint:
         serial_atrium = to_serial_byte(self.atrium, PM_LIMIT.ATRIAL_AMPLITUDE["max"])
         serial_ventricle = to_serial_byte(self.ventricle, PM_LIMIT.VENTRICULAR_AMPLITUDE["max"])
         serial_period = to_serial_byte(self.period)
-        return flatten_to_bytearray([serial_period, serial_atrium, serial_ventricle])
+        return flatten_to_26_bytearray([serial_period, serial_atrium, serial_ventricle])
 
 
 class EGMPointBuilder:

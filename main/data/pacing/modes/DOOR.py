@@ -2,7 +2,7 @@ import json
 
 from main.data.pacing.PacingMode import PacingMode
 from main.data.pacing.PacingModes import toSerial
-from main.data.serial.SerialUtils import flatten_to_bytearray
+from main.data.serial.SerialUtils import flatten_to_26_bytearray
 
 
 class DOOR(PacingMode):
@@ -40,7 +40,7 @@ class DOOR(PacingMode):
         serial_bytes[10] = serial_self.max_sensor_rate
         serial_bytes[11] = serial_self.response_factor
         serial_bytes[12] = serial_self.av_delay
-        return flatten_to_bytearray(serial_bytes)
+        return flatten_to_26_bytearray(serial_bytes)
 
 
 class DOORBuilder:

@@ -19,7 +19,7 @@ def double_byte_to_value(double_byte: list, max_value=65535):
     return round(max_value * int_val / 65535, 2)
 
 
-def flatten_to_bytearray(list_of_lists) -> bytearray:
+def flatten_to_26_bytearray(list_of_lists) -> bytearray:
     flat_list = []
     for sublist in list_of_lists:
         if type(sublist) is not list:
@@ -27,5 +27,6 @@ def flatten_to_bytearray(list_of_lists) -> bytearray:
         else:
             for item in sublist:
                 flat_list.append(item)
-
+    length = len(flat_list)
+    flat_list += [0]*(26-length)
     return bytearray(flat_list)

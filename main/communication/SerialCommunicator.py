@@ -35,7 +35,7 @@ class SerialCommunicator(SerialBase, SerialInterface):
     def connect_to_pacemaker(self):
         self.send(SerialIdentifier.CONNECT)
         self.check_response(SerialIdentifier.CONNECT)
-        self.device_id = self.await_data(6)
+        self.device_id = self.await_data(8)
 
     def disconnect_from_pacemaker(self):
         self.send(SerialIdentifier.DISCONNECT)

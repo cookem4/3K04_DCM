@@ -42,7 +42,7 @@ def serial_safe_methods(serial_using_class: SerialBase):
                     self.oInstance.close()
                 except (SerialException, SerialTimeoutException, Exception) as e:
                     self.oInstance.close()
-                    print(e)
+                    raise e
                 return output
 
             return new_function

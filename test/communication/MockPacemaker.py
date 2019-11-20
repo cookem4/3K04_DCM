@@ -38,20 +38,20 @@ class MockPacemaker:
     def main_loop(self):
         while self.running:
             if self.serial.inWaiting() > 0:
-                print(self.serial.read(self.serial.inWaiting()))
-                # identifier = self.serial.read(2)
-                # if identifier == SerialIdentifier.CONNECT.value:
-                #     self.connect_response()
-                # elif identifier == SerialIdentifier.SEND_DATA.value:
-                #     self.recieve_pacing_mode()
-                # elif identifier == SerialIdentifier.REQUEST_EGM.value:
-                #     self.start_sending_egm_data()
-                # elif identifier == SerialIdentifier.STOP_EGM.value:
-                #     self.stop_sending_egm_data()
-                # elif identifier == SerialIdentifier.PING:
-                #     self.ping()
-                # elif identifier == SerialIdentifier.DISCONNECT:
-                #     self.disconnect()
+                reading = self.serial.read(self.serial.inWaiting())
+                identifier = int.from_bytes(reading, "big")
+                if identifier == SerialIdentifier.CONNECT.value:
+                    self.connect_response()
+                elif identifier == SerialIdentifier.SEND_DATA.value:
+                    self.recieve_pacing_mode()
+                elif identifier == SerialIdentifier.REQUEST_EGM.value:
+                    self.start_sending_egm_data()
+                elif identifier == SerialIdentifier.STOP_EGM.value:
+                    self.stop_sending_egm_data()
+                elif identifier == SerialIdentifier.PING.value:
+                    self.ping()
+                elif identifier == SerialIdentifier.DISCONNECT.value:
+                    self.disconnect()
             time.sleep(.1)
 
     def egm_loop(self):
@@ -89,3 +89,8 @@ class MockPacemaker:
     def stop_sending_egm_data(self):
         self.sending_egm_data = False
         self.egm_thread.join()
+
+
+if __name__ == '__main__':
+    mock_pacemaker = MockPacemaker("COM1")
+    mock_pacemaker.start()

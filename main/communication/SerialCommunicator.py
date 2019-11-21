@@ -34,8 +34,8 @@ class SerialCommunicator(SerialBase, SerialInterface):
 
     def connect_to_pacemaker(self):
         self.send(SerialIdentifier.CONNECT)
-        self.check_response(SerialIdentifier.CONNECT)
-        self.device_id = self.await_data(8)
+        # self.check_response(SerialIdentifier.CONNECT)
+        self.device_id = self.await_data()
 
     def disconnect_from_pacemaker(self):
         self.send(SerialIdentifier.DISCONNECT)
@@ -46,12 +46,13 @@ class SerialCommunicator(SerialBase, SerialInterface):
 
     def is_connection_established(self):
         self.send(SerialIdentifier.PING)
-        return self.check_response(SerialIdentifier.PING)
+        return self.await_data()
+        # return self.check_response(SerialIdentifier.PING)
 
     def egm_loop(self):
         while self.listen_for_egm:
-            if self.serial.inWaiting() >= 14:
-                raw_egm_data = self.serial.read(12)
+            if self.serial.inWaiting() >= 26:
+                raw_egm_data = self.serial.read(26)
                 time_byte = int(raw_egm_data[:4], 16)
                 atrium_byte = int(raw_egm_data[4:8], 16)
                 ventricle_byte = int(raw_egm_data[8:12], 16)
@@ -90,3 +91,4 @@ if __name__ == '__main__':
     com.request_EGM_data()
     time.sleep(30)
     com.end_egm_data()
+

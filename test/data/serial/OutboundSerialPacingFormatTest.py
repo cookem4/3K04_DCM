@@ -5,7 +5,7 @@ from main.data.pacing.modes.VOOR import VOOR
 from main.data.serial.SerialUtils import double_byte_to_value
 
 
-class SerialPacingFormatTest(unittest.TestCase):
+class OutboundSerialPacingFormatTest(unittest.TestCase):
     aair = AAI(60, 70, 4, 3, 300)
     voor = VOOR(60, 70, 4, 3, 5, 20, 8, 100, 9)
 

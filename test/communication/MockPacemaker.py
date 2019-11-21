@@ -38,7 +38,8 @@ class MockPacemaker:
     def main_loop(self):
         while self.running:
             if self.serial.inWaiting() > 0:
-                reading = self.serial.read(self.serial.inWaiting())
+                reading = self.serial.read(1)
+                print("Mock Pacemaker Received: " + reading.hex())
                 identifier = int.from_bytes(reading, "big")
                 if identifier == SerialIdentifier.CONNECT.value:
                     self.connect_response()
@@ -63,9 +64,10 @@ class MockPacemaker:
             time.sleep(self.p_val / 1000)
 
     def ping(self):
-        self.serial.write(bytearray([SerialIdentifier.PING]))
+        self.serial.write(bytearray([SerialIdentifier.PING.value]))
 
     def connect_response(self):
+        print("sending id")
         self.serial.write(bytearray([0xff]))
         self.serial.write(bytearray(self.deviceId, "ASCII"))
 

@@ -2,6 +2,8 @@ from math import floor
 
 from serial import SerialException
 
+EXPECTED_RETURN_SIZE = 34 # bytes
+
 
 def to_serial_byte(val, max_value=65535):
     if val is None:

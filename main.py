@@ -1,8 +1,7 @@
 from main.views.GUIApplication import DCM_GUI
-from main.communication.SerialCommunicator import SerialCommunicator
+from test.communication.MockPacemaker import MockPacemaker
 
 if __name__ == '__main__':
-
 
     '''
     us = UserService()
@@ -15,8 +14,8 @@ if __name__ == '__main__':
     us.print()
     us.delete("parker")
     '''
-    #serialTest = SerialCommunicator("COM12")
-    #print(serialTest.is_connection_established())
+    # serialTest = SerialCommunicator("COM12")
+    # print(serialTest.is_connection_established())
     # Create GUI instance
     app = DCM_GUI()
     app.mainloop()

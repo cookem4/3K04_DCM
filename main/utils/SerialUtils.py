@@ -2,7 +2,7 @@ from math import floor
 
 from serial import SerialException
 
-EXPECTED_RETURN_SIZE = 34 # bytes
+EXPECTED_RETURN_SIZE = 34  # bytes
 
 
 def to_serial_byte(val, max_value=65535):
@@ -22,6 +22,13 @@ def double_byte_to_value(double_byte: list, max_value=65535):
 
 
 def flatten_to_26_bytearray(list_of_lists) -> bytearray:
+    flat_list = flatten_list(list_of_lists)
+    length = len(flat_list)
+    flat_list += [0] * (25 - length)
+    return bytearray(flat_list)
+
+
+def flatten_list(list_of_lists) -> list:
     flat_list = []
     for sublist in list_of_lists:
         if type(sublist) is not list:
@@ -29,6 +36,8 @@ def flatten_to_26_bytearray(list_of_lists) -> bytearray:
         else:
             for item in sublist:
                 flat_list.append(item)
-    length = len(flat_list)
-    flat_list += [0]*(25-length)
-    return bytearray(flat_list)
+    return flat_list
+
+
+def replace_nones_with_double_zero(alist: list):
+    return [(x if x is not None else [0, 0]) for x in alist]

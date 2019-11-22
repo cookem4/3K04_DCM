@@ -1,4 +1,4 @@
-from main.data.pacing.PacingModes import PacingModes
+from main.constants.PacingModes import PacingModes
 from main.data.pacing.modes.AAI import AAIBuilder
 from main.data.pacing.modes.VVI import VVIBuilder
 from main.data.pacing.modes.AOO import AOOBuilder

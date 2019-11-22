@@ -1,10 +1,15 @@
-from main.data.pacing.PacingValueRange import PM_LIMIT
-from main.data.serial.SerialUtils import to_serial_byte
+from serial import to_bytes
+
+from main.constants.PacingModes import to_pacing_mode_id
+from main.constants.PacingValueRange import PM_LIMIT
+from main.constants.SerialIdentifier import SerialIdentifier
+from main.utils.SerialUtils import to_serial_byte, flatten_list, replace_nones_with_double_zero
 
 
 class OutboundSerialPacingMode:
 
     def __init__(self, pm):
+        self.pacing_mode_id = to_pacing_mode_id(pm.NAME)
         self.lower_rate_limit = to_serial_byte(
             val=pm.lower_rate_limit,
             max_value=PM_LIMIT.LOWER_RATE_LIMIT["max"])
@@ -53,3 +58,13 @@ class OutboundSerialPacingMode:
         self.ventricular_sensitivity = to_serial_byte(
             val=pm.ventricular_sensitivity,
             max_value=PM_LIMIT.VENTRICULAR_SENSITIVITY["max"])
+
+    def as_inbound_data(self):
+        out = [SerialIdentifier.SEND_DATA.value, self.pacing_mode_id, self.lower_rate_limit, self.upper_rate_limit,
+               self.atrial_amplitude, self.atrial_pulse_width,
+               self.ventricular_amplitude,
+               self.ventricular_pulse_width, self.arp, self.vrp, self.activity_threshold, self.reaction_time,
+               self.recovery_time, self.max_sensor_rate, self.response_factor, self.av_delay, self.atrial_sensitivity,
+               self.ventricular_sensitivity]
+        out = flatten_list(replace_nones_with_double_zero(out))
+        return to_bytes(out)

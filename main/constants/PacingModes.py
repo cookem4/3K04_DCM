@@ -51,5 +51,5 @@ paceMap = {
 }
 
 
-def toSerial(mode: PacingModes or str) -> SerialPacingModes:
+def to_pacing_mode_id(mode: PacingModes or str) -> SerialPacingModes:
     return paceMap[mode].value

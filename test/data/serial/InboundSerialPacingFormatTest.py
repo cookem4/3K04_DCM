@@ -1,17 +1,14 @@
 import unittest
 
-from serial import to_bytes
-
-from main.data.pacing.PacingModes import SerialPacingModes
+from main.constants.PacingModes import SerialPacingModes
+from main.constants.SerialIdentifier import SerialIdentifier
 from main.data.pacing.modes.AAI import AAI
 from main.data.serial.InboundSerialPacingMode import InboundSerialPacingMode
-from main.data.serial.SerialIdentifier import SerialIdentifier
 
 
 class InboundSerialPacingFormatTest(unittest.TestCase):
     aair = AAI(60, 70, 4, 3, 300)
-    data = [SerialIdentifier.SEND_DATA.value, 3, 0, 60, 0, 70, 0, 4, 0, 3, 0, 0, 0, 0, 1, 44]
-    data = to_bytes(data + [0] * (34 - len(data)))
+    data = aair.as_serial.as_inbound_data()
 
     def testSerialMatchesInputtedData(self):
         inboundSerialPacingMode = InboundSerialPacingMode(self.data)

@@ -1,10 +1,11 @@
-import re
 import time
 from datetime import timedelta, datetime
 
 from serial import EIGHTBITS, Serial, to_bytes
 
-from main.data.serial.SerialIdentifier import SerialIdentifier
+from main.constants.SerialIdentifier import SerialIdentifier
+from main.utils.SerialUtils import EXPECTED_RETURN_SIZE
+from main.services.SerialTranslationService import SerialTranslationService as SerialTranslator
 
 
 class SerialBase:
@@ -17,6 +18,7 @@ class SerialBase:
         self.bytesize = bytesize
         self.serial: Serial = None
         self.time_since_last_call = datetime.now()
+        self.most_recent_data = None
 
     def open(self):
         if self.serial is None:
@@ -45,21 +47,9 @@ class SerialBase:
 
     def await_data(self):
         for i in range(SerialBase.RESPONSE_TIME_LIMIT):
-            if self.serial.inWaiting() >= 26:
-                out = self.serial.read(self.serial.inWaiting()).decode()
-                print("SerialCom Received: " + out)
-                out = re.sub('\r\n', '', out)
-                if len(out) == 26:
-                    return out
+            if self.serial.inWaiting() == EXPECTED_RETURN_SIZE:
+                data = SerialTranslator.from_data(self.serial.read(EXPECTED_RETURN_SIZE))
+                self.most_recent_data = data
+                self.serial.flushInput()
+                break
             time.sleep(1)
-        return []
-
-    # def check_response(self, expected_response: SerialIdentifier):
-    #     for i in range(SerialBase.RESPONSE_TIME_LIMIT):
-    #         if self.serial.inWaiting() >= 2:
-    #             reading = self.serial.read(2)
-    #             identifier = int(reading, 16)
-    #             if identifier == expected_response.value:
-    #                 return True
-    #         time.sleep(1)
-    #     return False

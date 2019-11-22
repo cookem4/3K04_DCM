@@ -1,7 +1,7 @@
 import unittest
 
 from main.data.egm.EGMPoint import EGMPoint
-from main.data.serial.SerialUtils import double_byte_to_value
+from main.utils.SerialUtils import double_byte_to_value
 
 
 class EGMDataTest(unittest.TestCase):

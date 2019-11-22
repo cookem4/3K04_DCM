@@ -2,7 +2,7 @@ import unittest
 
 from main.data.pacing.modes.AAI import AAI
 from main.data.pacing.modes.VOOR import VOOR
-from main.data.serial.SerialUtils import double_byte_to_value
+from main.utils.SerialUtils import double_byte_to_value
 
 
 class OutboundSerialPacingFormatTest(unittest.TestCase):
@@ -18,7 +18,7 @@ class OutboundSerialPacingFormatTest(unittest.TestCase):
         apw = double_byte_to_value(data_arr[7:9], 5)
         arp = double_byte_to_value(data_arr[9:11], 500)
 
-        self.assertEqual(26, len(data))
+        self.assertEqual(25, len(data))
         self.assertEqual(60, lrl)
         self.assertEqual(70, url)
         self.assertEqual(4, aa)
@@ -38,7 +38,7 @@ class OutboundSerialPacingFormatTest(unittest.TestCase):
         msr = double_byte_to_value(data_arr[15:17], 175)
         rf = double_byte_to_value(data_arr[17:19], 16)
 
-        self.assertEqual(26, len(data))
+        self.assertEqual(25, len(data))
         self.assertEqual(60, lrl)
         self.assertEqual(70, url)
         self.assertEqual(4, va)

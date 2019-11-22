@@ -1,6 +1,6 @@
 import json
 
-from main.data.pacing.PacingValueRange import PacingValueRange
+from main.constants.PacingValueRange import PacingValueRange
 from main.data.serial.OutboundSerialPacingMode import OutboundSerialPacingMode
 
 
@@ -41,3 +41,31 @@ class PacingMode:
     @property
     def as_serial(self):
         return OutboundSerialPacingMode(self)
+
+    def __eq__(self, other):
+        validity_array = []
+        validity_array[0] = self.lower_rate_limit == other.lower_rate_limit
+        validity_array[1] = self.upper_rate_limit == other.upper_rate_limit
+        validity_array[2] = value_match(self.atrial_amplitude, other.atrial_amplitude)
+        validity_array[3] = value_match(self.atrial_pulse_width, other.atrial_pulse_width)
+        validity_array[4] = value_match(self.ventricular_amplitude, other.ventricular_amplitude)
+        validity_array[5] = value_match(self.ventricular_pulse_width, other.ventricular_pulse_width)
+        validity_array[6] = value_match(self.arp, other.arp)
+        validity_array[7] = value_match(self.vrp, other.vrp)
+        validity_array[8] = value_match(self.activity_threshold, other.activity_threshold)
+        validity_array[9] = value_match(self.reaction_time, other.reaction_time)
+        validity_array[10] = value_match(self.recovery_time, other.recovery_time)
+        validity_array[11] = value_match(self.max_sensor_rate, other.max_sensor_rate)
+        validity_array[12] = value_match(self.response_factor, other.response_factor)
+        validity_array[13] = value_match(self.av_delay, other.av_delay)
+        validity_array[14] = value_match(self.atrial_sensitivity, other.atrial_sensitivity)
+        validity_array[15] = value_match(self.ventricular_sensitivity, other.ventricular_sensitivity)
+
+def value_match(val1,val2):
+    if val1 is None and val2 is None:
+        return True
+    if val1 is None and val2 is not None:
+        return False
+    if val1 is not None and val2 is None:
+        return False
+    return val1 == val2

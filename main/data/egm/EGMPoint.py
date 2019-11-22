@@ -1,5 +1,5 @@
-from main.data.pacing.PacingValueRange import PM_LIMIT
-from main.data.serial.SerialUtils import to_serial_byte, flatten_to_26_bytearray
+from main.constants.PacingValueRange import PM_LIMIT
+from main.utils.SerialUtils import to_serial_byte, flatten_to_26_bytearray
 
 
 class EGMPoint:

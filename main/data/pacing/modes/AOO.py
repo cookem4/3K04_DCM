@@ -1,8 +1,8 @@
 import json
 
 from main.data.pacing.PacingMode import PacingMode
-from main.data.pacing.PacingModes import toSerial
-from main.data.serial.SerialUtils import flatten_to_26_bytearray
+from main.constants.PacingModes import to_pacing_mode_id
+from main.utils.SerialUtils import flatten_to_26_bytearray
 
 
 class AOO(PacingMode):
@@ -18,7 +18,7 @@ class AOO(PacingMode):
     def serialize(self) -> bytearray:
         serial_self = self.as_serial
         serial_bytes = [0 for x in range(5)]
-        serial_bytes[0] = toSerial(self.NAME)
+        serial_bytes[0] = to_pacing_mode_id(self.NAME)
         serial_bytes[1] = serial_self.lower_rate_limit
         serial_bytes[2] = serial_self.upper_rate_limit
         serial_bytes[3] = serial_self.atrial_amplitude

@@ -4,13 +4,15 @@ from threading import Thread
 from serial import Serial, EIGHTBITS
 
 from main.data.egm.EGMPoint import EGMPoint
-from main.data.serial.SerialIdentifier import SerialIdentifier
+from main.constants.SerialIdentifier import SerialIdentifier
+from main.data.serial.InboundSerialPacingMode import InboundSerialPacingMode
 
 
+# @deprecated This no longer works under the new pacing format as of Nov 21st
 class MockPacemaker:
 
     def __init__(self, port):
-        self.deviceId = "12345678"
+        self.deviceId = "01abcdef"
         self.running = False
         self.sending_egm_data = False
         self.pacingMode = None
@@ -73,18 +75,17 @@ class MockPacemaker:
 
     def recieve_pacing_mode(self):
         i = 0
-        while self.serial.inWaiting() == 0 or i < 30:
-            i += 1
-            time.sleep(1)
-        self.pm_data = self.serial.read(self.serial.inWaiting())
-        self.serial.write(bytearray(SerialIdentifier.RECEIVED_DATA.value))
+        for i in range(30):
+            if self.serial.inWaiting() == 34:
+                self.pm_data = self.serial.read(34)
+                break
+
+        self.serial.write(bytearray([SerialIdentifier.RECEIVED_DATA.value] + []))
 
     def disconnect(self):
-        self.serial.write(bytearray([SerialIdentifier.DISCONNECT.value]))
         self.stop()
 
     def start_sending_egm_data(self):
-        self.serial.write(bytearray([SerialIdentifier.REQUEST_EGM.value]))
         self.sending_egm_data = True
         self.egm_thread.start()
 

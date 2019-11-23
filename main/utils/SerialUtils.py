@@ -22,9 +22,9 @@ def double_byte_to_value(double_byte: list, max_value=65535):
     return round(max_value * int_val / 65535, 2)
 
 
-def single_byte_to_value(byte, max_value=256):
+def single_byte_to_value(byte, max_value=255):
     byte_val = int(byte, 16)
-    return round(max_value * byte_val / 256, 2)
+    return round(max_value * byte_val / 255, 2)
 
 
 def flatten_to_26_bytearray(list_of_lists) -> bytearray:

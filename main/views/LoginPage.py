@@ -10,8 +10,8 @@ class LoginPage(AppFrameBase):
         self.xPadding = 325
 
         self.welcomeText = tk.Label(self, bg="black",
-                                    text="Welcome to the Pacemaker DCM\n This tool allows a pacemaker to be "
-                                         "configured in the \n AOO, VOO, AAI, and VVI pacing modes")
+                                    text="Welcome to the Pacemaker DCM\n \nThis tool allows a pacemaker to be "
+                                         "configured in\n10 different pacing modes")
         self.welcomeText.config(font=("Helvetica", 20), foreground="white")
         self.welcomeText.grid(row=0, column=0, columnspan=2, padx=(self.xPadding, 0), pady=(200, 75), sticky=tk.N)
 

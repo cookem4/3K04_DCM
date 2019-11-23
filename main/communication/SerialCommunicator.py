@@ -65,7 +65,7 @@ class SerialCommunicator(SerialBase, SerialInterface):
         return isinstance(self.most_recent_data, SerialPing)
 
     def egm_loop(self):
-        while self.listen_for_egm:
+        while self.listen_for_egm and self.serial.is_open:
             if self.serial.inWaiting() == EXPECTED_RETURN_SIZE:
                 data = self.serial.read(EXPECTED_RETURN_SIZE)
                 print("data read: " + data.hex())
@@ -73,7 +73,7 @@ class SerialCommunicator(SerialBase, SerialInterface):
                 if isinstance(data, SerialEGMPoint):
                     self.egm_data.append(data.to_egm_point())
                 self.serial.flushInput()
-        time.sleep(.1)
+            time.sleep(.1)
 
     @leave_serial_open
     def request_EGM_data(self):

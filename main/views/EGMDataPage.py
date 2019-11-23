@@ -123,13 +123,14 @@ class EGMDataPage(AppFrameBase):
 
     def toggleGraphing(self):
         if self.allowGraphing:
+            self.serial_service.end_egm_data()
             self.allowGraphing = False
             self.setToGraph = [[0], [0], [0]]
             self.timeSum = 0
         else:
             self.allowGraphing = True
             # Send request egm data command
-            # self.serial_service.request_EGM_data()
+            self.serial_service.request_EGM_data()
             myThread = Thread(target=self.FetchDataPoint, args=())
             myThread.start()
 

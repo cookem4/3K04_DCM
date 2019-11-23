@@ -11,6 +11,7 @@ class InboundSerialPacingFormatTest(unittest.TestCase):
     data = aair.as_serial.as_inbound_data()
 
     def testSerialMatchesInputtedData(self):
+        self.assertTrue(self.aair.validation_result)
         inboundSerialPacingMode = InboundSerialPacingMode(self.data)
         self.assertEqual(inboundSerialPacingMode.identifier, SerialIdentifier.SEND_DATA.value)
         self.assertEqual(inboundSerialPacingMode.pacingMode, SerialPacingModes.AAI.value)

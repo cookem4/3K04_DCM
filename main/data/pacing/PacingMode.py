@@ -1,6 +1,6 @@
 import json
 
-from main.constants.PacingValueRange import PacingValueRange
+from main.data.pacing.PacingModeValidator import PacingModeValidator
 from main.data.serial.OutboundSerialPacingMode import OutboundSerialPacingMode
 
 
@@ -36,7 +36,7 @@ class PacingMode:
 
     @property
     def validation_result(self):
-        return PacingValueRange(self).validate()
+        return PacingModeValidator.form_pacing_mode(self).validate()
 
     @property
     def as_serial(self):
@@ -61,7 +61,8 @@ class PacingMode:
         validity_array[14] = value_match(self.atrial_sensitivity, other.atrial_sensitivity)
         validity_array[15] = value_match(self.ventricular_sensitivity, other.ventricular_sensitivity)
 
-def value_match(val1,val2):
+
+def value_match(val1, val2):
     if val1 is None and val2 is None:
         return True
     if val1 is None and val2 is not None:

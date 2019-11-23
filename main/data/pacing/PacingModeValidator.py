@@ -44,10 +44,12 @@ class PM_LIMIT:
     VENTRICULAR_SENSITIVITY = {"min": 1, "max": 10}
 
 
-class PacingValueRange:
+class PacingModeValidator:
+    constraints = {}
 
-    def __init__(self, pm):
-        self.constraints = {
+    @staticmethod
+    def form_pacing_mode(pm):
+        PacingModeValidator.constraints = {
             "LRL": pm.lower_rate_limit >= PM_LIMIT.LOWER_RATE_LIMIT["min"],
             "URL": pm.upper_rate_limit <= PM_LIMIT.UPPER_RATE_LIMIT["max"],
             "URL_gt_LRL": pm.upper_rate_limit > pm.lower_rate_limit,
@@ -68,23 +70,25 @@ class PacingValueRange:
             "AT": pm.activity_threshold is None or \
                   PM_LIMIT.ACTIVITY_THRESHOLD["min"] <= pm.activity_threshold <= PM_LIMIT.ACTIVITY_THRESHOLD["max"],
             "REACT": pm.activity_threshold is None or \
-                  PM_LIMIT.REACTION_TIME["min"] <= pm.reaction_time <= PM_LIMIT.REACTION_TIME["max"],
+                     PM_LIMIT.REACTION_TIME["min"] <= pm.reaction_time <= PM_LIMIT.REACTION_TIME["max"],
             "RECT": pm.recovery_time is None or \
-                  PM_LIMIT.RECOVERY_TIME["min"] <= pm.recovery_time <= PM_LIMIT.RECOVERY_TIME["max"],
+                    PM_LIMIT.RECOVERY_TIME["min"] <= pm.recovery_time <= PM_LIMIT.RECOVERY_TIME["max"],
             "SR": pm.max_sensor_rate is None or \
-                    PM_LIMIT.MAX_SENSOR_RATE["min"] <= pm.max_sensor_rate <= PM_LIMIT.MAX_SENSOR_RATE["max"],
+                  PM_LIMIT.MAX_SENSOR_RATE["min"] <= pm.max_sensor_rate <= PM_LIMIT.MAX_SENSOR_RATE["max"],
             "RF": pm.response_factor is None or \
-                    PM_LIMIT.RESPONSE_FACTOR["min"] <= pm.response_factor <= PM_LIMIT.RESPONSE_FACTOR["max"],
+                  PM_LIMIT.RESPONSE_FACTOR["min"] <= pm.response_factor <= PM_LIMIT.RESPONSE_FACTOR["max"],
             "AS": pm.atrial_sensitivity is None or \
                   PM_LIMIT.ATRIAL_SENSITIVITY["min"] <= pm.atrial_sensitivity <= PM_LIMIT.ATRIAL_SENSITIVITY["max"],
             "VS": pm.ventricular_sensitivity is None or \
                   PM_LIMIT.VENTRICULAR_SENSITIVITY["min"] <= pm.ventricular_sensitivity <=
                   PM_LIMIT.VENTRICULAR_SENSITIVITY["max"]
         }
+        return PacingModeValidator
 
-    def validate(self):
-        for x in self.constraints.keys():
-            if not self.constraints[x]:
+    @staticmethod
+    def validate():
+        for x in PacingModeValidator.constraints.keys():
+            if not PacingModeValidator.constraints[x]:
                 return PacingValidationResult(False, error_messages[x])
 
         return PacingValidationResult(True)

@@ -75,7 +75,6 @@ class MainPage(AppFrameBase):
         self.threadController = False
         self.parent.switch_frame(PacingConfigPage.PacingConfigPage)
 
-
     def view_current_EGM_data_callback(self):
         self.parent.switch_frame(EGMDataPage.EGMDataPage)
         self.threadController = False
@@ -84,12 +83,11 @@ class MainPage(AppFrameBase):
         self.session_service.invalidate()
         self.parent.switch_frame(LoginPage.LoginPage)
         self.threadController = False
+        self.myThread.join()
         self.serial_service.disconnect_from_pacemaker()
         self.serial_indicators.setConnection(False)
         self.serial_indicators.setLastConnectionID(None)
         self.serial_indicators.setCurrConnectionID(None)
-
-
 
     #Thread to check connection status. Condition will change to self.serial_service.is_connection_established()
     #This is essentially a background thread for serial data

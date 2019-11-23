@@ -4,8 +4,8 @@ from datetime import timedelta, datetime
 from serial import EIGHTBITS, Serial, to_bytes
 
 from main.constants.SerialIdentifier import SerialIdentifier
-from main.utils.SerialUtils import EXPECTED_RETURN_SIZE
 from main.services.SerialTranslationService import SerialTranslationService as SerialTranslator
+from main.utils.SerialUtils import EXPECTED_RETURN_SIZE, EXPECTED_SEND_SIZE
 
 
 class SerialBase:
@@ -35,7 +35,7 @@ class SerialBase:
             self.serial.close()
 
     def send(self, identifier: SerialIdentifier, data_bytearray: bytearray = bytearray(0)):
-        numToPad = 26 - 1 - len(data_bytearray)
+        numToPad = EXPECTED_SEND_SIZE - 1 - len(data_bytearray)
         bytes_to_send = to_bytes(bytes([identifier.value]) + data_bytearray + bytearray([0] * numToPad))
         self.serial.write(bytes_to_send)
 
@@ -48,7 +48,9 @@ class SerialBase:
     def await_data(self):
         for i in range(SerialBase.RESPONSE_TIME_LIMIT):
             if self.serial.inWaiting() == EXPECTED_RETURN_SIZE:
-                data = SerialTranslator.from_data(self.serial.read(EXPECTED_RETURN_SIZE))
+                data = self.serial.read(EXPECTED_RETURN_SIZE)
+                print("data read: " + data.hex())
+                data = SerialTranslator.from_data(data)
                 self.most_recent_data = data
                 self.serial.flushInput()
                 break

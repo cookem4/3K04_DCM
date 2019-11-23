@@ -6,17 +6,15 @@ from serial import EIGHTBITS
 from main.communication.SerialBase import SerialBase
 from main.communication.SerialDecorator import serial_safe_methods, leave_serial_open
 from main.communication.interfaces.SerialInterface import SerialInterface
+from main.constants.SerialIdentifier import SerialIdentifier
 from main.data.pacing.PacingMode import PacingMode
 from main.data.pacing.modes.DOOR import DOOR
 from main.data.serial.InboundSerialPacingMode import InboundSerialPacingMode
 from main.data.serial.SerialDeviceId import SerialDeviceId
 from main.data.serial.SerialEGMPoint import SerialEGMPoint
-from main.constants.SerialIdentifier import SerialIdentifier
-from main.utils.SerialUtils import EXPECTED_RETURN_SIZE
 from main.exceptions.UnexpectedSerialResponseException import UnexpectedSerialResponseException
 from main.services.SerialTranslationService import SerialTranslationService as SerialTranslator, SerialPing
-
-
+from main.utils.SerialUtils import EXPECTED_RETURN_SIZE
 
 
 @serial_safe_methods
@@ -55,8 +53,9 @@ class SerialCommunicator(SerialBase, SerialInterface):
     def send_pacing_data(self, data: PacingMode):
         self.send(SerialIdentifier.SEND_DATA, data.serialize())
         self.await_data()
-        if isinstance(self.most_recent_data,InboundSerialPacingMode):
-            return self.most_recent_data.to_pacing_mode() == data
+        # self.await_identifier(SerialIdentifier.SEND_DATA)
+        if self.most_recent_data:
+            return True
         else:
             raise UnexpectedSerialResponseException("Expected response of type InboundSerialPacingMode")
 
@@ -68,7 +67,9 @@ class SerialCommunicator(SerialBase, SerialInterface):
     def egm_loop(self):
         while self.listen_for_egm:
             if self.serial.inWaiting() == EXPECTED_RETURN_SIZE:
-                data = SerialTranslator.from_data(self.serial.read(EXPECTED_RETURN_SIZE))
+                data = self.serial.read(EXPECTED_RETURN_SIZE)
+                print("data read: " + data.hex())
+                data = SerialTranslator.from_data(data)
                 if isinstance(data, SerialEGMPoint):
                     self.egm_data.append(data.to_egm_point())
                 self.serial.flushInput()

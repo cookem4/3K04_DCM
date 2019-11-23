@@ -22,15 +22,15 @@ class SerialTranslationService:
             raise InvalidSerialPacingModeException("Inbound pacing mode arrays must be of length 34")
         else:
             identifier = data[0]
-            if identifier == SerialIdentifier.SEND_DATA:
+            if identifier == SerialIdentifier.SEND_DATA.value:
                 SerialTranslationService.last_data_type = SerialIdentifier.SEND_DATA
-                return InboundSerialPacingMode(data)
-            elif identifier == SerialIdentifier.CONNECT:
+                return True
+            elif identifier == SerialIdentifier.CONNECT.value:
                 SerialTranslationService.last_data_type = SerialIdentifier.CONNECT
                 return SerialDeviceId(data)
-            elif identifier == SerialIdentifier.PING:
+            elif identifier == SerialIdentifier.PING.value:
                 SerialTranslationService.last_data_type = SerialIdentifier.PING
                 return SerialPing()
-            elif identifier == SerialIdentifier.REQUEST_EGM:
+            elif identifier == SerialIdentifier.REQUEST_EGM.value:
                 SerialTranslationService.last_data_type = SerialIdentifier.REQUEST_EGM
                 return SerialEGMPoint(data)

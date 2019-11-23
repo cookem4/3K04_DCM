@@ -4,13 +4,13 @@ from serial import to_bytes
 class SerialDeviceId:
     def __init__(self, data: bytearray):
         self.identifier = data[0]
-        self.id = data[1:5]
+        self.id = data[1]
 
     def get_raw_id(self):
         return self.id
 
     def get_str_id(self):
-        return self.id.hex()
+        return str(self.id)
 
     def get_int_id(self):
         return int(self.get_str_id(), 16)

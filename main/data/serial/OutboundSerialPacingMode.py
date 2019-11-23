@@ -1,7 +1,7 @@
 from serial import to_bytes
 
 from main.constants.PacingModes import to_pacing_mode_id
-from main.constants.PacingValueRange import PM_LIMIT
+from main.data.pacing.PacingModeValidator import PM_LIMIT
 from main.constants.SerialIdentifier import SerialIdentifier
 from main.utils.SerialUtils import to_serial_byte, flatten_list, replace_nones_with_double_zero
 

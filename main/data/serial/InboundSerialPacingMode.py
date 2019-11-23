@@ -1,5 +1,5 @@
 from main.data.pacing.PacingMode import PacingMode
-from main.constants.PacingValueRange import PM_LIMIT
+from main.data.pacing.PacingModeValidator import PM_LIMIT
 from main.utils.SerialUtils import double_byte_to_value
 
 

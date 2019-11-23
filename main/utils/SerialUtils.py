@@ -2,7 +2,8 @@ from math import floor
 
 from serial import SerialException
 
-EXPECTED_RETURN_SIZE = 34  # bytes
+EXPECTED_RETURN_SIZE = 4  # bytes
+EXPECTED_SEND_SIZE = 26
 
 
 def to_serial_byte(val, max_value=65535):
@@ -19,6 +20,11 @@ def to_serial_byte(val, max_value=65535):
 def double_byte_to_value(double_byte: list, max_value=65535):
     int_val = 256 * double_byte[0] + double_byte[1]
     return round(max_value * int_val / 65535, 2)
+
+
+def single_byte_to_value(byte, max_value):
+    byte_val = int(byte, 16)
+    return round(max_value * byte_val / 256, 2)
 
 
 def flatten_to_26_bytearray(list_of_lists) -> bytearray:

@@ -13,7 +13,7 @@ import time
 import math
 import multiprocessing
 import matplotlib.animation as animation
-
+from main.data.egm import EGMPoint
 
 class EGMDataPage(AppFrameBase):
 
@@ -30,9 +30,8 @@ class EGMDataPage(AppFrameBase):
         # First index is atrial pacing second is ventricle pacing
         # self.setToGraph = [[5, 6, 1, 3, 8, 9, 3, 5, 5, 6, 1, 3, 8, 9, 3, 5],
         # [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 14, 15, 16]]
-        self.setToGraph = [[0], [0]]
-        self.addCntr = 0
-
+        self.setToGraph = [[0], [0], [0]]
+        self.timeSum = 0
         self.connectionStateText = tk.Label(self, bg="gray", text="Connection Not Established")
         self.connectionStateText.config(font=("Helvetica", 25), foreground="black")
         self.connectionStateText.grid(row=0, column=0, columnspan=3, padx=(90, 0), pady=(20, 0), sticky=tk.N)
@@ -92,16 +91,16 @@ class EGMDataPage(AppFrameBase):
         if self.allowGraphing:
             ax.clear()
             if self.displaySelection.get() == 'Atrium':
-                ax.plot(range(len(self.setToGraph[0])), self.setToGraph[0])
-                ax.set_ylim([min(self.setToGraph[0]), max(self.setToGraph[0])])
-                ax.set_xlim([len(self.setToGraph[0]) - 10, len(self.setToGraph[0])])
+                ax.plot(self.setToGraph[2], self.setToGraph[0])
+                ax.set_ylim([min(self.setToGraph[0]) -1 , max(self.setToGraph[0]) + 1])
+                ax.set_xlim([min(self.setToGraph[2]) - 5, max(self.setToGraph[1]) + 5])
             elif self.displaySelection.get() == 'Ventrical':
-                ax.plot(range(len(self.setToGraph[1])), self.setToGraph[1])
-                ax.set_ylim([min(self.setToGraph[1]), max(self.setToGraph[1])])
-                ax.set_xlim([len(self.setToGraph[1]) - 10, len(self.setToGraph[1])])
+                ax.plot(self.setToGraph[2], self.setToGraph[1])
+                ax.set_ylim([min(self.setToGraph[1])-1, max(self.setToGraph[1])+1])
+                ax.set_xlim([min(self.setToGraph[2]) - 5, max(self.setToGraph[1]) + 5])
             elif self.displaySelection.get() == 'Both':
-                ax.plot(range(len(self.setToGraph[0])), self.setToGraph[0], self.setToGraph[1])
-                ax.set_xlim([len(self.setToGraph[0]) - 10, len(self.setToGraph[0])])
+                ax.plot(self.setToGraph[2], self.setToGraph[0], self.setToGraph[1])
+                ax.set_xlim([min(self.setToGraph[2]) - 5, max(self.setToGraph[1]) + 5])
                 myMin = 0
                 myMax = 0
                 if(min(self.setToGraph[0]) > min(self.setToGraph[1])):
@@ -125,8 +124,8 @@ class EGMDataPage(AppFrameBase):
     def toggleGraphing(self):
         if self.allowGraphing:
             self.allowGraphing = False
-            self.setToGraph = [[0], [0]]
-            self.addCntr = 0
+            self.setToGraph = [[0], [0], [0]]
+            self.timeSum = 0
         else:
             self.allowGraphing = True
             # Send request egm data command
@@ -186,8 +185,10 @@ class EGMDataPage(AppFrameBase):
     def FetchDataPoint(self):
         while self.allowGraphing:
             # Graph data point from serial module here:
-            # self.serial_service.get_graphing_data()
-            self.addCntr = self.addCntr + 1
-            self.setToGraph[0].append(math.sin(self.addCntr))
-            self.setToGraph[1].append(self.addCntr ** 0.5)
-            time.sleep(0.2)
+            egmDataPoint = self.serial_service.get_graphing_data()
+            if len(egmDataPoint) > len(self.setToGraph[0]):
+                self.timeSum = self.timeSum + egmDataPoint[-1].period
+                self.setToGraph[0].append(egmDataPoint[-1].atrium)
+                self.setToGraph[1].append(egmDataPoint[-1].ventricle)
+                self.setToGraph[2].append(self.timeSum)
+            time.sleep(0.01)

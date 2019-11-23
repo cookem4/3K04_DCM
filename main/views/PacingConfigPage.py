@@ -131,16 +131,15 @@ class PacingConfigPage(AppFrameBase):
         if(self.serial_indicators.isConnected()):
             self.saveBtn.config(state = tk.NORMAL)
         else:
-            #self.saveBtn.config(state=tk.DISABLED)
+            self.saveBtn.config(state=tk.DISABLED)
             print("")
         self.saveBtn.place(relx=0.12, rely=0.92, anchor='sw')
 
-        '''
-        self.saveDeviceLabel = tk.Label(self, bg="gray", text="Saving to Device...")
+
+        self.saveDeviceLabel = tk.Label(self, bg="gray", text="Saved to Device")
         self.saveDeviceLabel.config(font=(25), foreground="white")
-        # self.saveDeviceLabel.grid(row=6, column=1, padx=(30, 0), pady=(0, 0), sticky=tk.W)
+        #self.saveDeviceLabel.grid(row=6, column=1, padx=(30, 0), pady=(0, 0), sticky=tk.W)
         self.saveDeviceLabel.place(relx=0.20, rely=0.92, anchor='sw')
-        '''
 
         self.errorLabel = tk.Label(self, bg="black", text="Erroneous Parameters Provided", width=33)
 
@@ -494,8 +493,8 @@ class PacingConfigPage(AppFrameBase):
                                    False, False, False]
             # self.set_states(ALE="disabled", APW="disabled", ARP="disabled")
         if self.pacingSelection.get() == "DOO":
-            self.boxesToDisplay = [True, True, True, True, True, True, False, False, False, False, False, True, False,
-                                   False, False, False]
+            self.boxesToDisplay = [True, True, True, True, True, True, False, False, False, False, False, False, False,
+                                   True, False, False]
         if self.pacingSelection.get() == "AOOR":
             self.boxesToDisplay = [True, True, True, False, True, False, False, False, True, True, True, True, True, False, False,
                                    False]
@@ -803,7 +802,8 @@ class PacingConfigPage(AppFrameBase):
             self.actualModeLabel.config(text=self.currUserJson["pacing_mode_name"])
 
             # transmit serial data:
-            self.serial_service.send_pacing_data(pacing_mode)
+            if(self.serial_service.send_pacing_data(pacing_mode)):
+                self.saveDeviceLabel.config(foreground="black", bg="green")
 
     # Thread to check connection status. Condition will change to self.serial_service.is_connection_established()
     # This is essentially a background thread for serial data
@@ -826,7 +826,7 @@ class PacingConfigPage(AppFrameBase):
                 self.currID.config(text="None")
                 self.prevID.config(text="None")
         else:
-            #self.saveBtn.config(state=tk.DISABLED)
+            self.saveBtn.config(state=tk.DISABLED)
             self.connectionStateText.config(text="Connection Not Established", foreground="black",
                                             background="gray")
             self.currID.config(text="None")
@@ -857,7 +857,7 @@ class PacingConfigPage(AppFrameBase):
                         self.currID.config(text="None")
                         self.prevID.config(text="None")
                 else:
-                    #self.saveBtn.config(state=tk.DISABLED)
+                    self.saveBtn.config(state=tk.DISABLED)
                     self.connectionStateText.config(text="Connection Not Established", foreground="black",
                                                     background="gray")
                     self.currID.config(text="None")

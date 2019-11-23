@@ -797,13 +797,12 @@ class PacingConfigPage(AppFrameBase):
 
             self.errorLabel.config(text="", width=1)  # Shrink to remove, deleting wasn't working
 
-            # Update displayed programmed mode
-            self.currUserJson = self.load_current_user_json()
-            self.actualModeLabel.config(text=self.currUserJson["pacing_mode_name"])
-
             # transmit serial data:
             if(self.serial_service.send_pacing_data(pacing_mode)):
                 self.saveDeviceLabel.config(foreground="black", bg="green")
+                # Update displayed programmed mode
+                self.currUserJson = self.load_current_user_json()
+                self.actualModeLabel.config(text=self.currUserJson["pacing_mode_name"])
 
     # Thread to check connection status. Condition will change to self.serial_service.is_connection_established()
     # This is essentially a background thread for serial data

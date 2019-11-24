@@ -31,6 +31,7 @@ class EGMDataPage(AppFrameBase):
         # self.setToGraph = [[5, 6, 1, 3, 8, 9, 3, 5, 5, 6, 1, 3, 8, 9, 3, 5],
         # [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 14, 15, 16]]
         self.setToGraph = [[0], [0], [0]]
+        #self.setToGraph = [[1,4,2,5,4,3], [4,3,1,5,3,4], [3,6,12,17,22,35]]
         self.timeSum = 0
         self.connectionStateText = tk.Label(self, bg="gray", text="Connection Not Established")
         self.connectionStateText.config(font=("Helvetica", 25), foreground="black")
@@ -93,20 +94,24 @@ class EGMDataPage(AppFrameBase):
             if self.displaySelection.get() == 'Atrium':
                 ax.plot(self.setToGraph[2], self.setToGraph[0])
                 ax.set_ylim([min(self.setToGraph[0]) -1 , max(self.setToGraph[0]) + 1])
-                ax.set_xlim([min(self.setToGraph[2]) - 5, max(self.setToGraph[1]) + 5])
+                ax.set_xlim([min(self.setToGraph[2]) - 1, max(self.setToGraph[2]) + 1])
             elif self.displaySelection.get() == 'Ventrical':
                 ax.plot(self.setToGraph[2], self.setToGraph[1])
                 ax.set_ylim([min(self.setToGraph[1])-1, max(self.setToGraph[1])+1])
-                ax.set_xlim([min(self.setToGraph[2]) - 5, max(self.setToGraph[1]) + 5])
+                ax.set_xlim([min(self.setToGraph[2]) - 1, max(self.setToGraph[2]) + 1])
             elif self.displaySelection.get() == 'Both':
                 ax.plot(self.setToGraph[2], self.setToGraph[0], self.setToGraph[1])
-                ax.set_xlim([min(self.setToGraph[2]) - 5, max(self.setToGraph[1]) + 5])
+                ax.set_xlim([min(self.setToGraph[2]) - 1, max(self.setToGraph[2]) + 1])
                 myMin = 0
                 myMax = 0
                 if(min(self.setToGraph[0]) > min(self.setToGraph[1])):
                     myMin = min(self.setToGraph[1])
+                else:
+                    myMin = min(self.setToGraph[0])
                 if(max(self.setToGraph[0]) > max(self.setToGraph[1])):
                     myMax = max(self.setToGraph[0])
+                else:
+                    myMax = max(self.setToGraph[1])
                 ax.set_ylim([myMin, myMax])
             ax.set_xlabel("Time (ms)")
             ax.set_ylabel("Voltage")

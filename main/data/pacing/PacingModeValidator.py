@@ -14,8 +14,8 @@ error_messages = {
     "SR": "Max sensor rate must be between 50-175",
     "RF": "Response factor must be between 1-16",
     "AV": "AV delay must be between 70-300",
-    "AS": "Atrial Sensitivity must be between 1-10",
-    "VS": "Ventricular Sensitivity must be between 1-10"
+    "AS": "Atrial Sensitivity must be between 1-5",
+    "VS": "Ventricular Sensitivity must be between 1-5"
 }
 
 
@@ -40,8 +40,8 @@ class PM_LIMIT:
     MAX_SENSOR_RATE = {"min": 50, "max": 175}
     RESPONSE_FACTOR = {"min": 1, "max": 16}
     AV_DELAY = {"min": 70, "max": 300}
-    ATRIAL_SENSITIVITY = {"min": 1, "max": 10}
-    VENTRICULAR_SENSITIVITY = {"min": 1, "max": 10}
+    ATRIAL_SENSITIVITY = {"min": 1, "max": 5}
+    VENTRICULAR_SENSITIVITY = {"min": 1, "max": 5}
 
 
 class PacingModeValidator:
@@ -81,7 +81,10 @@ class PacingModeValidator:
                   PM_LIMIT.ATRIAL_SENSITIVITY["min"] <= pm.atrial_sensitivity <= PM_LIMIT.ATRIAL_SENSITIVITY["max"],
             "VS": pm.ventricular_sensitivity is None or \
                   PM_LIMIT.VENTRICULAR_SENSITIVITY["min"] <= pm.ventricular_sensitivity <=
-                  PM_LIMIT.VENTRICULAR_SENSITIVITY["max"]
+                  PM_LIMIT.VENTRICULAR_SENSITIVITY["max"],
+            "AV": pm.av_delay is None or \
+                  PM_LIMIT.AV_DELAY["min"] <= pm.av_delay <=
+                  PM_LIMIT.AV_DELAY["max"]
         }
         return PacingModeValidator
 

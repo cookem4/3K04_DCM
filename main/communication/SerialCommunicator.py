@@ -34,7 +34,10 @@ class SerialCommunicator(SerialBase, SerialInterface):
             return 0
 
     def get_last_device_connected(self) -> str:
-        return self.device_id
+        if len(self.device_id) != 0:
+            return int(self.device_id, 16)
+        else:
+            return 0
 
     def is_pacing_being_saved(self) -> bool:
         return self.listen_for_egm
@@ -51,6 +54,7 @@ class SerialCommunicator(SerialBase, SerialInterface):
         self.send(SerialIdentifier.DISCONNECT)
 
     def send_pacing_data(self, data: PacingMode):
+        print(data.serialize())
         self.send(SerialIdentifier.SEND_DATA, data.serialize())
         self.await_data()
         # self.await_identifier(SerialIdentifier.SEND_DATA)

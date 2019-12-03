@@ -11,7 +11,7 @@ from main.data.serial.SerialConnectionIndicators import SerialConnectionIndicato
 class AppFrameBase(tk.Frame):
     session_service: SessionService = SessionService.get_instance()
     user_service: UserService = UserService()
-    serial_service: SerialCommunicator = SerialCommunicator("COM6")
+    serial_service: SerialCommunicator = SerialCommunicator("COM11")
     # serial related members
     serial_indicators: SerialConnectionIndicators = SerialConnectionIndicators()
     def __init__(self, parent):

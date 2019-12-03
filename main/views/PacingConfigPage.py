@@ -295,7 +295,7 @@ class PacingConfigPage(AppFrameBase):
                                            bg=self.enabled_bg,
                                            disabledbackground=self.disabled_bg)
 
-        self.responseFactorUnit = tk.Label(self, bg="black", text="")
+        self.responseFactorUnit = tk.Label(self, bg="black", text="(1-16)")
         self.responseFactorUnit.config(font=(25), foreground="white")
 
         #########################
@@ -486,11 +486,11 @@ class PacingConfigPage(AppFrameBase):
             # self.set_states(ALE="disabled", APW="disabled", ARP="disabled", VRP="disabled")
         if self.pacingSelection.get() == "AAI":
             self.boxesToDisplay = [True, True, True, False, True, False, True, False, False, False, False, False, False,
-                                   False, False, False]
+                                   False, True, False]
             # self.set_states(VLE="disabled", VPW="disabled", VRP="disabled")
         if self.pacingSelection.get() == "VVI":
             self.boxesToDisplay = [True, True, False, True, False, True, False, True, False, False, False, False, False,
-                                   False, False, False]
+                                   False, False, True]
             # self.set_states(ALE="disabled", APW="disabled", ARP="disabled")
         if self.pacingSelection.get() == "DOO":
             self.boxesToDisplay = [True, True, True, True, True, True, False, False, False, False, False, False, False,

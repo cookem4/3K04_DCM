@@ -16,11 +16,12 @@ class DOO(PacingMode):
             atrial_amplitude=atrial_amplitude,
             atrial_pulse_width=atrial_pulse_width,
             ventricular_amplitude=ventricular_amplitude,
-            ventricular_pulse_width=ventricular_pulse_width)
+            ventricular_pulse_width=ventricular_pulse_width,
+            av_delay=av_delay)
 
     def serialize(self) -> bytearray:
         serial_self = self.as_serial
-        serial_bytes = [0 for x in range(7)]
+        serial_bytes = [0 for x in range(8)]
         serial_bytes[0] = to_pacing_mode_id(self.NAME)
         serial_bytes[1] = serial_self.lower_rate_limit
         serial_bytes[2] = serial_self.upper_rate_limit
@@ -28,6 +29,7 @@ class DOO(PacingMode):
         serial_bytes[4] = serial_self.atrial_pulse_width
         serial_bytes[5] = serial_self.ventricular_amplitude
         serial_bytes[6] = serial_self.ventricular_pulse_width
+        serial_bytes[7] = serial_self.av_delay
         return flatten_to_26_bytearray(serial_bytes)
 
 

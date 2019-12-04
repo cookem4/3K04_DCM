@@ -59,7 +59,6 @@ class PacingConfigPage(AppFrameBase):
 
         self.connectionStateText = tk.Label(self, bg="gray", text="Connection Not Established")
         self.connectionStateText.config(font=("Helvetica", 25), foreground="black")
-        # self.connectionStateText.grid(row=0, column=0, columnspan=4, padx=(self.xPadding, 0), pady=(20, 0), sticky=tk.N)
         self.connectionStateText.place(relx=0.325, rely=0.03, anchor='nw')
 
         self.screenInfo = tk.Label(self, bg="light gray", text="Pacing Mode Configuration", width=50)
